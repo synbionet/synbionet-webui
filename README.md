@@ -2,9 +2,9 @@
 
 To test:
 
-1. Follow README in synbionet-api project folder to make sure API is hooked up correctly and passing tests.
+1. Follow README in synbionet-api-js project folder to make sure API is hooked up correctly and passing tests.
 
-2. Make sure this project folder is in same directiory level as synbionet-api project folder because npm installs relative path "../synbionet-api" as a dependency
+2. Make sure this project folder is in same directiory level as synbionet-api project folder because npm installs relative path "../synbionet-api-js" as a dependency
 
 3. Install dependencies with `npm install`
 
