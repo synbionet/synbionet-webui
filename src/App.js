@@ -1,25 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from './components/Header'
+import ExploreView from './components/ExploreView'
+import PortfolioView from './components/PortfolioView'
+import React, { useState } from 'react'
 
 function App() {
+  const [activeView, setActiveView] = useState('Explore')
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App text-gray-200">
+      <Header setActiveView={setActiveView} />
+      <div className="bg-gradient-to-b from-teal-800 to-gray-900 min-h-screen">
+        {activeView === 'Explore' ? <ExploreView /> : <PortfolioView />}
+      </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
