@@ -2,7 +2,7 @@ import HeaderButton from './HeaderButton'
 import logo from '../logo.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { setActiveAccount } from '../store/accountStore'
-import { SynBioNet } from 'synbionet-api'
+import { SynBioNet } from '@synbionet/api'
 
 const NavBar = ({ setActiveView }) => {
   const activeAccount = useSelector((state) => state.account.activeAccount)

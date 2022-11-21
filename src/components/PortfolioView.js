@@ -1,6 +1,6 @@
 import { ReactComponent as MinusIcon } from '../assets/minusIcon.svg'
 import { ReactComponent as PlusIcon } from '../assets/plusIcon.svg'
-import { SynBioNet } from 'synbionet-api'
+import { SynBioNet } from '@synbionet/api'
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { ethers } from 'ethers'

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { SynBioNet } from 'synbionet-api'
+import { SynBioNet } from '@synbionet/api'
 import BioAssetCard from './BioAssetCard'
 
 const ExploreViewBody = () => {
