@@ -8,7 +8,7 @@ To test:
 
    **_allow a few seconds for contracts to deploy before starting webui, otherwise contract addresses my be impacted_**
 
-3. Install dependencies with `npm install`
+3. Install dependencies with `npm install && npm update`
 
 4. Run with `npm start` . Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
