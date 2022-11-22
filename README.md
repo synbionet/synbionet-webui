@@ -6,7 +6,7 @@ To test:
 
 2. after image build completes, run test node with `docker run -d -p 8545:8545 anvil_node`
 
-**_allow a few seconds for contracts to deploy before starting webui, otherwise contract addresses my be impacted_**
+   **_allow a few seconds for contracts to deploy before starting webui, otherwise contract addresses my be impacted_**
 
 3. Install dependencies with `npm install`
 
@@ -21,6 +21,6 @@ To test:
 
    - 0x2a871d0798f97d79848a013d4936a73bf4cc922c825d33c1cf7073dff6d409c6
 
-**_When testing locally and restarting the anvil test node, you will need to reset the nonce information of the account to ensure transactions go through correctly. You can do this with "Clear wallet transaction and nonce information" in brave wallet or "reset account" in metamask_**
+   **_When testing locally and restarting the anvil test node, you will need to reset the nonce information of the account to ensure transactions go through correctly. You can do this with "Clear wallet transaction and nonce information" in brave wallet or "reset account" in metamask_**
 
 7. After you're connected, navigate to the "portfolio" page to buy and sell bioTokens.
