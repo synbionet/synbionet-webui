@@ -13,16 +13,22 @@ const PortfolioView = () => {
 
   async function buyTokens() {
     const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-    await synbionet.market.buyBioTokens(5)
+    await synbionet.portfolio.buyBioTokens(5)
     const balance = await synbionet.portfolio.getBioTokenBalance(activeAccount)
     setAccountBalance(ethers.utils.formatUnits(balance, 'wei'))
   }
 
   async function withdrawTokens() {
     const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-    await synbionet.market.withdrawBioTokens(5)
+    await synbionet.portfolio.withdrawBioTokens(5)
     const balance = await synbionet.portfolio.getBioTokenBalance(activeAccount)
     setAccountBalance(ethers.utils.formatUnits(balance, 'wei'))
+  }
+
+  async function createAsset() {
+    const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+    const response = await synbionet.portfolio.createAsset('http://this.work?')
+    console.log({ response })
   }
 
   useEffect(() => {
@@ -62,7 +68,10 @@ const PortfolioView = () => {
         <div className="w-1/2">
           <div className="flex mx-8 space-x-2 items-center border-b-2 border-gray-300 pb-1">
             <h3 className="text-3xl pl-2">BioAssets</h3>
-            <button className="w-6 h-6 fill-gray-200 opacity-40 hover:opacity-60">
+            <button
+              onClick={createAsset}
+              className="w-6 h-6 fill-gray-200 opacity-40 hover:opacity-60"
+            >
               <PlusIcon />
             </button>
           </div>
