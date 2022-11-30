@@ -1,11 +1,11 @@
 import ExploreViewHeader from './ExploreViewHeader'
-// import ExploreViewBody from './ExploreViewBody'
+import ExploreViewBody from './ExploreViewBody'
 
 const ExploreView = () => {
   return (
     <div>
       <ExploreViewHeader />
-      {/* <ExploreViewBody /> */}
+      <ExploreViewBody />
     </div>
   )
 }

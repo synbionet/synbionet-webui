@@ -12,6 +12,13 @@ const NavBar = ({ setActiveView }) => {
     const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
     const account = await synbionet.requestAccounts()
     dispatch(setActiveAccount(account))
+    window.ethereum.on('accountsChanged', (accounts) => {
+      if (accounts.length > 0) {
+        return dispatch(setActiveAccount(accounts[0]))
+      } else {
+        return dispatch(setActiveAccount(undefined))
+      }
+    })
   }
 
   return (

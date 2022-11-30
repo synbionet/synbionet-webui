@@ -10,6 +10,8 @@ To test:
 
 3. Install dependencies with `npm install && npm update`
 
+   **_if experiencing any issues after spinning up, try deleting node_modules folder and running npm install again_**
+
 4. Run with `npm start` . Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 5. Ensure that your wallet is connected to your local anvil node that was spun up in step 1. You will likely have to add a new network in your wallet client with the following configuration:
