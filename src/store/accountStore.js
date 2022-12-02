@@ -13,12 +13,15 @@ export const accountStore = createSlice({
     addBioAsset: (state, bioAssetAddress) => {
       state.bioAssets.push(bioAssetAddress.payload)
     },
+    setBioAssets: (state, bioAssetAddresses) => {
+      state.bioAssets = bioAssetAddresses.payload
+    },
     // decrement: (state) => {
     //   state.value -= 1
     // },
   },
 })
 
-export const { setActiveAccount, addBioAsset } = accountStore.actions
+export const { setActiveAccount, addBioAsset, setBioAssets } = accountStore.actions
 
 export default accountStore.reducer

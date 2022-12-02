@@ -10,7 +10,12 @@ const AssetTable = () => {
 
   async function createAsset() {
     const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-    const assetAddress = await synbionet.portfolio.createAsset('http://this.work?')
+    const assetAddress = await synbionet.portfolio.createAsset(
+      'example name',
+      'example desc',
+      'http://example.license',
+      'http://service.endpoint'
+    )
     dispatch(addBioAsset(assetAddress))
   }
   return (

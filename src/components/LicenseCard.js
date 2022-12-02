@@ -37,7 +37,9 @@ const LicenseCard = ({ bioAssetAddress, assetIndex, marketView, portfolioView, l
     <div className="flex rounded bg-white bg-opacity-20 p-3">
       <div className="flex flex-col flex-grow space-y-2">
         <h4>BioAsset #{assetIndex}</h4>
-        <p>URI: {assetDetails.uri}</p>
+        <p className="w-64 truncate">
+          URI: {assetDetails.uri.replace('http://127.0.0.1:8081/', '')}
+        </p>
         <p className={parseInt(assetDetails.availableLicenses) === 0 ? 'invisible' : ''}>
           License price: {assetDetails.licensePrice} BioTokens
         </p>
@@ -47,13 +49,13 @@ const LicenseCard = ({ bioAssetAddress, assetIndex, marketView, portfolioView, l
         <p className={parseInt(assetDetails.availableLicenses) === 0 ? 'invisible' : ''}>
           Asset price: {assetDetails.ipPrice} BioTokens
         </p>
-        <p className={portfolioView ? 'invisible' : 'truncate'}>
+        <p className={portfolioView ? 'invisible' : 'w-64 truncate'}>
           Asset owner: {assetDetails.owner}
         </p>
       </div>
       <div className="flex flex-col items-end space-y-2">
         <button className="flex fill-gray-200 opacity-80 hover:opacity-100">
-          <div>Redeem Service</div>
+          <div className="whitespace-nowrap">Redeem Service</div>
           <PlusIcon className="w-6 h-6 ml-2" />
         </button>
       </div>

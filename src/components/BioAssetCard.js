@@ -42,7 +42,9 @@ const BioAssetCard = ({ bioAssetAddress, assetIndex, marketView, portfolioView, 
     <div className="flex rounded bg-white bg-opacity-20 p-3">
       <div className="flex flex-col flex-grow space-y-2">
         <h4>BioAsset #{assetIndex}</h4>
-        <p>URI: {assetDetails.uri}</p>
+        <p className="w-64 truncate">
+          URI: {assetDetails.uri.replace('http://127.0.0.1:8081/', '')}
+        </p>
         <p className={parseInt(assetDetails.availableLicenses) === 0 ? 'invisible' : ''}>
           License price: {assetDetails.licensePrice} BioTokens
         </p>
@@ -61,12 +63,12 @@ const BioAssetCard = ({ bioAssetAddress, assetIndex, marketView, portfolioView, 
           onClick={registerAssetOnMarket}
           className="flex fill-gray-200 opacity-80 hover:opacity-100"
         >
-          <div>Register with Market</div>
+          <div className="whitespace-nowrap">Register with Market</div>
           <PlusIcon className="w-6 h-6 ml-2" />
         </button>
       )}
       {parseInt(assetDetails.availableLicenses) > 0 && portfolioView && (
-        <div>Available on Market</div>
+        <div className="whitespace-nowrap">Available on Market</div>
       )}
       {parseInt(assetDetails.availableLicenses) > 0 && marketView && (
         <div className="flex flex-col items-end space-y-2">
