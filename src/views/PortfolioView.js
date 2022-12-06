@@ -1,6 +1,6 @@
-import BioTokenWidget from './BioTokenWidget'
-import AssetTable from './AssetTable'
-import LicenseTable from './LicenseTable'
+import BioTokenWidget from '../components/BioTokenWidget'
+import AssetTable from '../components/AssetTable'
+import LicenseTable from '../components/LicenseTable'
 import { useSelector } from 'react-redux'
 
 const PortfolioView = () => {

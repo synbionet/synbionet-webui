@@ -3,8 +3,9 @@ import logo from '../logo.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { setActiveAccount } from '../store/accountStore'
 import { SynBioNet } from '@synbionet/api'
+import { Link } from 'react-router-dom'
 
-const NavBar = ({ setActiveView }) => {
+const NavBar = () => {
   const activeAccount = useSelector((state) => state.account.activeAccount)
   const dispatch = useDispatch()
 
@@ -22,9 +23,15 @@ const NavBar = ({ setActiveView }) => {
   }
 
   return (
-    <div className="flex space-x-8">
-      <HeaderButton buttonTitle="Explore" onClick={() => setActiveView('Explore')} />
-      <HeaderButton buttonTitle="Portfolio" onClick={() => setActiveView('Portfolio')} />
+    <div className="flex items-center space-x-8">
+      <Link to="/">
+        <HeaderButton buttonTitle="Explore" />
+      </Link>
+      {/* <HeaderButton buttonTitle="Explore" onClick={() => setActiveView('Explore')} /> */}
+      {/* <HeaderButton buttonTitle="Portfolio" onClick={() => setActiveView('Portfolio')} /> */}
+      <Link to="/portfolio">
+        <HeaderButton buttonTitle="Portfolio" />
+      </Link>
       <HeaderButton
         buttonTitle={activeAccount ? activeAccount : 'Connect'}
         onClick={connectWallet}

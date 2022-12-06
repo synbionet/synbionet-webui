@@ -1,18 +1,21 @@
-import Header from './components/Header'
-import ExploreView from './components/ExploreView'
-import PortfolioView from './components/PortfolioView'
-import React, { useState } from 'react'
+// import Header from './components/Header'
+import Layout from './views/Layout'
+import ExploreView from './views/ExploreView'
+import PortfolioView from './views/PortfolioView'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 function App() {
-  const [activeView, setActiveView] = useState('Explore')
-
   return (
-    <div className="App text-gray-200">
-      <Header setActiveView={setActiveView} />
-      <div className="bg-gradient-to-b from-teal-800 to-gray-900 min-h-screen">
-        {activeView === 'Explore' ? <ExploreView /> : <PortfolioView />}
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<ExploreView />} />
+          <Route path="portfolio" element={<PortfolioView />} />
+          {/* <Route path="*" element={<NoPage />} /> */}
+          {/* <Route path="blog/:id" element={<Post />} /> */}
+        </Route>
+      </Routes>
+    </Router>
   )
 }
 

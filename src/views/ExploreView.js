@@ -1,5 +1,5 @@
-import ExploreViewHeader from './ExploreViewHeader'
-import ExploreViewBody from './ExploreViewBody'
+import ExploreViewHeader from '../components/ExploreViewHeader'
+import ExploreViewBody from '../components/ExploreViewBody'
 import { useSelector } from 'react-redux'
 
 const ExploreView = () => {
