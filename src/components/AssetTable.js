@@ -3,20 +3,27 @@ import { SynBioNet } from '@synbionet/api'
 import { useDispatch, useSelector } from 'react-redux'
 import { addBioAsset } from '../store/accountStore'
 import BioAssetCard from './BioAssetCard'
+import { setBioAssets } from '../store/accountStore'
 
 const AssetTable = () => {
   const bioAssets = useSelector((state) => state.account.bioAssets)
   const dispatch = useDispatch()
 
+  async function getAssets() {
+    const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+    const assets = await synbionet.market.getAllBioAssets()
+    dispatch(setBioAssets(assets))
+  }
+
   async function createAsset() {
     const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-    const assetAddress = await synbionet.portfolio.createAsset(
+    await synbionet.portfolio.createAsset(
       'example name',
       'example desc',
       'http://example.license',
       'http://service.endpoint'
     )
-    dispatch(addBioAsset(assetAddress))
+    await getAssets()
   }
   return (
     <div className="flex flex-col space-y-4 mx-8">
@@ -29,9 +36,9 @@ const AssetTable = () => {
       </div>
       {bioAssets.map((bioAsset, index) => (
         <BioAssetCard
-          key={bioAsset.toString()}
+          key={bioAsset.did}
           assetIndex={index + 1}
-          bioAssetAddress={bioAsset}
+          asset={bioAsset}
           portfolioView={true}
         />
       ))}

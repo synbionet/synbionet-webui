@@ -9,14 +9,14 @@ const LicenseTable = () => {
       <div className="flex space-x-2 items-center border-b-2 border-gray-300 pb-1 px-3">
         <h3 className="flex-grow text-3xl">Licenses</h3>
       </div>
-      {bioAssets.map((bioAsset, index) => (
+      {/* {bioAssets.map((bioAsset, index) => (
         <LicenseCard
-          key={bioAsset}
+          key={bioAsset.did}
           assetIndex={index + 1}
-          bioAssetAddress={bioAsset}
+          asset={bioAsset}
           licenseView={true}
         />
-      ))}
+      ))} */}
     </div>
   )
 }

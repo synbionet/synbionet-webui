@@ -13,8 +13,7 @@ const ExploreViewBody = () => {
     async function getAssets() {
       const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
       const assets = await synbionet.market.getAllBioAssets()
-      const addresses = assets.map((asset) => asset.nftAddress)
-      dispatch(setBioAssets(addresses))
+      dispatch(setBioAssets(assets))
     }
     getAssets()
   }, [dispatch])
@@ -23,13 +22,8 @@ const ExploreViewBody = () => {
     <div className="flex flex-wrap mx-8 justify-center">
       {bioAssets.map((asset, index) => {
         return (
-          <div className="w-1/3 m-2">
-            <BioAssetCard
-              key={asset.toString()}
-              assetIndex={index + 1}
-              bioAssetAddress={asset}
-              marketView={true}
-            />
+          <div className="w-1/4 m-2">
+            <BioAssetCard key={asset.did} assetIndex={index + 1} asset={asset} marketView={true} />
           </div>
         )
       })}
