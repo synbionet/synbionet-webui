@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* @font-face {
+  font-family: 'Maven-Pro';
+  src: local('Maven-Pro'),
+    url('./fonts/Maven_Pro/MavenPro-VariableFont_wght.ttf') format('truetype');
+} */
