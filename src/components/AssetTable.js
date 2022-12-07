@@ -1,19 +1,26 @@
 import { ReactComponent as PlusIcon } from '../assets/plusIcon.svg'
 import { SynBioNet } from '@synbionet/api'
 import { useDispatch, useSelector } from 'react-redux'
-import { addBioAsset } from '../store/accountStore'
+import { useEffect } from 'react'
 import BioAssetCard from './BioAssetCard'
 import { setBioAssets } from '../store/accountStore'
+import { fetchAssets } from '../utils'
+import { Link } from 'react-router-dom'
 
 const AssetTable = () => {
-  const bioAssets = useSelector((state) => state.account.bioAssets)
   const dispatch = useDispatch()
+  const bioAssets = useSelector((state) => state.account.bioAssets)
+  const activeAccount = useSelector((state) => state.account.activeAccount)
+  const ownedAssets = bioAssets.filter(
+    (asset) => asset.owner.toLowerCase() === activeAccount.toLowerCase()
+  )
 
-  async function getAssets() {
-    const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-    const assets = await synbionet.market.getAllBioAssets()
-    dispatch(setBioAssets(assets))
-  }
+  useEffect(() => {
+    async function getAssets() {
+      dispatch(setBioAssets(await fetchAssets()))
+    }
+    getAssets()
+  }, [dispatch])
 
   async function createAsset() {
     const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
@@ -23,7 +30,7 @@ const AssetTable = () => {
       'http://example.license',
       'http://service.endpoint'
     )
-    await getAssets()
+    dispatch(setBioAssets(await fetchAssets()))
   }
   return (
     <div className="flex flex-col space-y-4 mx-8">
@@ -34,13 +41,15 @@ const AssetTable = () => {
           <PlusIcon className="w-6 h-6 ml-2" />
         </button>
       </div>
-      {bioAssets.map((bioAsset, index) => (
-        <BioAssetCard
-          key={bioAsset.did}
-          assetIndex={index + 1}
-          asset={bioAsset}
-          portfolioView={true}
-        />
+      {ownedAssets.map((bioAsset, index) => (
+        <Link to={`/asset/${bioAsset.did}`}>
+          <BioAssetCard
+            key={bioAsset.did}
+            assetIndex={index + 1}
+            asset={bioAsset}
+            portfolioView={true}
+          />
+        </Link>
       ))}
     </div>
   )

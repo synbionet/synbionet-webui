@@ -27,8 +27,6 @@ const NavBar = () => {
       <Link to="/">
         <HeaderButton buttonTitle="Explore" />
       </Link>
-      {/* <HeaderButton buttonTitle="Explore" onClick={() => setActiveView('Explore')} /> */}
-      {/* <HeaderButton buttonTitle="Portfolio" onClick={() => setActiveView('Portfolio')} /> */}
       <Link to="/portfolio">
         <HeaderButton buttonTitle="Portfolio" />
       </Link>
@@ -45,7 +43,7 @@ const Header = ({ setActiveView }) => {
     <header className="flex justify-between px-8 h-16 items-cente bg-gray-800">
       <div className="flex items-center">
         <img src={logo} className="h-10" alt="logo" />
-        <h1 className="text-xl font-semibold">SynBioNet</h1>
+        <h1 className="text-xl">SynBioNet</h1>
       </div>
       <NavBar setActiveView={setActiveView} />
     </header>

@@ -1,12 +1,8 @@
 import BioTokenWidget from '../components/BioTokenWidget'
 import AssetTable from '../components/AssetTable'
 import LicenseTable from '../components/LicenseTable'
-import { useSelector } from 'react-redux'
 
 const PortfolioView = () => {
-  const activeAccount = useSelector((state) => state.account.activeAccount)
-
-  if (!activeAccount) return <p className="pt-4 text-center">Connect your wallet to access page</p>
   return (
     <div className="flex flex-col py-4">
       <BioTokenWidget />

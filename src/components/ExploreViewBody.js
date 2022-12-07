@@ -1,29 +1,36 @@
 import { useSelector, useDispatch } from 'react-redux'
 import BioAssetCard from './BioAssetCard'
-import { SynBioNet } from '@synbionet/api'
 import { useEffect } from 'react'
 import { setBioAssets } from '../store/accountStore'
+import { Link } from 'react-router-dom'
+import { fetchAssets } from '../utils'
 
 const ExploreViewBody = () => {
-  const bioAssets = useSelector((state) => state.account.bioAssets)
   const dispatch = useDispatch()
+  const bioAssets = useSelector((state) => state.account.bioAssets)
+  // TODO: fix this temp filter to show what assets are currently listed on market. May not be correct since licenses can run out.
+  const marketAssets = bioAssets.filter((asset) => asset.availableLicenses > 0)
 
   useEffect(() => {
-    // TODO: temporary method to render assets without breaking. Will need to modify to use data from indexer instead of just mapping contract addressess
     async function getAssets() {
-      const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-      const assets = await synbionet.market.getAllBioAssets()
-      dispatch(setBioAssets(assets))
+      dispatch(setBioAssets(await fetchAssets()))
     }
     getAssets()
   }, [dispatch])
 
   return (
     <div className="flex flex-wrap mx-8 justify-center">
-      {bioAssets.map((asset, index) => {
+      {marketAssets.map((asset, index) => {
         return (
           <div className="w-1/4 m-2">
-            <BioAssetCard key={asset.did} assetIndex={index + 1} asset={asset} marketView={true} />
+            <Link to={`asset/${asset.did}`}>
+              <BioAssetCard
+                key={asset.did}
+                assetIndex={index + 1}
+                asset={asset}
+                marketView={true}
+              />
+            </Link>
           </div>
         )
       })}
