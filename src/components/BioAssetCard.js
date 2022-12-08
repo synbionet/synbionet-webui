@@ -8,10 +8,7 @@ const BioAssetCard = ({ asset, assetIndex, marketView, portfolioView, licenseVie
         )}
       </div>
       {!portfolioView && <div className="w-36 truncate">{asset.owner}</div>}
-      <p className="mt-8">
-        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
-      </p>
-      {/* <p className="mt-8">{asset.description}</p> */}
+      <p className="mt-8">{asset.description}</p>
       {marketView && (
         <p className="mt-8">
           {asset.licensePrice} {parseInt(asset.licensePrice) !== 1 ? 'BioTokens' : 'BioToken'}
