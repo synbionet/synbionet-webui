@@ -19,10 +19,10 @@ const ExploreViewBody = () => {
   }, [dispatch])
 
   return (
-    <div className="flex flex-wrap mx-8 justify-center">
+    <div className="flex flex-wrap mx-8">
       {marketAssets.map((asset, index) => {
         return (
-          <div className="w-1/4 m-2">
+          <div className="w-1/4 p-3">
             <Link to={`asset/${asset.did}`}>
               <BioAssetCard
                 key={asset.did}

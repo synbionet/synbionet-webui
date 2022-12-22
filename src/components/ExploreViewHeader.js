@@ -13,8 +13,7 @@ const ButtonBar = () => {
 
 const ExploreViewHeader = () => {
   return (
-    <div className="flex h-14 items-center px-8 mb-2">
-      <h2 className="text-lg pr-2">Available BioAssets</h2>
+    <div className="flex h-14 items-center px-8 mb-2 pt-3">
       <div className="grow px-2">
         <SearchBar />
       </div>

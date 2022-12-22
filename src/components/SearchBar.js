@@ -12,7 +12,7 @@ const SearchBar = () => {
       <SearchIcon className="w-8 h-8 px-2 fill-slate-200" />
       <input
         className="grow placeholder:italic placeholder:text-slate-200 bg-transparent py-2 pr-3 focus:outline-none sm:text-sm"
-        placeholder="Search for anything..."
+        placeholder="Search marketplace..."
         type="text"
         name="search"
         value={searchText}

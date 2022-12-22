@@ -7,7 +7,7 @@ const Layout = () => {
   return (
     <div className="App text-gray-200">
       <Header />
-      <div className="bg-gradient-to-b from-teal-800 to-gray-900 min-h-screen">
+      <div className="bg-slate-800 min-h-screen">
         {!activeAccount ? (
           <p className="pt-4 text-center">Connect your wallet to access page</p>
         ) : (
