@@ -20,6 +20,11 @@ const NavBar = () => {
         return dispatch(setActiveAccount(undefined))
       }
     })
+    window.ethereum.on('disconnect', (accounts) => {
+      console.log({ test: accounts })
+      dispatch(setActiveAccount(undefined))
+      return
+    })
   }
 
   return (
@@ -40,7 +45,7 @@ const NavBar = () => {
 
 const Header = ({ setActiveView }) => {
   return (
-    <header className="flex justify-between px-8 h-16 items-cente bg-gray-800">
+    <header className="flex justify-between px-8 h-16 items-cente bg-slate-700">
       <div className="flex items-center">
         <img src={logo} className="h-10" alt="logo" />
         <h1 className="text-xl">SynBioNet</h1>

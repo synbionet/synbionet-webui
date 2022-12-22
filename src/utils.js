@@ -5,9 +5,14 @@ export async function fetchAssets() {
   const assets = await synbionet.market.getAllBioAssets()
   const assetsWithDetails = await Promise.all(
     assets.map(async (asset) => {
-      const productDetails = await synbionet.market.getProduct(asset.nftAddress)
+      let productDetails
+      try {
+        productDetails = await synbionet.market.getProduct(asset.nftAddress)
+      } catch (err) {
+        return undefined
+      }
       return Object.assign(asset, productDetails)
     })
   )
-  return assetsWithDetails
+  return assetsWithDetails.filter((asset) => asset !== undefined)
 }
