@@ -32,9 +32,11 @@ const LicenseTable = () => {
   }, [bioAssets])
 
   return (
-    <div className="flex flex-col space-y-4 mx-8">
-      <div className="flex space-x-2 items-center border-b-2 border-gray-300 pb-1 px-3">
-        <h3 className="flex-grow text-3xl">Licenses</h3>
+    <div className="flex flex-col space-y-4 mx-8 bg-gray-100 rounded-sm border-2 border-slate-300 drop-shadow-sm px-8 py-6">
+      <div className="flex justify-between items-center">
+        <h5 className="font-semibold uppercase tracking-wider text-slate-500 pb-2 py-2">
+          licenses
+        </h5>
       </div>
       {licensedAssets.map((bioAsset, index) => (
         <Link to={`/asset/${bioAsset.did}`}>

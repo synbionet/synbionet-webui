@@ -45,9 +45,9 @@ const NavBar = () => {
 
 const Header = ({ setActiveView }) => {
   return (
-    <header className="flex justify-between px-8 h-16 bg-slate-700">
+    <header className="flex justify-between px-8 h-16 bg-gray-100 border-b-2 border-slate-300 drop-shadow-sm">
       <div className="flex items-center">
-        <img src={logo} className="h-10" alt="logo" />
+        {/* <img src={logo} className="h-10" alt="logo" /> */}
         <h1 className="text-xl tracking-wide">SynBioNet</h1>
       </div>
       <NavBar setActiveView={setActiveView} />

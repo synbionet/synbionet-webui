@@ -5,7 +5,9 @@ import LicenseTable from '../components/LicenseTable'
 const PortfolioView = () => {
   return (
     <div className="flex flex-col py-4">
-      <BioTokenWidget />
+      <div className="flex pt-4">
+        <BioTokenWidget />
+      </div>
       <div className="mt-8 flex">
         <div className="w-1/2">
           <AssetTable />

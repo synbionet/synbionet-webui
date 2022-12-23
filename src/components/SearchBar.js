@@ -8,10 +8,10 @@ const SearchBar = () => {
     setSearchText(e.target.value)
   }
   return (
-    <div className="w-full bg-white bg-opacity-10 rounded-md flex items-center">
-      <SearchIcon className="w-8 h-8 px-2 fill-slate-200" />
+    <div className="w-full bg-gray-100 border-slate-300 border-2 rounded-sm flex items-center drop-shadow-sm">
+      <SearchIcon className="w-8 h-8 px-2 fill-slate-500" />
       <input
-        className="grow placeholder:italic placeholder:text-slate-200 bg-transparent py-2 pr-3 focus:outline-none sm:text-sm"
+        className="grow placeholder:italic placeholder:text-slate-500 text-slate-800 bg-transparent py-2 pr-3 focus:outline-none sm:text-sm tracking-wide"
         placeholder="Search marketplace..."
         type="text"
         name="search"

@@ -5,11 +5,11 @@ import { useSelector } from 'react-redux'
 const Layout = () => {
   const activeAccount = useSelector((state) => state.account.activeAccount)
   return (
-    <div className="App text-gray-200">
+    <div className="App text-slate-700 tracking-wide">
       <Header />
-      <div className="bg-slate-800 min-h-screen">
+      <div className="bg-gray-200 min-h-screen">
         {!activeAccount ? (
-          <p className="pt-4 text-center">Connect your wallet to access page</p>
+          <p className="pt-4 text-center tracking-wide">Connect your wallet to use SynBioNet App</p>
         ) : (
           <Outlet />
         )}
