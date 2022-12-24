@@ -30,7 +30,7 @@ const NavBar = () => {
   return (
     <div className="flex items-center space-x-8">
       <Link to="/">
-        <HeaderButton buttonTitle="Explore" />
+        <HeaderButton buttonTitle="Market" />
       </Link>
       <Link to="/portfolio">
         <HeaderButton buttonTitle="Portfolio" />
@@ -45,7 +45,7 @@ const NavBar = () => {
 
 const Header = ({ setActiveView }) => {
   return (
-    <header className="flex justify-between px-8 h-16 bg-gray-100 border-b-2 border-slate-300 drop-shadow-sm">
+    <header className="flex justify-between px-8 h-16 bg-gray-100 drop=shadow-sm border-2 border-slate-300">
       <div className="flex items-center">
         {/* <img src={logo} className="h-10" alt="logo" /> */}
         <h1 className="text-xl tracking-wide">SynBioNet</h1>

@@ -54,16 +54,20 @@ const BioTokenWidget = () => {
         <div className="flex text-center">
           <button
             onClick={() => setBuyOptionSelected(true)}
-            className={`w-1/2 mr-1 rounded-sm py-2 drop-shadow-sm ${
-              buyOptionSelected ? 'bg-slate-300' : 'border border-slate-400'
+            className={`w-1/2 mr-1 tracking-wider rounded-sm py-2 drop-shadow-sm font-bold ${
+              buyOptionSelected
+                ? 'shadow-inner bg-emerald-200 font-bold text-green-900'
+                : 'bg-slate-300 font-semibold drop-shadow-sm'
             }`}
           >
             Buy
           </button>
           <button
             onClick={() => setBuyOptionSelected(false)}
-            className={`w-1/2 ml-1  rounded-sm py-2 drop-shadow-sm ${
-              !buyOptionSelected ? 'bg-slate-300' : 'border border-slate-400'
+            className={`w-1/2 ml-1  rounded-sm py-2 drop-shadow-sm tracking-wider ${
+              !buyOptionSelected
+                ? 'shadow-inner bg-emerald-200 font-bold text-green-900'
+                : 'bg-slate-300 font-semibold drop-shadow-sm'
             }`}
           >
             Sell

@@ -53,13 +53,21 @@ const AssetDetailsView = () => {
   if (!assetDetails?.nftAddress) return
   return (
     <div className="flex flex-col w-3/4 mx-auto space-y-8">
-      <div className="mt-8 font-semibold text-2xl capitalize">{assetDetails.name}</div>
-      <div className="flex px-4 break-words">
+      <div>
+        <div className="mt-8 font-semibold text-2xl capitalize">{assetDetails.name}</div>
+        <div>
+          <span className="font-semibold uppercase text-sm text-slate-500 mb-1 mr-2">
+            Owned by:
+          </span>
+          <span className="font-mono text-slate-600">{assetDetails.owner}</span>
+        </div>
+      </div>
+      <div className="flex break-words">
         <div className="flex flex-col space-y-8 w-3/4">
-          <div>
+          {/* <div>
             <p className="font-semibold uppercase text-sm mb-1">Owner</p>
             <p>{assetDetails.owner}</p>
-          </div>
+          </div> */}
           <div>
             <p className="font-semibold uppercase text-sm mb-1">Description</p>
             <p>{assetDetails.description}</p>
@@ -171,6 +179,9 @@ const AssetDetailsView = () => {
             )}
           </div>
         )}
+      </div>
+      <div className="w-40">
+        <PrimaryButton text="view license" />
       </div>
     </div>
   )

@@ -1,23 +1,42 @@
 const BioAssetCard = ({ asset, assetIndex, marketView, portfolioView, licenseView }) => {
   return (
     <div className="flex rounded-sm bg-gray-100 border-2 border-slate-300 drop-shadow-sm">
-      <div className="w-2 bg-slate-300" />
-      <div className="flex flex-col flex-grow px-6 pt-4 pb-6">
-        <div className="flex">
-          <h4 className="capitalize flex-grow font-semibold text-xl tracking-wide">{asset.name}</h4>
-          {parseInt(asset.availableLicenses) > 0 && portfolioView && (
-            <div className="whitespace-nowrap">Available on Market</div>
-          )}
-        </div>
-        {marketView && (
-          <div className="flex items-baseline">
-            <div className="w-36 truncate text-sm tracking-wide">{asset.owner}</div>
+      <div className="w-2 bg-cyan-500 flex-none" />
+      <div
+        className={`flex flex-col justify-between flex-grow px-3 pt-3 pb-3 ${
+          marketView ? 'h-60' : 'h-36'
+        }`}
+      >
+        <div>
+          <div className="flex">
+            <h4
+              className={`capitalize flex-grow font-semibold text-xl tracking-wide leading-6 ${
+                marketView ? 'line-clamp-2' : 'line-clamp-1'
+              }`}
+            >
+              {asset.name}
+            </h4>
           </div>
-        )}
-        <p className="mt-8">{asset.description}</p>
-        {marketView && (
-          <p className="mt-8">
-            {asset.licensePrice} {parseInt(asset.licensePrice) !== 1 ? 'BioTokens' : 'BioToken'}
+          {/* {parseInt(asset.availableLicenses) > 0 && portfolioView && (
+            <div className="font-semibold text-slate-600">Available on Market</div>
+          )} */}
+          {marketView && (
+            <div className="flex items-baseline mt-1">
+              <div className="font-mono text-slate-500 w-24 truncate text-sm tracking-wide">
+                {asset.owner}
+              </div>
+            </div>
+          )}
+          <p className={`mt-4 ${marketView ? 'line-clamp-3' : 'line-clamp-1'}`}>
+            {asset.description}
+          </p>
+        </div>
+        {(marketView || (parseInt(asset.availableLicenses) > 0 && portfolioView)) && (
+          <p className="mt-4">
+            <span className="mr-1 text-2xl font-semibold">{asset.licensePrice}</span>
+            <span className="text-slate-500">
+              {parseInt(asset.licensePrice) !== 1 ? 'BioTokens' : 'BioToken'}
+            </span>
           </p>
         )}
       </div>

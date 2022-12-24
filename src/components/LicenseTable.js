@@ -22,7 +22,9 @@ const LicenseTable = () => {
       })
     )
     const licensedAssets = assetsWithLicenseBalances
-      ? assetsWithLicenseBalances.filter((asset) => asset.licensesOwned > 0)
+      ? assetsWithLicenseBalances.filter(
+          (asset) => asset.licensesOwned > 0 && asset.owner.toLowerCase() !== activeAccount
+        )
       : []
     setLicensedAssets(licensedAssets)
   }
