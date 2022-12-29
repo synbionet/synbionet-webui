@@ -53,7 +53,7 @@ const Header = ({ setActiveView }) => {
           <div className="w-4 h-4 bg-gradient-to-r from-indigo-500 to-indigo-400" />
           <div className="w-4 h-4 bg-gradient-to-r from-indigo-400 to-indigo-300" />
           <div className="w-4 h-4 bg-gradient-to-r from-indigo-300 to-indigo-200" />
-          <h1 className="text-xl tracking-wide pl-1 ">SynBioNet</h1>
+          <h1 className="text-xl tracking-wide pl-1">SynBioNet</h1>
         </div>
       </Link>
       <NavBar setActiveView={setActiveView} />

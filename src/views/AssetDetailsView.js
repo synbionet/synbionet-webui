@@ -242,18 +242,20 @@ const AssetDetailsView = () => {
                         </div> */}
                 </div>
 
-                <div className="text-right flex flex-col space-y-2">
-                  <p className="text-slate-600 font-semibold uppercase text-sm">IP Price</p>
-                  <p>
-                    <span className="mr-1 text-2xl font-semibold">{assetDetails.ipPrice}</span>
-                    <span className="text-slate-500">
-                      {parseInt(assetDetails.ipPrice) !== 1 ? 'BioTokens' : 'BioToken'}
-                    </span>
-                  </p>
-                  <div className="w-40">
-                    <PrimaryButton text="Purchase Asset" onClick={buyAsset} />
+                {assetDetails.ipForSale && (
+                  <div className="text-right flex flex-col space-y-2">
+                    <p className="text-slate-600 font-semibold uppercase text-sm">IP Price</p>
+                    <p>
+                      <span className="mr-1 text-2xl font-semibold">{assetDetails.ipPrice}</span>
+                      <span className="text-slate-500">
+                        {parseInt(assetDetails.ipPrice) !== 1 ? 'BioTokens' : 'BioToken'}
+                      </span>
+                    </p>
+                    <div className="w-40">
+                      <PrimaryButton text="Purchase Asset" onClick={buyAsset} />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             )}
             {ownedByActiveAccount && listedOnMarket && (
