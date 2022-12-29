@@ -10,7 +10,7 @@ const PortfolioView = () => {
     <div className="flex flex-1">
       <PortfolioNavBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
       {selectedTab === 'portfolio' ? (
-        <div className="flex space-x-4 pt-4 mx-4">
+        <div className="flex flex-1 space-x-4 pt-4 mx-4">
           <div className="flex-1">
             <AssetTable />
           </div>
