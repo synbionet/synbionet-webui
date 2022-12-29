@@ -1,7 +1,7 @@
 const BioAssetCard = ({ asset, assetIndex, marketView, portfolioView, licenseView }) => {
   return (
     <div className="flex rounded-sm bg-gray-100 border-2 border-slate-300 drop-shadow-sm">
-      <div className="w-2 bg-cyan-500 flex-none" />
+      <div className="w-2 bg-indigo-200 flex-none" />
       <div
         className={`flex flex-col justify-between flex-grow px-3 pt-3 pb-3 ${
           marketView ? 'h-60' : 'h-36'
@@ -31,12 +31,19 @@ const BioAssetCard = ({ asset, assetIndex, marketView, portfolioView, licenseVie
             {asset.description}
           </p>
         </div>
-        {(marketView || (parseInt(asset.availableLicenses) > 0 && portfolioView)) && (
+        {marketView && (
           <p className="mt-4">
             <span className="mr-1 text-2xl font-semibold">{asset.licensePrice}</span>
             <span className="text-slate-500">
               {parseInt(asset.licensePrice) !== 1 ? 'BioTokens' : 'BioToken'}
             </span>
+          </p>
+        )}
+        {parseInt(asset.availableLicenses) > 0 && portfolioView && (
+          <p className="mt-4">
+            <div className="text-sm font-semibold uppercase text-indigo-400">
+              Available on market
+            </div>
           </p>
         )}
       </div>

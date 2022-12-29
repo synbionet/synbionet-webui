@@ -4,6 +4,7 @@ import { SynBioNet } from '@synbionet/api'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import SecondaryButton from './SecondaryButton'
 
 const LicenseTable = () => {
   const bioAssets = useSelector((state) => state.account.bioAssets)
@@ -34,11 +35,16 @@ const LicenseTable = () => {
   }, [bioAssets])
 
   return (
-    <div className="flex flex-col space-y-4 mx-8 bg-gray-100 rounded-sm border-2 border-slate-300 drop-shadow-sm px-8 py-6">
+    <div className="flex flex-col space-y-4 bg-gray-100 rounded-sm border-2 border-slate-300 drop-shadow-sm px-8 py-6">
       <div className="flex justify-between items-center">
         <h5 className="font-semibold uppercase tracking-wider text-slate-500 pb-2 py-2">
           licenses
         </h5>
+        <Link to="/">
+          <div className="w-40">
+            <SecondaryButton text="search market" />
+          </div>
+        </Link>
       </div>
       {licensedAssets.map((bioAsset, index) => (
         <Link to={`/asset/${bioAsset.did}`}>

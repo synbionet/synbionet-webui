@@ -32,11 +32,11 @@ const CreateAssetView = () => {
 
   return (
     <div className="flex flex-col w-3/4 mx-auto">
-      <div className="my-12 font-semibold text-2xl capitalize">Create Asset</div>
+      <div className="my-12 font-semibold text-2xl capitalize">Publish Asset</div>
       {/* <form className="flex flex-col space-y-8" onSubmit={handleSubmit}> */}
       <form className="flex flex-col space-y-8">
         <label>
-          Title:
+          <div className="text-sm tracking-wider text-slate-500 uppercase font-semibold">Title</div>
           <div className="w-full bg-white bg-opacity-10 rounded-md flex items-center">
             <input
               className="px-2 grow placeholder:italic placeholder:text-slate-200 bg-gray-100 border-2 rounded-sm border-slate-300 drop-shadow-sm py-2 pr-3 focus:outline-none sm:text-sm"
@@ -47,7 +47,9 @@ const CreateAssetView = () => {
           </div>
         </label>
         <label>
-          Description:
+          <div className="text-sm tracking-wider text-slate-500 uppercase font-semibold">
+            Description
+          </div>
           <div className="w-full bg-white bg-opacity-10 rounded-md flex items-center">
             <textarea
               className="h-40 px-2 grow placeholder:italic placeholder:text-slate-200 bg-gray-100 border-2 rounded-sm border-slate-300 drop-shadow-sm py-2 pr-3 focus:outline-none sm:text-sm"
@@ -58,7 +60,9 @@ const CreateAssetView = () => {
           </div>
         </label>
         <label>
-          Service Endpoint:
+          <div className="text-sm tracking-wider text-slate-500 uppercase font-semibold">
+            Service Endpoint
+          </div>
           <div className="w-full bg-white bg-opacity-10 rounded-md flex items-center">
             <input
               className="px-2 grow placeholder:italic placeholder:text-slate-200 bg-gray-100 border-2 rounded-sm border-slate-300 drop-shadow-sm py-2 pr-3 focus:outline-none sm:text-sm"
@@ -69,7 +73,9 @@ const CreateAssetView = () => {
           </div>
         </label>
         <label>
-          License:
+          <div className="text-sm tracking-wider text-slate-500 uppercase font-semibold">
+            License Address
+          </div>
           <div className="w-full bg-white bg-opacity-10 rounded-md flex items-center">
             <input
               className="px-2 grow placeholder:italic placeholder:text-slate-200 bg-gray-100 border-2 rounded-sm border-slate-300 drop-shadow-sm py-2 pr-3 focus:outline-none sm:text-sm"
@@ -80,7 +86,7 @@ const CreateAssetView = () => {
           </div>
         </label>
         <div className="w-36">
-          <PrimaryButton text="Submit" onClick={handleSubmit} />
+          <PrimaryButton text="Publish" onClick={handleSubmit} />
         </div>
         {/* <input
           className="w-36 text-center py-1 bg-slate-200 bg-opacity-60 text-slate-800 rounded"

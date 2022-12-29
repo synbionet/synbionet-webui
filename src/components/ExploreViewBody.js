@@ -23,7 +23,7 @@ const ExploreViewBody = () => {
       {marketAssets.map((asset, index) => {
         return (
           <div className="w-1/4 p-3">
-            <Link to={`asset/${asset.did}`}>
+            <Link to={`/asset/${asset.did}`}>
               <BioAssetCard
                 key={asset.did}
                 assetIndex={index + 1}

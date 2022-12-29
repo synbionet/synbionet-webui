@@ -1,5 +1,3 @@
-import { ReactComponent as MinusIcon } from '../assets/minusIcon.svg'
-import { ReactComponent as PlusIcon } from '../assets/plusIcon.svg'
 import PrimaryButton from './PrimaryButton'
 import { useSelector } from 'react-redux'
 import { SynBioNet } from '@synbionet/api'
@@ -42,32 +40,28 @@ const BioTokenWidget = () => {
   }, [activeAccount])
 
   return (
-    <div className="mx-8 flex space-x-10 bg-gray-100 px-4 py-4 rounded-sm border-2 border-slate-300 drop-shadow-sm">
-      <div className="flex flex-col">
-        <h5 className="font-semibold uppercase tracking-wider text-slate-500 pt-1">balance</h5>
+    <div className="p-6 px-8 space-y-6 bg-gray-100 rounded-sm border-2 border-slate-300 drop-shadow-sm">
+      <div className="flex flex-col items-center">
+        <h5 className="font-semibold uppercase wtracking-wider text-slate-500 pt-1">balance</h5>
         <div className="flex items-baseline mt-4">
           <div className="text-4xl mr-1">{accountBalance}</div>
-          <div className="text-base font-semibold text-slate-600">BioTokens</div>
         </div>
+        <div className="text-base font-semibold text-slate-600">BioTokens</div>
       </div>
       <div className="flex flex-col space-y-4 w-48">
         <div className="flex text-center">
           <button
             onClick={() => setBuyOptionSelected(true)}
-            className={`w-1/2 mr-1 tracking-wider rounded-sm py-2 drop-shadow-sm font-bold ${
-              buyOptionSelected
-                ? 'shadow-inner bg-emerald-200 font-bold text-green-900'
-                : 'bg-slate-300 font-semibold drop-shadow-sm'
+            className={`w-1/2 mr-1 tracking-wider rounded-sm py-2 drop-shadow-sm font-semibold ${
+              buyOptionSelected ? 'bg-indigo-200 text-slate-800' : 'text-slate-500 bg-gray-200'
             }`}
           >
             Buy
           </button>
           <button
             onClick={() => setBuyOptionSelected(false)}
-            className={`w-1/2 ml-1  rounded-sm py-2 drop-shadow-sm tracking-wider ${
-              !buyOptionSelected
-                ? 'shadow-inner bg-emerald-200 font-bold text-green-900'
-                : 'bg-slate-300 font-semibold drop-shadow-sm'
+            className={`w-1/2 ml-1  rounded-sm py-2 drop-shadow-sm tracking-wider font-semibold ${
+              !buyOptionSelected ? 'bg-indigo-200 text-slate-800' : 'text-slate-500 bg-gray-200'
             }`}
           >
             Sell

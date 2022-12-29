@@ -1,4 +1,3 @@
-import { ReactComponent as PlusIcon } from '../assets/plusIcon.svg'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
 import BioAssetCard from './BioAssetCard'
@@ -23,7 +22,7 @@ const AssetTable = () => {
   }, [dispatch])
 
   return (
-    <div className="flex flex-col space-y-4 mx-8 bg-gray-100 rounded-sm border-2 border-slate-300 drop-shadow-sm px-8 py-6">
+    <div className="flex flex-col space-y-4 bg-gray-100 rounded-sm border-2 border-slate-300 drop-shadow-sm px-8 py-6">
       <div className="flex justify-between items-center">
         <h5 className="font-semibold uppercase tracking-wider text-slate-500 py-2">bioassets</h5>
         <Link to="/create">
