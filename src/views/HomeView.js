@@ -1,8 +1,8 @@
-import PrimaryButton from '../components/PrimaryButton'
-import SecondaryButton from '../components/SecondaryButton'
+import { PrimaryButton } from '../components/common/PrimaryButton'
+import { SecondaryButton } from '../components/common/SecondaryButton'
 import { Link } from 'react-router-dom'
 
-const HomeView = () => {
+export function HomeView() {
   return (
     <div className="flex flex-1 pt-56">
       <div className="flex-1 flex flex-col items-center">
@@ -12,24 +12,16 @@ const HomeView = () => {
         </div>
         <div className="flex space-x-8 mt-20">
           <Link to="/market">
-            <div className="w-40">
-              <PrimaryButton text="view market" />
-            </div>
+            <PrimaryButton defaultSize text="view market" />
           </Link>
           <Link to="/portfolio">
-            <div className="w-40">
-              <PrimaryButton text="manage assets" />
-            </div>
+            <PrimaryButton defaultSize text="manage assets" />
           </Link>
           <a target="_blank" href="https://github.com/synbionet" rel="noreferrer">
-            <div className="w-40">
-              <SecondaryButton text="view GitHub" />
-            </div>
+            <SecondaryButton defaultSize text="view GitHub" />
           </a>
         </div>
       </div>
     </div>
   )
 }
-
-export default HomeView

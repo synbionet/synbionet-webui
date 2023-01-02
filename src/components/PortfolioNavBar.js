@@ -1,7 +1,7 @@
 import { ReactComponent as Briefcase } from '../assets/briefcase.svg'
 import { ReactComponent as CheckMark } from '../assets/checkMark.svg'
 
-const NavBarButton = ({ Icon, isActive, onClick }) => {
+function NavBarButton({ Icon, isActive, onClick }) {
   return (
     <button onClick={onClick}>
       <Icon
@@ -13,7 +13,7 @@ const NavBarButton = ({ Icon, isActive, onClick }) => {
   )
 }
 
-const PortfolioNavBar = ({ selectedTab, setSelectedTab }) => {
+export function PortfolioNavBar({ selectedTab, setSelectedTab }) {
   return (
     <div className="flex-none w-14 border-r-2 bg-slate-100 border-slate-300">
       <div className="flex flex-col items-center space-y-2 mt-6 fill-slate-400">
@@ -31,5 +31,3 @@ const PortfolioNavBar = ({ selectedTab, setSelectedTab }) => {
     </div>
   )
 }
-
-export default PortfolioNavBar

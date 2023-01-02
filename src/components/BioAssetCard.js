@@ -1,4 +1,4 @@
-const BioAssetCard = ({ asset, assetIndex, marketView, portfolioView, licenseView }) => {
+export function BioAssetCard({ asset, marketView, portfolioView, licenseView }) {
   return (
     <div className="flex rounded-sm bg-gray-100 border-2 border-slate-300 drop-shadow-sm">
       <div className="w-2 bg-indigo-200 flex-none" />
@@ -17,9 +17,6 @@ const BioAssetCard = ({ asset, assetIndex, marketView, portfolioView, licenseVie
               {asset.name}
             </h4>
           </div>
-          {/* {parseInt(asset.availableLicenses) > 0 && portfolioView && (
-            <div className="font-semibold text-slate-600">Available on Market</div>
-          )} */}
           {marketView && (
             <div className="flex items-baseline mt-1">
               <div className="font-mono text-slate-500 w-24 truncate text-sm tracking-wide">
@@ -40,15 +37,11 @@ const BioAssetCard = ({ asset, assetIndex, marketView, portfolioView, licenseVie
           </p>
         )}
         {parseInt(asset.availableLicenses) > 0 && portfolioView && (
-          <p className="mt-4">
-            <div className="text-sm font-semibold uppercase text-indigo-400">
-              Available on market
-            </div>
-          </p>
+          <div className="mt-4">
+            <p className="text-sm font-semibold uppercase text-indigo-400">Available on market</p>
+          </div>
         )}
       </div>
     </div>
   )
 }
-
-export default BioAssetCard

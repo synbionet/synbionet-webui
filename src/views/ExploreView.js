@@ -1,7 +1,7 @@
-import ExploreViewHeader from '../components/ExploreViewHeader'
-import ExploreViewBody from '../components/ExploreViewBody'
+import { ExploreViewHeader } from '../components/ExploreViewHeader'
+import { ExploreViewBody } from '../components/ExploreViewBody'
 
-const ExploreView = () => {
+export function ExploreView() {
   return (
     <div>
       <ExploreViewHeader />
@@ -9,5 +9,3 @@ const ExploreView = () => {
     </div>
   )
 }
-
-export default ExploreView

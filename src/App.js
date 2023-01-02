@@ -1,10 +1,10 @@
 // import Header from './components/Header'
-import Layout from './views/Layout'
-import ExploreView from './views/ExploreView'
-import PortfolioView from './views/PortfolioView'
-import AssetDetailsView from './views/AssetDetailsView'
-import CreateAssetView from './views/CreateAssetView'
-import HomeView from './views/HomeView'
+import { Layout } from './views/Layout'
+import { ExploreView } from './views/ExploreView'
+import { PortfolioView } from './views/PortfolioView'
+import { AssetDetailsView } from './views/AssetDetailsView'
+import { CreateAssetView } from './views/CreateAssetView'
+import { HomeView } from './views/HomeView'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 function App() {

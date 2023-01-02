@@ -1,21 +1,19 @@
 import { Outlet } from 'react-router-dom'
-import Header from '../components/Header'
+import { Header } from '../components/Header'
 import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import PrimaryButton from '../components/PrimaryButton'
+import { PrimaryButton } from '../components/common/PrimaryButton'
 import { setActiveAccount } from '../store/accountStore'
-import { SynBioNet } from '@synbionet/api'
+import { connectWalletToBionet } from '../utils'
 
-const Layout = () => {
+export function Layout() {
   const activeAccount = useSelector((state) => state.account.activeAccount)
   const location = useLocation()
   const dispatch = useDispatch()
 
   async function connectWallet() {
-    const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-    const account = await synbionet.requestAccounts()
-    dispatch(setActiveAccount(account))
+    dispatch(setActiveAccount(await connectWalletToBionet()))
     window.ethereum.on('accountsChanged', (accounts) => {
       if (accounts.length > 0) {
         return dispatch(setActiveAccount(accounts[0]))
@@ -24,7 +22,6 @@ const Layout = () => {
       }
     })
     window.ethereum.on('disconnect', (accounts) => {
-      console.log({ test: accounts })
       dispatch(setActiveAccount(undefined))
       return
     })
@@ -33,7 +30,7 @@ const Layout = () => {
   return (
     <div className="App flex flex-col min-h-screen text-slate-700 tracking-wide">
       <div className="flex-0">
-        <Header />
+        <Header connectWallet={connectWallet} />
       </div>
       <div className="bg-gray-200 flex-1 flex flex-col">
         {!activeAccount && location.pathname !== '/' ? (
@@ -52,5 +49,3 @@ const Layout = () => {
     </div>
   )
 }
-
-export default Layout

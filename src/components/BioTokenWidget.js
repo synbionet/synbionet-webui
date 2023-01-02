@@ -1,41 +1,50 @@
-import PrimaryButton from './PrimaryButton'
+import { PrimaryButton } from './common/PrimaryButton'
 import { useSelector } from 'react-redux'
-import { SynBioNet } from '@synbionet/api'
 import { useState, useEffect } from 'react'
-import { ethers } from 'ethers'
+import { buyBioTokens, withdrawBioTokens, getBioTokenBalanceForAccount } from '../utils'
+import { FormField } from './common/FormField'
 
-const BioTokenWidget = () => {
+function BuyAndSellToggle({ buyOptionSelected, setBuyOptionSelected }) {
+  const commonStyle = 'w-1/2 tracking-wider rounded-sm py-2 drop-shadow-sm font-semibold'
+  const activeStyle = 'bg-indigo-200 text-slate-800'
+  const passiveStyle = 'text-slate-500 bg-gray-200'
+
+  return (
+    <div className="flex w-full space-x-2 text-center">
+      <button
+        onClick={() => setBuyOptionSelected(true)}
+        className={`${commonStyle} ${buyOptionSelected ? activeStyle : passiveStyle}`}
+      >
+        Buy
+      </button>
+      <button
+        onClick={() => setBuyOptionSelected(false)}
+        className={`${commonStyle} ${!buyOptionSelected ? activeStyle : passiveStyle}`}
+      >
+        Sell
+      </button>
+    </div>
+  )
+}
+
+export function BioTokenWidget() {
   const [tokensToBuyOrSell, setTokensToBuyOrSell] = useState('')
   const [accountBalance, setAccountBalance] = useState(undefined)
   const activeAccount = useSelector((state) => state.account.activeAccount)
   const [buyOptionSelected, setBuyOptionSelected] = useState(true)
 
-  function handleChange(event, setter) {
-    setter(event.target.value)
-  }
-
-  async function buyTokens() {
-    const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-    await synbionet.portfolio.buyBioTokens(parseInt(tokensToBuyOrSell))
-    const balance = await synbionet.portfolio.getBioTokenBalance(activeAccount)
-    setAccountBalance(ethers.utils.formatUnits(balance, 'wei'))
+  async function handleTradeTokens() {
+    const amt = parseInt(tokensToBuyOrSell)
+    buyOptionSelected ? await buyBioTokens(amt) : await withdrawBioTokens(amt)
+    getBalance()
     setTokensToBuyOrSell('')
   }
 
-  async function withdrawTokens() {
-    const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-    await synbionet.portfolio.withdrawBioTokens(parseInt(tokensToBuyOrSell))
-    const balance = await synbionet.portfolio.getBioTokenBalance(activeAccount)
-    setAccountBalance(ethers.utils.formatUnits(balance, 'wei'))
-    setTokensToBuyOrSell('')
+  async function getBalance() {
+    setAccountBalance(await getBioTokenBalanceForAccount(activeAccount))
   }
 
   useEffect(() => {
-    async function getBalance() {
-      const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-      const balance = await synbionet.portfolio.getBioTokenBalance(activeAccount)
-      setAccountBalance(ethers.utils.formatUnits(balance, 'wei'))
-    }
     if (activeAccount) getBalance()
   }, [activeAccount])
 
@@ -49,48 +58,19 @@ const BioTokenWidget = () => {
         <div className="text-base font-semibold text-slate-600">BioTokens</div>
       </div>
       <div className="flex flex-col space-y-4 w-48">
-        <div className="flex text-center">
-          <button
-            onClick={() => setBuyOptionSelected(true)}
-            className={`w-1/2 mr-1 tracking-wider rounded-sm py-2 drop-shadow-sm font-semibold ${
-              buyOptionSelected ? 'bg-indigo-200 text-slate-800' : 'text-slate-500 bg-gray-200'
-            }`}
-          >
-            Buy
-          </button>
-          <button
-            onClick={() => setBuyOptionSelected(false)}
-            className={`w-1/2 ml-1  rounded-sm py-2 drop-shadow-sm tracking-wider font-semibold ${
-              !buyOptionSelected ? 'bg-indigo-200 text-slate-800' : 'text-slate-500 bg-gray-200'
-            }`}
-          >
-            Sell
-          </button>
-        </div>
-        <input
-          className="placeholder:italic placeholder:text-slate-500 text-slate-800 bg-slate-200 shadow-inner py-2 font-semibold rounded-sm px-2 focus:outline-none tracking-wide text-center"
-          placeholder="Enter Amt"
-          type="text"
-          name="search"
-          autoComplete="off"
-          value={tokensToBuyOrSell}
-          onChange={(e) => handleChange(e, setTokensToBuyOrSell)}
+        <BuyAndSellToggle
+          setBuyOptionSelected={setBuyOptionSelected}
+          buyOptionSelected={buyOptionSelected}
         />
-        <PrimaryButton text="trade" onClick={buyOptionSelected ? buyTokens : withdrawTokens} />
+        <FormField
+          alternateStyle
+          type="text"
+          value={tokensToBuyOrSell}
+          setter={setTokensToBuyOrSell}
+          placeholder="Enter Amt"
+        />
+        <PrimaryButton text="trade" onClick={handleTradeTokens} />
       </div>
-      {/* <button onClick={buyTokens} className="w-6 h-6 fill-gray-200 opacity-80 hover:opacity-100">
-        <PlusIcon />
-        <div className="text-base opacity-100">Buy</div>
-      </button>
-      <button
-        onClick={withdrawTokens}
-        className="w-6 h-6 fill-gray-200 opacity-80 hover:opacity-100"
-      >
-        <MinusIcon />
-        <div className="text-base">Sell</div>
-      </button> */}
     </div>
   )
 }
-
-export default BioTokenWidget

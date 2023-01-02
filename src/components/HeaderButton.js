@@ -1,4 +1,4 @@
-const HeaderButton = ({ buttonTitle, onClick, isActive }) => {
+export function HeaderButton({ buttonTitle, onClick, isActive }) {
   return (
     <button
       style={{ maxWidth: '110px' }}
@@ -11,5 +11,3 @@ const HeaderButton = ({ buttonTitle, onClick, isActive }) => {
     </button>
   )
 }
-
-export default HeaderButton

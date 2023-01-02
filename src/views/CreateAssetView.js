@@ -1,101 +1,49 @@
 import { useState } from 'react'
-import { SynBioNet } from '@synbionet/api'
 import { useNavigate } from 'react-router-dom'
-import PrimaryButton from '../components/PrimaryButton'
+import { PrimaryButton } from '../components/common/PrimaryButton'
+import { createAsset } from '../utils'
+import { FormField } from '../components/common/FormField'
 
-const CreateAssetView = () => {
+export function CreateAssetView() {
+  const navigate = useNavigate()
   const [titleValue, setTitleValue] = useState('')
   const [descriptionValue, setDescriptionValue] = useState('')
   const [serviceEndpointValue, setServiceEndpointValue] = useState('')
   const [licenseValue, setlicenseValue] = useState('')
-  const navigate = useNavigate()
-
-  function handleChange(event, setter) {
-    setter(event.target.value)
-  }
 
   async function handleSubmit(event) {
     event.preventDefault()
-    await createAsset()
+    await createAsset(titleValue, descriptionValue, licenseValue, serviceEndpointValue)
     navigate('/portfolio')
   }
 
-  async function createAsset() {
-    const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-    await synbionet.portfolio.createAsset(
-      titleValue,
-      descriptionValue,
-      licenseValue,
-      serviceEndpointValue
-    )
-  }
-
   return (
-    <div className="flex flex-col w-3/4 mx-auto">
-      <div className="my-12 font-semibold text-2xl capitalize">Publish Asset</div>
-      {/* <form className="flex flex-col space-y-8" onSubmit={handleSubmit}> */}
-      <form className="flex flex-col space-y-8">
-        <label>
-          <div className="text-sm tracking-wider text-slate-500 uppercase font-semibold">Title</div>
-          <div className="w-full bg-white bg-opacity-10 rounded-md flex items-center">
-            <input
-              className="px-2 grow placeholder:italic placeholder:text-slate-200 bg-gray-100 border-2 rounded-sm border-slate-300 drop-shadow-sm py-2 pr-3 focus:outline-none sm:text-sm"
-              type="text"
-              value={titleValue}
-              onChange={(e) => handleChange(e, setTitleValue)}
-            />
-          </div>
-        </label>
-        <label>
-          <div className="text-sm tracking-wider text-slate-500 uppercase font-semibold">
-            Description
-          </div>
-          <div className="w-full bg-white bg-opacity-10 rounded-md flex items-center">
-            <textarea
-              className="h-40 px-2 grow placeholder:italic placeholder:text-slate-200 bg-gray-100 border-2 rounded-sm border-slate-300 drop-shadow-sm py-2 pr-3 focus:outline-none sm:text-sm"
-              type="text"
-              value={descriptionValue}
-              onChange={(e) => handleChange(e, setDescriptionValue)}
-            />
-          </div>
-        </label>
-        <label>
-          <div className="text-sm tracking-wider text-slate-500 uppercase font-semibold">
-            Service Endpoint
-          </div>
-          <div className="w-full bg-white bg-opacity-10 rounded-md flex items-center">
-            <input
-              className="px-2 grow placeholder:italic placeholder:text-slate-200 bg-gray-100 border-2 rounded-sm border-slate-300 drop-shadow-sm py-2 pr-3 focus:outline-none sm:text-sm"
-              type="text"
-              value={serviceEndpointValue}
-              onChange={(e) => handleChange(e, setServiceEndpointValue)}
-            />
-          </div>
-        </label>
-        <label>
-          <div className="text-sm tracking-wider text-slate-500 uppercase font-semibold">
-            License Address
-          </div>
-          <div className="w-full bg-white bg-opacity-10 rounded-md flex items-center">
-            <input
-              className="px-2 grow placeholder:italic placeholder:text-slate-200 bg-gray-100 border-2 rounded-sm border-slate-300 drop-shadow-sm py-2 pr-3 focus:outline-none sm:text-sm"
-              type="text"
-              value={licenseValue}
-              onChange={(e) => handleChange(e, setlicenseValue)}
-            />
-          </div>
-        </label>
-        <div className="w-36">
-          <PrimaryButton text="Publish" onClick={handleSubmit} />
-        </div>
-        {/* <input
-          className="w-36 text-center py-1 bg-slate-200 bg-opacity-60 text-slate-800 rounded"
-          type="submit"
-          value="Submit"
-        /> */}
-      </form>
+    <div>
+      <div className="mt-8 w-11/12 lg:w-9/12 xl:w-3/4 mx-auto py-4 px-6">
+        <div className="mb-8 font-semibold text-2xl capitalize">Publish Asset</div>
+        <form className="flex flex-col space-y-8">
+          <FormField value={titleValue} setter={setTitleValue} type="text" label="title" />
+          <FormField
+            value={descriptionValue}
+            setter={setDescriptionValue}
+            type="textarea"
+            label="description"
+          />
+          <FormField
+            value={serviceEndpointValue}
+            setter={setServiceEndpointValue}
+            type="text"
+            label="service endpoint"
+          />
+          <FormField
+            value={licenseValue}
+            setter={setlicenseValue}
+            type="text"
+            label="license URI"
+          />
+          <PrimaryButton defaultSize text="Publish" onClick={handleSubmit} />
+        </form>
+      </div>
     </div>
   )
 }
-
-export default CreateAssetView

@@ -1,6 +1,6 @@
-import SearchBar from './SearchBar'
+import { SearchBar } from './SearchBar'
 
-const ButtonBar = () => {
+function ButtonBar() {
   const buttonOptions = ['Services', 'Data', 'Materials', 'View All']
   return (
     <div className="flex space-x-4 border-slate-300 drop-shadow-sm border-2 h-10 rounded-sm px-2 items-center text-sm font-bold uppercase tracking-wider text-slate-500 bg-gray-100">
@@ -11,7 +11,7 @@ const ButtonBar = () => {
   )
 }
 
-const ExploreViewHeader = () => {
+export function ExploreViewHeader() {
   return (
     <div className="flex h-14 items-center px-8 mb-2 pt-3">
       <div className="grow px-2">
@@ -21,5 +21,3 @@ const ExploreViewHeader = () => {
     </div>
   )
 }
-
-export default ExploreViewHeader

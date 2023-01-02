@@ -1,21 +1,46 @@
-import BioTokenWidget from '../components/BioTokenWidget'
-import AssetTable from '../components/AssetTable'
-import LicenseTable from '../components/LicenseTable'
-import PortfolioNavBar from '../components/PortfolioNavBar'
-import { useState } from 'react'
+import { BioTokenWidget } from '../components/BioTokenWidget'
+import { AssetTable } from '../components/AssetTable'
+import { PortfolioNavBar } from '../components/PortfolioNavBar'
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { setBioAssets } from '../store/accountStore'
+import { fetchAssets } from '../utils'
 
-const PortfolioView = () => {
+export function PortfolioView() {
+  const dispatch = useDispatch()
+  const bioAssets = useSelector((state) => state.account.bioAssets)
+  const activeAccount = useSelector((state) => state.account.activeAccount)
   const [selectedTab, setSelectedTab] = useState('portfolio')
+
+  const ownedAssets = bioAssets.filter(
+    (asset) => asset.owner.toLowerCase() === activeAccount.toLowerCase()
+  )
+
+  const licensedAssets = bioAssets.filter((asset) => {
+    if (!asset.numberOfLicensesOwnedByActiveAccount) return false
+    if (ownedAssets.find((ownedAsset) => ownedAsset.did === asset.did)) return false
+    return parseInt(asset.numberOfLicensesOwnedByActiveAccount) > 0 ? true : false
+  })
+
+  async function getAssets() {
+    const allBioAssets = await fetchAssets(activeAccount)
+    dispatch(setBioAssets(allBioAssets))
+  }
+
+  useEffect(() => {
+    getAssets()
+  }, [activeAccount])
+
   return (
     <div className="flex flex-1">
       <PortfolioNavBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
       {selectedTab === 'portfolio' ? (
         <div className="flex flex-1 space-x-4 pt-4 mx-4">
           <div className="flex-1">
-            <AssetTable />
+            <AssetTable assets={ownedAssets} portfolioView />
           </div>
           <div className="flex-1">
-            <LicenseTable />
+            <AssetTable assets={licensedAssets} licenseView />
           </div>
           <div className="flex-none">
             <BioTokenWidget />
@@ -37,5 +62,3 @@ const PortfolioView = () => {
     </div>
   )
 }
-
-export default PortfolioView

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ReactComponent as SearchIcon } from '../assets/searchIcon.svg'
 
-const SearchBar = () => {
+export function SearchBar() {
   const [searchText, setSearchText] = useState('')
 
   const handleChange = (e) => {
@@ -22,5 +22,3 @@ const SearchBar = () => {
     </div>
   )
 }
-
-export default SearchBar
