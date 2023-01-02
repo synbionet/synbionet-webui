@@ -5,6 +5,7 @@ import { PrimaryButton } from '../components/common/PrimaryButton'
 import { SecondaryButton } from '../components/common/SecondaryButton'
 import { FlyoutForm } from '../components/common/FlyoutForm'
 import { getAssetByDid, registerAssetOnMarket, buyAsset, buyLicense } from '../utils'
+import { ThreeDotsLoader } from '../components/common/ThreeDotsLoader'
 
 export function AssetDetailsView() {
   const { did } = useParams()
@@ -89,7 +90,12 @@ export function AssetDetailsView() {
     )
   }
 
-  if (!assetDetails?.nftAddress) return
+  if (!assetDetails?.nftAddress)
+    return (
+      <div className="flex flex-1 mt-40 justify-center">
+        <ThreeDotsLoader />
+      </div>
+    )
   return (
     <div>
       <div className="h-8" />

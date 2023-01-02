@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import { setBioAssets } from '../store/accountStore'
 import { Link } from 'react-router-dom'
 import { fetchAssets } from '../utils'
-import { Loader } from './common/loader'
+import { GridLoader } from './common/GridLoader'
 import { useState } from 'react'
 
 export function ExploreViewBody() {
@@ -35,11 +35,7 @@ export function ExploreViewBody() {
           </div>
         )
       })}
-      {marketAssets.length === 0 && isLoading && (
-        <div className="flex flex-1 justify-center mt-36">
-          <Loader />
-        </div>
-      )}
+      {marketAssets.length === 0 && isLoading && <GridLoader />}
     </div>
   )
 }

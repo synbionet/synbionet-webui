@@ -2,7 +2,7 @@ import { PrimaryButton } from './common/PrimaryButton'
 import { useState } from 'react'
 import { buyBioTokens, withdrawBioTokens } from '../utils'
 import { FormField } from './common/FormField'
-import { ThreeDots } from 'react-loader-spinner'
+import { ThreeDotsLoader } from './common/ThreeDotsLoader'
 
 function BuyAndSellToggle({ buyOptionSelected, setBuyOptionSelected }) {
   const commonStyle = 'w-1/2 tracking-wider rounded-sm py-2 drop-shadow-sm font-semibold'
@@ -44,16 +44,7 @@ export function BioTokenWidget({ accountBalance, getBioTokenBalance }) {
         <h5 className="font-semibold uppercase wtracking-wider text-slate-500 pt-1">balance</h5>
         <div className="flex items-baseline mt-4">
           {!accountBalance ? (
-            <ThreeDots
-              height="40"
-              width="60"
-              radius="9"
-              color="#6366f1"
-              ariaLabel="three-dots-loading"
-              wrapperStyle={{}}
-              wrapperClassName=""
-              visible={true}
-            />
+            <ThreeDotsLoader height="40" width="60" />
           ) : (
             <div className="text-4xl mr-1" style={{ minHeight: '40px' }}>
               {accountBalance}

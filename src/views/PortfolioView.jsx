@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setBioAssets, setBioTokenBalance } from '../store/accountStore'
 import { fetchAssets } from '../utils'
 import { getBioTokenBalanceForAccount } from '../utils'
-import { Loader } from '../components/common/loader'
+import { GridLoader } from '../components/common/GridLoader'
 
 export function PortfolioView() {
   const dispatch = useDispatch()
@@ -53,7 +53,7 @@ export function PortfolioView() {
       <div className="flex-1 flex">
         <PortfolioNavBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
         <div className="flex flex-1 justify-center mt-36">
-          <Loader />
+          <GridLoader />
         </div>
       </div>
     )
