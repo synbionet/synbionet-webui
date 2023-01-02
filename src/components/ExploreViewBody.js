@@ -4,16 +4,22 @@ import { useEffect } from 'react'
 import { setBioAssets } from '../store/accountStore'
 import { Link } from 'react-router-dom'
 import { fetchAssets } from '../utils'
+import { Loader } from './common/loader'
+import { useState } from 'react'
 
 export function ExploreViewBody() {
   const dispatch = useDispatch()
   const bioAssets = useSelector((state) => state.account.bioAssets)
+  const [isLoading, setIsLoading] = useState(false)
+
   // TODO: fix this temp filter to show what assets are currently listed on market. May not be correct since licenses can run out.
   const marketAssets = bioAssets.filter((asset) => asset.availableLicenses > 0)
 
   useEffect(() => {
     async function getAssets() {
+      setIsLoading(true)
       dispatch(setBioAssets(await fetchAssets()))
+      setIsLoading(false)
     }
     getAssets()
   }, [dispatch])
@@ -29,6 +35,11 @@ export function ExploreViewBody() {
           </div>
         )
       })}
+      {marketAssets.length === 0 && isLoading && (
+        <div className="flex flex-1 justify-center mt-36">
+          <Loader />
+        </div>
+      )}
     </div>
   )
 }

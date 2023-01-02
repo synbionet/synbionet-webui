@@ -5,13 +5,14 @@ export const accountStore = createSlice({
   initialState: {
     activeAccount: undefined,
     bioAssets: [],
+    bioTokenBalance: undefined,
   },
   reducers: {
     setActiveAccount: (state, activeAccount) => {
       state.activeAccount = activeAccount.payload
     },
-    addBioAsset: (state, bioAssetAddress) => {
-      state.bioAssets.push(bioAssetAddress.payload)
+    setBioTokenBalance: (state, bioTokenBalance) => {
+      state.bioTokenBalance = bioTokenBalance.payload
     },
     setBioAssets: (state, bioAssetAddresses) => {
       state.bioAssets = bioAssetAddresses.payload
@@ -22,6 +23,6 @@ export const accountStore = createSlice({
   },
 })
 
-export const { setActiveAccount, addBioAsset, setBioAssets } = accountStore.actions
+export const { setActiveAccount, setBioTokenBalance, setBioAssets } = accountStore.actions
 
 export default accountStore.reducer
