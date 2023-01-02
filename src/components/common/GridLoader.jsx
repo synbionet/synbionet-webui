@@ -2,7 +2,7 @@ import { Grid } from 'react-loader-spinner'
 
 export function GridLoader() {
   return (
-    <div className="flex flex-1 justify-center mt-40">
+    <div className="flex flex-1 justify-center mt-32">
       <Grid
         height="80"
         width="80"

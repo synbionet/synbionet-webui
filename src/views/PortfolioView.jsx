@@ -52,9 +52,7 @@ export function PortfolioView() {
     return (
       <div className="flex-1 flex">
         <PortfolioNavBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-        <div className="flex flex-1 justify-center mt-36">
-          <GridLoader />
-        </div>
+        <GridLoader />
       </div>
     )
 
