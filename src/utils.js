@@ -1,5 +1,4 @@
 import { SynBioNet } from '@synbionet/api'
-import { ethers } from 'ethers'
 
 export async function fetchAssets(activeAccount) {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
@@ -77,7 +76,7 @@ export async function withdrawBioTokens(tokenQty) {
 export async function getBioTokenBalanceForAccount(accountAddress) {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
   const balance = await synbionet.portfolio.getBioTokenBalance(accountAddress)
-  return ethers.utils.formatUnits(balance, 'wei')
+  return balance
 }
 
 export async function connectWalletToBionet() {
