@@ -1,4 +1,5 @@
 import { BioTokenWidget } from '../components/BioTokenWidget'
+import { AssetDetailsView } from './AssetDetailsView'
 import { AssetTable } from '../components/AssetTable'
 import { PortfolioNavBar } from '../components/PortfolioNavBar'
 import { useState, useEffect } from 'react'
@@ -40,7 +41,8 @@ export function PortfolioView() {
 
   async function fetchData() {
     setIsLoading(true)
-    await Promise.all([await getBioTokenBalance(), await getAssets()])
+    // await Promise.all([await getBioTokenBalance(), await getAssets()])
+    await getAssets()
     setIsLoading(false)
   }
 
@@ -56,22 +58,27 @@ export function PortfolioView() {
       </div>
     )
 
+  // TODO: Refactor code below
   return (
     <div className="flex flex-1">
       <PortfolioNavBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
       {selectedTab === 'portfolio' ? (
         <div className="flex flex-1 space-x-4 pt-4 mx-4">
           <div className="flex-1">
-            <AssetTable assets={ownedAssets} portfolioView />
+            {ownedAssets.length === 0 ? (
+              <AssetTable assets={ownedAssets} portfolioView />
+            ) : (
+              <AssetDetailsView portfolioView asset={ownedAssets[0]} />
+            )}
           </div>
-          <div className="flex-1">
+          {/* <div className="flex-1">
             <AssetTable assets={licensedAssets} licenseView />
-          </div>
+          </div> */}
           <div className="flex-none">
-            <BioTokenWidget
+            {/* <BioTokenWidget
               accountBalance={bioTokenBalance}
               getBioTokenBalance={getBioTokenBalance}
-            />
+            /> */}
           </div>
         </div>
       ) : (

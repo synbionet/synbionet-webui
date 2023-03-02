@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom'
 import { Header } from '../components/Header'
-import { useSelector } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { PrimaryButton } from '../components/common/PrimaryButton'
 import { setActiveAccount } from '../store/accountStore'
-import { connectWalletToBionet } from '../utils'
+import { setAllEvents } from '../store/eventStore'
+import { connectWalletToBionet, getExchangeContractEvents, getProvider } from '../utils'
 
 export function Layout() {
   const activeAccount = useSelector((state) => state.account.activeAccount)
@@ -14,6 +14,15 @@ export function Layout() {
 
   async function connectWallet() {
     dispatch(setActiveAccount(await connectWalletToBionet()))
+
+    const provider = await getProvider()
+    // TODO: append new events for latest block rather than recreating entire history of events
+    provider.on('block', async (blockNumber) => {
+      // temp solution to index the history of the contract
+      const allExchangeEvents = await getExchangeContractEvents()
+      dispatch(setAllEvents(allExchangeEvents))
+    })
+
     window.ethereum.on('accountsChanged', (accounts) => {
       if (accounts.length > 0) {
         return dispatch(setActiveAccount(accounts[0]))

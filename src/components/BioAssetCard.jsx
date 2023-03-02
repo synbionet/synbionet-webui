@@ -1,3 +1,5 @@
+import { PrimaryButton } from './common/PrimaryButton'
+
 export function BioAssetCard({ asset, marketView, portfolioView, licenseView }) {
   return (
     <div className="flex rounded-sm bg-gray-100 border-2 border-slate-300 drop-shadow-sm">
@@ -28,14 +30,14 @@ export function BioAssetCard({ asset, marketView, portfolioView, licenseView }) 
             {asset.description}
           </p>
         </div>
-        {marketView && (
+        {/* {marketView && (
           <p className="mt-4">
             <span className="mr-1 text-2xl font-semibold">{asset.licensePrice}</span>
             <span className="text-slate-500">
               {parseInt(asset.licensePrice) !== 1 ? 'BioTokens' : 'BioToken'}
             </span>
           </p>
-        )}
+        )} */}
         {parseInt(asset.availableLicenses) > 0 && portfolioView && (
           <div className="mt-4">
             <p className="text-sm font-semibold uppercase text-indigo-400">Available on market</p>

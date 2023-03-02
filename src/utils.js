@@ -1,4 +1,103 @@
 import { SynBioNet } from '@synbionet/api'
+import { ethers } from 'ethers'
+
+// temporary helper function for getting and storing events in app storage to recreate history without indexer
+function serializeAndConvertEvent(event) {
+  let e = JSON.parse(JSON.stringify(event))
+  if (e.event === 'OfferCreated') {
+    Object.assign(e, {
+      args: {
+        offerId: ethers.utils.formatUnits(e.args[0], 'wei'),
+        seller: e.args[1],
+        offer: {
+          offerId: ethers.utils.formatUnits(e.args[2][0], 'wei'),
+          seller: e.args[2][1],
+          price: ethers.utils.formatUnits(e.args[2][2], 'wei'),
+          quantityAvailable: ethers.utils.formatUnits(e.args[2][3], 'wei'),
+          assetAddress: e.args[2][4],
+          assetTokenId: ethers.utils.formatUnits(e.args[2][5], 'wei'),
+          metadataUri: e.args[2][6],
+          voided: e.args[2][7],
+        },
+      },
+    })
+  } else if (e.event === 'OfferVoided') {
+    Object.assign(e, {
+      args: {
+        offerId: ethers.utils.formatUnits(e.args[0], 'wei'),
+        seller: e.args[1],
+      },
+    })
+  } else if (e.event === 'ExchangeCreated') {
+    Object.assign(e, {
+      args: {
+        offerId: ethers.utils.formatUnits(e.args[0], 'wei'),
+        exchangeId: ethers.utils.formatUnits(e.args[1], 'wei'),
+        buyer: e.args[2],
+      },
+    })
+  } else if (e.event === 'ExchangeRedeemed') {
+    Object.assign(e, {
+      args: {
+        offerId: ethers.utils.formatUnits(e.args[0], 'wei'),
+        exchangeId: ethers.utils.formatUnits(e.args[1], 'wei'),
+        seller: e.args[2],
+      },
+    })
+  } else if (e.event === 'ExchangeCompleted') {
+    Object.assign(e, {
+      args: {
+        offerId: ethers.utils.formatUnits(e.args[0], 'wei'),
+        exchangeId: ethers.utils.formatUnits(e.args[1], 'wei'),
+        timestamp: ethers.utils.formatUnits(e.args[2], 'wei'),
+      },
+    })
+  }
+  return e
+}
+
+async function sortEvents(allEvents) {
+  const serializedEvents = allEvents.map((event) => serializeAndConvertEvent(event))
+  const createOffers = []
+  const voidOffers = []
+  const exchangesCreated = []
+  const exchangesRedeemed = []
+  const exchangesCompleted = []
+  serializedEvents.forEach((e) => {
+    switch (e.event) {
+      case 'OfferCreated':
+        createOffers.unshift(e.args)
+        break
+      case 'OfferVoided':
+        voidOffers.unshift(e.args)
+        break
+      case 'ExchangeCreated':
+        exchangesCreated.unshift(e.args)
+        break
+      case 'ExchangeRedeemed':
+        exchangesRedeemed.unshift(e.args)
+        break
+      case 'ExchangeCompleted':
+        exchangesCompleted.unshift(e.args)
+        break
+      default:
+        break
+    }
+  })
+  return { createOffers, voidOffers, exchangesCreated, exchangesRedeemed, exchangesCompleted }
+}
+
+export async function getProvider() {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  return await synbionet.requestProvider()
+}
+
+export async function getExchangeContractEvents() {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  const allEvents = await synbionet.exchange.getExchangeEvents()
+  const sortedEvents = sortEvents(allEvents)
+  return sortedEvents
+}
 
 export async function fetchAssets(activeAccount) {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
@@ -30,6 +129,11 @@ export async function getAssetByDid(did, activeAccount) {
   return Object.assign(details, productInfo, { numberOfLicensesOwnedByActiveAccount })
 }
 
+export async function getOfferById(offerId) {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  return synbionet.exchange.getOffer(offerId)
+}
+
 export async function registerAssetOnMarket(
   assetAddress,
   licensePrice,
@@ -46,6 +150,32 @@ export async function registerAssetOnMarket(
     ipForSale,
     ipPrice !== '' ? parseInt(ipPrice) : 0
   )
+}
+
+export async function createOfferOnExchange(assetAddress, price, metadataUri) {
+  if (price === '' || metadataUri === '') return
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  await synbionet.exchange.createOffer(assetAddress, 1, 1, parseInt(price), metadataUri)
+}
+
+export async function voidOffer(offerId) {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  await synbionet.exchange.voidOffer(offerId)
+}
+
+export async function commitToOffer(offerId) {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  await synbionet.exchange.commitToOffer(offerId)
+}
+
+export async function redeem(exchangeId) {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  await synbionet.exchange.redeem(exchangeId)
+}
+
+export async function finalize(exchangeId) {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  await synbionet.exchange.finalize(exchangeId)
 }
 
 export async function buyLicense(assetAddress, qty = 1) {

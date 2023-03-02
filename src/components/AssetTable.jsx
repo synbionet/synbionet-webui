@@ -8,11 +8,12 @@ export function AssetTable({ assets = [], portfolioView, licenseView }) {
     <div className="flex flex-col space-y-4 bg-gray-100 rounded-sm border-2 border-slate-300 drop-shadow-sm px-8 py-6">
       <div className="flex justify-between items-center">
         <h5 className="font-semibold uppercase tracking-wider text-slate-500 py-2">
-          {portfolioView ? 'bioassets' : 'licenses'}
+          {/* TODO: update logic here */}
+          {portfolioView ? 'Business Overview' : 'licenses'}
         </h5>
         {portfolioView ? (
           <Link to="/create">
-            <PrimaryButton defaultSize text="publish asset" />
+            <PrimaryButton defaultSize text="Register Service" />
           </Link>
         ) : (
           <Link to="/market">

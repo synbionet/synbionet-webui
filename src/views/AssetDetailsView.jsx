@@ -4,63 +4,95 @@ import { useSelector } from 'react-redux'
 import { PrimaryButton } from '../components/common/PrimaryButton'
 import { SecondaryButton } from '../components/common/SecondaryButton'
 import { FlyoutForm } from '../components/common/FlyoutForm'
-import { getAssetByDid, registerAssetOnMarket, buyAsset, buyLicense } from '../utils'
+import { OfferTable } from '../components/OfferTable'
+import {
+  getAssetByDid,
+  registerAssetOnMarket,
+  createOfferOnExchange,
+  getOfferById,
+  buyAsset,
+  buyLicense,
+} from '../utils'
 import { ThreeDotsLoader } from '../components/common/ThreeDotsLoader'
 
-export function AssetDetailsView() {
+// TODO: Refactor this page. remove old code
+
+export function AssetDetailsView({ asset, portfolioView }) {
   const { did } = useParams()
   const [assetDetails, setAssetDetails] = useState(undefined)
   const activeAccount = useSelector((state) => state.account.activeAccount)
 
   // form fields
   const [showPanel, setShowPanel] = useState(false)
-  const [licenseQty, setLicenseQty] = useState('')
-  const [licensePrice, setLicensePrice] = useState('')
-  const [ipForSale, setIpForSale] = useState(false)
-  const [ipPrice, setIpPrice] = useState('')
-  const formInputFields = [
+  // const [licenseQty, setLicenseQty] = useState('')
+  // const [licensePrice, setLicensePrice] = useState('')
+  const [offerPrice, setOfferPrice] = useState('')
+  const [offerMetadataUri, setOfferMetadataUri] = useState('')
+  // const [ipForSale, setIpForSale] = useState(false)
+  // const [ipPrice, setIpPrice] = useState('')
+  const offerFormInputFields = [
     {
-      label: 'License Price in BioTokens',
-      value: licensePrice,
-      setter: setLicensePrice,
+      label: 'Offer Details',
+      value: offerMetadataUri,
+      setter: setOfferMetadataUri,
       type: 'text',
     },
     {
-      label: 'Number of available licenses',
-      value: licenseQty,
-      setter: setLicenseQty,
+      label: 'Offer Price',
+      value: offerPrice,
+      setter: setOfferPrice,
       type: 'text',
-    },
-    {
-      label: 'Asset for sale?',
-      value: ipForSale,
-      setter: setIpForSale,
-      type: 'boolean',
-    },
-    {
-      label: 'Asset Price in BioTokens',
-      value: ipPrice,
-      setter: setIpPrice,
-      type: 'text',
-      disabled: !ipForSale,
     },
   ]
+  // const formInputFields = [
+  //   {
+  //     label: 'License Price in BioTokens',
+  //     value: licensePrice,
+  //     setter: setLicensePrice,
+  //     type: 'text',
+  //   },
+  //   {
+  //     label: 'Number of available licenses',
+  //     value: licenseQty,
+  //     setter: setLicenseQty,
+  //     type: 'text',
+  //   },
+  //   {
+  //     label: 'Asset for sale?',
+  //     value: ipForSale,
+  //     setter: setIpForSale,
+  //     type: 'boolean',
+  //   },
+  //   {
+  //     label: 'Asset Price in BioTokens',
+  //     value: ipPrice,
+  //     setter: setIpPrice,
+  //     type: 'text',
+  //     disabled: !ipForSale,
+  //   },
+  // ]
 
   const isListedOnMarket = parseInt(assetDetails?.availableLicenses) > 0
   const isOwnedByActiveAccount = assetDetails?.owner.toLowerCase() === activeAccount?.toLowerCase()
   const isLicensedByActiveAccount =
     !isOwnedByActiveAccount && parseInt(assetDetails?.numberOfLicensesOwnedByActiveAccount) > 0
 
-  async function handleRegisterOnMarket(event) {
+  // async function handleRegisterOnMarket(event) {
+  //   event.preventDefault()
+  //   await registerAssetOnMarket(
+  //     assetDetails.nftAddress,
+  //     licensePrice,
+  //     licenseQty,
+  //     ipForSale,
+  //     ipPrice
+  //   )
+  //   await getAssetDetails()
+  // }
+
+  async function handleCreateOffer(event) {
     event.preventDefault()
-    await registerAssetOnMarket(
-      assetDetails.nftAddress,
-      licensePrice,
-      licenseQty,
-      ipForSale,
-      ipPrice
-    )
-    await getAssetDetails()
+    await createOfferOnExchange(assetDetails.nftAddress, offerPrice, offerMetadataUri)
+    setShowPanel(false)
   }
 
   async function handleBuyLicense() {
@@ -74,7 +106,9 @@ export function AssetDetailsView() {
   }
 
   async function getAssetDetails() {
-    setAssetDetails(await getAssetByDid(did, activeAccount))
+    portfolioView
+      ? setAssetDetails(asset)
+      : setAssetDetails(await getAssetByDid(did, activeAccount))
   }
 
   useEffect(() => {
@@ -100,7 +134,7 @@ export function AssetDetailsView() {
     <div>
       <div className="h-8" />
       <div className="w-11/12 lg:w-9/12 xl:w-3/4 mx-auto bg-slate-100 border-2 border-slate-300 py-4 px-6 shadow-sm">
-        <div className="flex justify-between space-x-4">
+        <div className="flex justify-between space-x-4 pb-5">
           <div className="flex flex-col space-y-8">
             <div>
               <h2 className="font-semibold text-2xl capitalize">{assetDetails.name}</h2>
@@ -112,37 +146,53 @@ export function AssetDetailsView() {
               </div>
             </div>
             <AssetDetailsTableRow title="Description" details={assetDetails.description} />
-            <div className="break-all">
+            {/* <div className="break-all">
               <AssetDetailsTableRow title="Did" details={assetDetails.did} />
-            </div>
+            </div> */}
             <AssetDetailsTableRow
               title="Asset Contract Address"
               details={assetDetails.nftAddress}
             />
-            <AssetDetailsTableRow title="Service Endpoint" details={assetDetails.serviceEndpoint} />
-            <a target="_blank" href={assetDetails.license} rel="noreferrer">
-              <SecondaryButton text="View License" defaultSize />
-            </a>
+            {/* <AssetDetailsTableRow title="Service Endpoint" details={assetDetails.serviceEndpoint} /> */}
           </div>
 
           <div>
-            {isOwnedByActiveAccount && !isListedOnMarket && (
-              <div className="flex flex-col flex-grow space-y-10 items-end">
-                <PrimaryButton
+            <div className="flex flex-col flex-grow space-y-10 items-end">
+              {isOwnedByActiveAccount && (
+                <SecondaryButton
+                  text="Update Org Info"
                   defaultSize
-                  text="List on Market"
-                  onClick={() => setShowPanel(!showPanel)}
+                  onClick={async () => console.log(await getOfferById(1))}
                 />
-                <FlyoutForm
-                  formTitle="List Asset on Market"
-                  inputFields={formInputFields}
-                  showPanel={showPanel}
-                  setShowPanel={setShowPanel}
-                  submitButtonText="List On Market"
-                  handleSubmit={handleRegisterOnMarket}
+              )}
+              {/* <SecondaryButton
+                  text="get all events"
+                  defaultSize
+                  onClick={async () => console.log(offers)}
+                /> */}
+              {!isOwnedByActiveAccount && (
+                <SecondaryButton
+                  defaultSize
+                  text="Contact Us"
+                  // onClick={() => setShowPanel(!showPanel)}
                 />
-              </div>
-            )}
+              )}
+            </div>
+            {/* <div className="flex flex-col flex-grow space-y-10 items-end">
+                 <PrimaryButton
+                   defaultSize
+                   text="List on Market"
+                   onClick={() => setShowPanel(!showPanel)}
+                 />
+                 <FlyoutForm
+                   formTitle="List Asset on Market"
+                   inputFields={formInputFields}
+                   showPanel={showPanel}
+                   setShowPanel={setShowPanel}
+                   submitButtonText="List On Market"
+                   handleSubmit={handleRegisterOnMarket}
+                 />
+               </div> */}
 
             {isListedOnMarket && !isOwnedByActiveAccount && (
               <div className="flex flex-col flex-0 space-y-16 items-end">
@@ -220,6 +270,19 @@ export function AssetDetailsView() {
             )}
           </div>
         </div>
+        <OfferTable
+          providerAddress={assetDetails.nftAddress}
+          portfolioView={isOwnedByActiveAccount}
+          toggleShowPanel={() => setShowPanel(!showPanel)}
+        />
+        <FlyoutForm
+          formTitle="Create Offer on Market"
+          inputFields={offerFormInputFields}
+          showPanel={showPanel}
+          setShowPanel={setShowPanel}
+          submitButtonText="Create Offer"
+          handleSubmit={handleCreateOffer}
+        />
       </div>
     </div>
   )

@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.0",
-    "@synbionet/api": "github:synbionet/synbionet-api-js",
+    "@synbionet/api": "file:../synbionet-api-js#feature/integrate-fair-exchange",
     "@tailwindcss/line-clamp": "^0.4.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
