@@ -14,7 +14,7 @@ export function ExploreViewBody() {
 
   // TODO: fix this temp filter to show what assets are currently listed on market. May not be correct since licenses can run out.
   // const marketAssets = bioAssets.filter((asset) => asset.availableLicenses > 0)
-  const serviceProviders = bioAssets
+  const serviceProviders = bioAssets.filter((asset) => asset.assetType === 'provider')
 
   useEffect(() => {
     async function getAssets() {

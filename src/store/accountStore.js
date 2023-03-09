@@ -6,6 +6,8 @@ export const accountStore = createSlice({
     activeAccount: undefined,
     bioAssets: [],
     bioTokenBalance: undefined,
+    ethBalance: undefined,
+    escrowBalance: undefined,
   },
   reducers: {
     setActiveAccount: (state, activeAccount) => {
@@ -13,6 +15,12 @@ export const accountStore = createSlice({
     },
     setBioTokenBalance: (state, bioTokenBalance) => {
       state.bioTokenBalance = bioTokenBalance.payload
+    },
+    setEthBalance: (state, ethBalance) => {
+      state.ethBalance = ethBalance.payload
+    },
+    setEscrowBalance: (state, escrowBalance) => {
+      state.escrowBalance = escrowBalance.payload
     },
     setBioAssets: (state, bioAssetAddresses) => {
       state.bioAssets = bioAssetAddresses.payload
@@ -23,6 +31,12 @@ export const accountStore = createSlice({
   },
 })
 
-export const { setActiveAccount, setBioTokenBalance, setBioAssets } = accountStore.actions
+export const {
+  setActiveAccount,
+  setBioTokenBalance,
+  setBioAssets,
+  setEthBalance,
+  setEscrowBalance,
+} = accountStore.actions
 
 export default accountStore.reducer

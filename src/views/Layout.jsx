@@ -3,29 +3,43 @@ import { Header } from '../components/Header'
 import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { PrimaryButton } from '../components/common/PrimaryButton'
-import { setActiveAccount } from '../store/accountStore'
+import { setActiveAccount, setEthBalance, setBioAssets } from '../store/accountStore'
 import { setAllEvents } from '../store/eventStore'
-import { connectWalletToBionet, getExchangeContractEvents, getProvider } from '../utils'
+import {
+  connectWalletToBionet,
+  getExchangeContractEvents,
+  getProvider,
+  bigNumToUSDString,
+  fetchAssets,
+} from '../utils'
 
 export function Layout() {
   const activeAccount = useSelector((state) => state.account.activeAccount)
   const location = useLocation()
   const dispatch = useDispatch()
+  let provider = undefined
 
   async function connectWallet() {
-    dispatch(setActiveAccount(await connectWalletToBionet()))
+    const activeAccountAddress = dispatch(setActiveAccount(await connectWalletToBionet())).payload
 
-    const provider = await getProvider()
+    provider = await getProvider()
     // TODO: append new events for latest block rather than recreating entire history of events
+    // TODO: update escrow balance on mined block
     provider.on('block', async (blockNumber) => {
       // temp solution to index the history of the contract
+      const bioAssets = await fetchAssets()
+      dispatch(setBioAssets(bioAssets))
       const allExchangeEvents = await getExchangeContractEvents()
       dispatch(setAllEvents(allExchangeEvents))
+
+      dispatch(setEthBalance(bigNumToUSDString(await provider.getBalance(activeAccountAddress))))
     })
 
-    window.ethereum.on('accountsChanged', (accounts) => {
+    window.ethereum.on('accountsChanged', async (accounts) => {
       if (accounts.length > 0) {
-        return dispatch(setActiveAccount(accounts[0]))
+        const activeAccountAddress = dispatch(setActiveAccount(accounts[0])).payload
+        dispatch(setEthBalance(bigNumToUSDString(await provider.getBalance(activeAccountAddress))))
+        return
       } else {
         return dispatch(setActiveAccount(undefined))
       }
