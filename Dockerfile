@@ -11,7 +11,7 @@ WORKDIR /root/
 RUN curl -L https://foundry.paradigm.xyz | bash
 RUN ~/.foundry/bin/foundryup
 
-RUN git clone https://github.com/synbionet/synbionet-core.git
+RUN git clone -b v0.1.0 https://github.com/synbionet/synbionet-core.git
 
 WORKDIR /root/synbionet-core
 ADD docker_artifacts/solc-0.8.16-linux .
