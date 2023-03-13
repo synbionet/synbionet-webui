@@ -45,7 +45,7 @@ export function BioTokenWidget({ accountBalance, escrowBalance }) {
         )}
       </div>
 
-      <div className="flex flex-col space-y-4 w-48">
+      <div className="flex flex-col space-y-4">
         <PrimaryButton
           text="withdraw"
           onClick={withdrawFunds}
