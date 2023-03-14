@@ -15,8 +15,18 @@ export function AssetDetailsView({ asset, portfolioView }) {
   const [assetDetails, setAssetDetails] = useState(undefined)
   const activeAccount = useSelector((state) => state.account.activeAccount)
 
-  // form fields
-  const [showPanel, setShowPanel] = useState(false)
+  const [showOfferPanel, setShowOfferPanel] = useState(false)
+  const [showRequestPanel, setShowRequestPanel] = useState(false)
+
+  // request form fields
+  const [geneName, setGeneName] = useState('')
+  const [sequence, setSequence] = useState('')
+  const [requiredServices, setRequiredServices] = useState([])
+  const [amount, setAmount] = useState('')
+  const [purity, setPurity] = useState('')
+  const [notes, setNotes] = useState('')
+
+  // offer form fields
   const [offerPrice, setOfferPrice] = useState('')
   const [offerMetadataUri, setOfferMetadataUri] = useState('')
   const [offerDescription, setOfferDescription] = useState('')
@@ -48,6 +58,51 @@ export function AssetDetailsView({ asset, portfolioView }) {
     },
   ]
 
+  const requestFormInputFields = [
+    {
+      label: 'Gene Name',
+      value: geneName,
+      setter: setGeneName,
+      type: 'text',
+    },
+    {
+      label: 'Sequence',
+      value: sequence,
+      setter: setSequence,
+      type: 'textarea',
+    },
+    {
+      label: 'Required Services',
+      value: requiredServices,
+      setter: setRequiredServices,
+      type: 'multi-select',
+      selectionOptions: [
+        'Bacterial Expression System',
+        'Yeast Expression System',
+        'Baculovirus-Insect Cell Expression System',
+        'Mammalian Cell Expression System',
+      ],
+    },
+    {
+      label: 'Amount',
+      value: amount,
+      setter: setAmount,
+      type: 'text',
+    },
+    {
+      label: 'Purity',
+      value: purity,
+      setter: setPurity,
+      type: 'text',
+    },
+    {
+      label: 'Additional Notes',
+      value: notes,
+      setter: setNotes,
+      type: 'additionalNotes',
+    },
+  ]
+
   // TODO: remove isListedOnMarket variable leftover from version 1.
   const isListedOnMarket = false
   const isOwnedByActiveAccount = assetDetails?.owner.toLowerCase() === activeAccount?.toLowerCase()
@@ -63,7 +118,12 @@ export function AssetDetailsView({ asset, portfolioView }) {
       offerPrice,
       offerMetadataUri
     )
-    setShowPanel(false)
+    setShowOfferPanel(false)
+  }
+
+  function handleSendRequest(event) {
+    event.preventDefault()
+    setShowRequestPanel(false)
   }
 
   async function handleBuyLicense() {
@@ -140,8 +200,8 @@ export function AssetDetailsView({ asset, portfolioView }) {
               {!isOwnedByActiveAccount && (
                 <SecondaryButton
                   defaultSize
-                  text="Contact Us"
-                  // onClick={() => setShowPanel(!showPanel)}
+                  text="Send Request"
+                  onClick={() => setShowRequestPanel(!showRequestPanel)}
                 />
               )}
             </div>
@@ -225,15 +285,23 @@ export function AssetDetailsView({ asset, portfolioView }) {
         <OfferTable
           providerAddress={assetDetails.nftAddress}
           isOwnedByActiveAccount={isOwnedByActiveAccount}
-          toggleShowPanel={() => setShowPanel(!showPanel)}
+          toggleShowPanel={() => setShowOfferPanel(!showOfferPanel)}
         />
         <FlyoutForm
           formTitle="Create Offer on Market"
           inputFields={offerFormInputFields}
-          showPanel={showPanel}
-          setShowPanel={setShowPanel}
+          showPanel={showOfferPanel}
+          setShowPanel={setShowOfferPanel}
           submitButtonText="Create Offer"
           handleSubmit={handleCreateOffer}
+        />
+        <FlyoutForm
+          formTitle={`Request Service from ${assetDetails.name}`}
+          inputFields={requestFormInputFields}
+          showPanel={showRequestPanel}
+          setShowPanel={setShowRequestPanel}
+          submitButtonText="Send Request"
+          handleSubmit={handleSendRequest}
         />
       </div>
     </div>
