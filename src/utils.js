@@ -16,6 +16,7 @@ export function bigNumToEtherString(bigNum) {
 
 export function bigNumToUSDString(bigNum) {
   const ethString = ethers.utils.formatEther(bigNum)
+  // TODO: dynamically set accurate ethPrice instead of hard-coded value
   const ethPriceInUSD = 1574
   return {
     value: (parseFloat(ethString) * ethPriceInUSD).toFixed(2),
