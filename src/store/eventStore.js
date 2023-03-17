@@ -8,6 +8,7 @@ export const eventStore = createSlice({
     exchangeCreatedEvents: [],
     exchangeRedeemedEvents: [],
     exchangeCompletedEvents: [],
+    exchangeRevokedEvents: [],
   },
   reducers: {
     setAllEvents: (state, allEvents) => {
@@ -16,6 +17,7 @@ export const eventStore = createSlice({
       state.exchangeCreatedEvents = allEvents.payload.exchangesCreated
       state.exchangeRedeemedEvents = allEvents.payload.exchangesRedeemed
       state.exchangeCompletedEvents = allEvents.payload.exchangesCompleted
+      state.exchangeRevokedEvents = allEvents.payload.exchangesRevoked
     },
     // setCreateOfferEvents: (state, createOfferEvents) => {
     //   state.createOfferEvents = createOfferEvents.payload

@@ -99,6 +99,14 @@ function serializeAndConvertEvent(event) {
         amount: ethers.utils.formatUnits(e.args[1], 'wei'),
       },
     })
+  } else if (e.event === 'ExchangeRevoked') {
+    Object.assign(e, {
+      args: {
+        offerId: ethers.utils.formatUnits(e.args[0], 'wei'),
+        exchangeId: ethers.utils.formatUnits(e.args[1], 'wei'),
+        seller: e.args[2],
+      },
+    })
   }
   return e
 }
@@ -112,6 +120,7 @@ async function sortEvents(allEvents) {
   const exchangesCompleted = []
   const withdraws = []
   const fundsNotAvailable = []
+  const exchangesRevoked = []
   serializedEvents.forEach((e) => {
     switch (e.event) {
       case 'OfferCreated':
@@ -135,6 +144,9 @@ async function sortEvents(allEvents) {
       case 'FundsNotAvailable':
         fundsNotAvailable.unshift(e.args)
         break
+      case 'ExchangeRevoked':
+        exchangesRevoked.unshift(e.args)
+        break
       default:
         break
     }
@@ -147,6 +159,7 @@ async function sortEvents(allEvents) {
     exchangesCompleted,
     withdraws,
     fundsNotAvailable,
+    exchangesRevoked,
   }
 }
 
@@ -245,6 +258,11 @@ export async function commitToOffer(offerId) {
 export async function redeem(exchangeId) {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
   await synbionet.exchange.redeem(exchangeId)
+}
+
+export async function revoke(exchangeId) {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  await synbionet.exchange.revoke(exchangeId)
 }
 
 export async function withdrawFunds() {

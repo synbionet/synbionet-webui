@@ -1,6 +1,6 @@
 import { PrimaryButton } from './common/PrimaryButton'
 import { useSelector } from 'react-redux'
-import { voidOffer, commitToOffer, redeem, finalize, generateDid, weiToUSD } from '../utils'
+import { voidOffer, commitToOffer, redeem, revoke, finalize, generateDid, weiToUSD } from '../utils'
 import { useState } from 'react'
 
 export function OfferTable({
@@ -21,6 +21,7 @@ export function OfferTable({
   const createdExchanges = useSelector((state) => state.event.exchangeCreatedEvents)
   const redeemedExchanges = useSelector((state) => state.event.exchangeRedeemedEvents)
   const completedExchanges = useSelector((state) => state.event.exchangeCompletedEvents)
+  const revokedExchanges = useSelector((state) => state.event.exchangeRevokedEvents)
 
   async function handleVoidOffer(offerId) {
     await voidOffer(offerId)
@@ -32,6 +33,10 @@ export function OfferTable({
 
   async function handleRedeemOffer(offerId) {
     await redeem(offerId)
+  }
+
+  async function handleRevokeOffer(exchangeId) {
+    await revoke(exchangeId)
   }
 
   async function handleCompleteExchange(offerId) {
@@ -65,6 +70,10 @@ export function OfferTable({
         const isCommittedToBuy =
           isCommittedOffer && isCommittedOffer.buyer.toLowerCase() === activeAccount.toLowerCase()
 
+        const isExchangeRevoked =
+          isCommittedOffer &&
+          revokedExchanges.find((re) => re.exchangeId === isCommittedOffer.exchangeId)
+
         if (workflowView && !isCommittedToBuy) return undefined
 
         const isRedeemed =
@@ -77,6 +86,8 @@ export function OfferTable({
         function determineButtonState() {
           if (isOfferVoided) {
             return { text: 'Offer Voided', onClick: null }
+          } else if (isExchangeRevoked) {
+            return { text: 'Revoked', onClick: null }
           } else if (isComplete) {
             return { text: 'Completed', onClick: null }
           } else if (isRedeemed) {
@@ -87,7 +98,12 @@ export function OfferTable({
               }
             else return { text: 'Redeemed', onClick: null }
           } else if (!!isCommittedOffer) {
-            if (isCommittedToBuy)
+            if (isOwnedByActiveAccount)
+              return {
+                text: 'Revoke',
+                onClick: () => handleRevokeOffer(isCommittedOffer.exchangeId),
+              }
+            else if (isCommittedToBuy)
               return {
                 text: 'Redeem',
                 onClick: () => handleRedeemOffer(isCommittedOffer.exchangeId),
@@ -123,7 +139,9 @@ export function OfferTable({
                     : isRedeemed
                     ? 'Redeemed'
                     : isCommittedOffer
-                    ? 'Committed'
+                    ? isExchangeRevoked
+                      ? 'Revoked'
+                      : 'Committed'
                     : isOfferVoided
                     ? 'Voided'
                     : 'Created'}
@@ -212,13 +230,21 @@ export function OfferTable({
                     )}
                   </div>
                   <div className="flex flex-col items-center w-1/4">
-                    {buttonState && buttonState.text !== 'Redeem' ? (
+                    {buttonState &&
+                    buttonState.text !== 'Redeem' &&
+                    buttonState.text !== 'Revoke' ? (
                       <div
-                        className={`text-center ${!isRedeemed && !isComplete && 'text-gray-500'}`}
+                        className={`text-center ${
+                          !isRedeemed && !isComplete && !isExchangeRevoked && 'text-gray-500'
+                        }`}
                       >
-                        <div className="font-semibold uppercase">redeemed</div>
+                        <div className="font-semibold uppercase">
+                          {isExchangeRevoked ? 'revoked' : 'redeemed'}
+                        </div>
                         <div className="font-mono">
-                          {!isRedeemed && !isComplete ? 'TBD' : "20 April '23 - 9:16 AM"}
+                          {!isRedeemed && !isComplete && !isExchangeRevoked
+                            ? 'TBD'
+                            : "20 April '23 - 9:16 AM"}
                         </div>
                       </div>
                     ) : (
@@ -256,8 +282,11 @@ export function OfferTable({
 function OfferTableButton({ buttonText, onClick }) {
   const dynamicStyle = `w-32 h-8 justify-center flex rounded-sm text-sm font-semibold items-center 
     ${buttonText === 'View Agreement' && 'text-indigo-500 border-2 border-indigo-500'}
-    ${buttonText === 'Offer Voided' && 'text-white bg-slate-600 opacity-60'}
-    ${buttonText === 'Void Offer' && 'text-white bg-slate-600'}
+    ${
+      (buttonText === 'Offer Voided' || buttonText === 'Revoked') &&
+      'text-white bg-slate-600 opacity-60'
+    }
+    ${(buttonText === 'Void Offer' || buttonText === 'Revoke') && 'text-white bg-slate-600'}
     ${buttonText === 'Commit' && 'text-white bg-indigo-500'}
     ${
       (buttonText === 'Committed' ||
