@@ -13,7 +13,8 @@ export function ExploreViewBody() {
   const [isLoading, setIsLoading] = useState(false)
 
   // TODO: fix this temp filter to show what assets are currently listed on market. May not be correct since licenses can run out.
-  const marketAssets = bioAssets.filter((asset) => asset.availableLicenses > 0)
+  // const marketAssets = bioAssets.filter((asset) => asset.availableLicenses > 0)
+  const serviceProviders = bioAssets.filter((asset) => asset.assetType === 'provider')
 
   useEffect(() => {
     async function getAssets() {
@@ -26,7 +27,7 @@ export function ExploreViewBody() {
 
   return (
     <div className="flex flex-wrap mx-8">
-      {marketAssets.map((asset) => {
+      {serviceProviders.map((asset) => {
         return (
           <div key={asset.did} className="w-1/4 p-3">
             <Link to={`/asset/${asset.did}`}>
@@ -35,7 +36,7 @@ export function ExploreViewBody() {
           </div>
         )
       })}
-      {marketAssets.length === 0 && isLoading && <GridLoader />}
+      {serviceProviders.length === 0 && isLoading && <GridLoader />}
     </div>
   )
 }

@@ -12,7 +12,7 @@ export function SearchBar() {
       <SearchIcon className="w-8 h-8 px-2 fill-slate-500" />
       <input
         className="grow placeholder:italic placeholder:text-slate-500 text-slate-800 bg-transparent py-2 pr-3 focus:outline-none sm:text-sm tracking-wide"
-        placeholder="Search marketplace..."
+        placeholder="Search Providers"
         type="text"
         name="search"
         value={searchText}

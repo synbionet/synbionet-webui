@@ -40,6 +40,7 @@ export function FlyoutForm({
                   label={field.label}
                   type={field.type}
                   disabled={field.disabled}
+                  selectionOptions={field.selectionOptions}
                 />
               )
             })}
