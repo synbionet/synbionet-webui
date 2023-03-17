@@ -138,7 +138,7 @@ export function OfferTable({
             </div>
             <div
               className={`transition-all duration-500 transition-500 overflow-hidden ${
-                expandedOffer === o.offerId ? 'h-80' : 'h-0'
+                expandedOffer === o.offerId ? 'h-96' : 'h-0'
               }`}
             >
               <div className="flex flex-col">
@@ -148,11 +148,15 @@ export function OfferTable({
                     <h3 className="font-semibold uppercase text-sm mb-1 text-gray-500">
                       Description
                     </h3>
-                    <p>{offerDetails.description}</p>
+                    <p className="h-24 overflow-auto">{offerDetails.description}</p>
+                    <h3 className="pt-8 font-semibold uppercase text-sm mb-1 text-gray-500">
+                      Contract Checksum
+                    </h3>
+                    <p>{offerDetails.license}</p>
                   </div>
                   <div className="flex pr-8 pt-6 pl-24">
                     <div className="flex-1 flex flex-col items-center">
-                      <OfferTableButton buttonText="View Agreement" onClick={buttonState.onClick} />
+                      <OfferTableButton buttonText="View Agreement" onClick={() => {}} />
                       <div className="text-sm font-semibold pt-3">delivery 4-6 weeks</div>
                       <div className="text-sm font-semibold pt-3">98% purity</div>
                       <div className="text-sm font-semibold pt-3">accredited lab</div>
