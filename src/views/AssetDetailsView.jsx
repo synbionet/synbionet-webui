@@ -28,7 +28,7 @@ export function AssetDetailsView({ asset, portfolioView }) {
 
   // offer form fields
   const [offerPrice, setOfferPrice] = useState('')
-  const [offerMetadataUri, setOfferMetadataUri] = useState('')
+  const [contractChecksum, setContractChecksum] = useState('')
   const [offerDescription, setOfferDescription] = useState('')
   const [offerName, setOfferName] = useState('')
   const offerFormInputFields = [
@@ -45,15 +45,15 @@ export function AssetDetailsView({ asset, portfolioView }) {
       type: 'textarea',
     },
     {
-      label: 'Offer Price',
+      label: 'Offer Price (USD)',
       value: offerPrice,
       setter: setOfferPrice,
       type: 'text',
     },
     {
-      label: 'Agreement URI',
-      value: offerMetadataUri,
-      setter: setOfferMetadataUri,
+      label: 'Contract Checksum',
+      value: contractChecksum,
+      setter: setContractChecksum,
       type: 'text',
     },
   ]
@@ -116,7 +116,7 @@ export function AssetDetailsView({ asset, portfolioView }) {
       offerName,
       offerDescription,
       offerPrice,
-      offerMetadataUri
+      contractChecksum
     )
     setShowOfferPanel(false)
   }
@@ -181,14 +181,6 @@ export function AssetDetailsView({ asset, portfolioView }) {
               </div>
             </div>
             <AssetDetailsTableRow title="Description" details={assetDetails.description} />
-            {/* <div className="break-all">
-              <AssetDetailsTableRow title="Did" details={assetDetails.did} />
-            </div> */}
-            <AssetDetailsTableRow
-              title="Asset Contract Address"
-              details={assetDetails.nftAddress}
-            />
-            {/* <AssetDetailsTableRow title="Service Endpoint" details={assetDetails.serviceEndpoint} /> */}
           </div>
 
           <div>
@@ -204,6 +196,13 @@ export function AssetDetailsView({ asset, portfolioView }) {
                   onClick={() => setShowRequestPanel(!showRequestPanel)}
                 />
               )}
+              <a
+                target="_blank"
+                href="https://synbio-tech.com/terms-and-conditions/"
+                rel="noreferrer"
+              >
+                <SecondaryButton text="Terms/Conditions" defaultSize />
+              </a>
             </div>
 
             {isListedOnMarket && !isOwnedByActiveAccount && (

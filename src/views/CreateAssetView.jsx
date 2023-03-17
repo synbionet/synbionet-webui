@@ -9,7 +9,7 @@ export function CreateAssetView() {
   const [titleValue, setTitleValue] = useState('')
   const [descriptionValue, setDescriptionValue] = useState('')
   const [serviceEndpointValue, setServiceEndpointValue] = useState('')
-  const [licenseValue, setlicenseValue] = useState('')
+  const [licenseValue, setLicenseValue] = useState('')
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -20,28 +20,28 @@ export function CreateAssetView() {
   return (
     <div>
       <div className="mt-8 w-11/12 lg:w-9/12 xl:w-3/4 mx-auto py-4 px-6">
-        <div className="mb-8 font-semibold text-2xl capitalize">Publish Asset</div>
+        <div className="mb-8 font-semibold text-2xl capitalize">Register Service</div>
         <form className="flex flex-col space-y-8">
-          <FormField value={titleValue} setter={setTitleValue} type="text" label="title" />
+          <FormField value={titleValue} setter={setTitleValue} type="text" label="service name" />
           <FormField
             value={descriptionValue}
             setter={setDescriptionValue}
             type="textarea"
-            label="description"
+            label="service description"
           />
           <FormField
             value={serviceEndpointValue}
             setter={setServiceEndpointValue}
             type="text"
-            label="service endpoint"
+            label="Website"
           />
           <FormField
             value={licenseValue}
-            setter={setlicenseValue}
+            setter={setLicenseValue}
             type="text"
-            label="license URI"
+            label="Terms and Conditions URI"
           />
-          <PrimaryButton defaultSize text="Publish" onClick={handleSubmit} />
+          <PrimaryButton defaultSize text="Register" onClick={handleSubmit} />
         </form>
       </div>
     </div>
