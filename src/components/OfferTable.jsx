@@ -130,11 +130,6 @@ export function OfferTable({
                 </div>
                 <div className="w-32 text-center font-semibold">{weiToUSD(o.offer.price)}</div>
               </div>
-              {/* <div className="flex-1 px-3 flex justify-end">
-                {buttonState && (
-                  <OfferTableButton buttonText={buttonState.text} onClick={buttonState.onClick} />
-                )}
-              </div> */}
             </div>
             <div
               className={`transition-all duration-500 transition-500 overflow-hidden ${
@@ -142,7 +137,6 @@ export function OfferTable({
               }`}
             >
               <div className="flex flex-col">
-                {/* <div className="pt-4 mr-6 border-t border-slate-600" /> */}
                 <div className="flex">
                   <div className="flex-1 pt-4 pl-16">
                     <h3 className="font-semibold uppercase text-sm mb-1 text-gray-500">
@@ -163,6 +157,8 @@ export function OfferTable({
                     </div>
                   </div>
                 </div>
+
+                {/* TODO: make this progress bar dynamic and refactor as separate component */}
                 <div className="pt-16 flex">
                   <div className="flex justify-center w-1/4 items-center">
                     <div className="flex-1" />
@@ -185,11 +181,8 @@ export function OfferTable({
                     <div className="flex-1" />
                   </div>
                 </div>
+
                 <div className="pt-6 flex justify-between text-sm align-middle">
-                  {/* <div className="text-center">
-                    <div className="font-semibold uppercase">created</div>
-                    <div className="font-mono">20 April '23 - 9:16 AM</div>
-                  </div> */}
                   <div className="flex flex-col items-center w-1/4">
                     {buttonState && buttonState.text !== 'Void Offer' ? (
                       <div className={`text-center ${!isCommittedOffer && 'text-gray-500'}`}>
@@ -203,12 +196,6 @@ export function OfferTable({
                       />
                     )}
                   </div>
-                  {/* <div className="flex flex-col items-center">
-                    <div className="text-center">
-                      <div className="font-semibold uppercase">committed</div>
-                      <div className="font-mono">20 April '23 - 9:16 AM</div>
-                    </div>
-                  </div> */}
                   <div className="flex flex-col items-center w-1/4">
                     {buttonState && buttonState.text !== 'Commit' ? (
                       <div className={`text-center ${!isCommittedOffer && 'text-gray-500'}`}>
