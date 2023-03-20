@@ -2,6 +2,8 @@ import { FormField } from './FormField'
 import { PrimaryButton } from './PrimaryButton'
 import { SecondaryButton } from './SecondaryButton'
 import { ReactComponent as CloseIcon } from '../../assets/close-x.svg'
+import { materialRenderers, materialCells } from '@jsonforms/material-renderers'
+import { JsonForms } from '@jsonforms/react'
 
 export function FlyoutForm({
   inputFields = [],
@@ -10,6 +12,7 @@ export function FlyoutForm({
   handleSubmit,
   showPanel,
   setShowPanel,
+  jsonForm,
 }) {
   return (
     <div>
@@ -30,36 +33,133 @@ export function FlyoutForm({
           </button>
         </div>
         <div className="w-full h-full py-4 overflow-scroll">
-          <form className="flex flex-col space-y-8">
-            {inputFields.map((field, index) => {
-              return (
-                <FormField
-                  key={index}
-                  value={field.value}
-                  setter={field.setter}
-                  label={field.label}
-                  type={field.type}
-                  disabled={field.disabled}
-                  selectionOptions={field.selectionOptions}
-                />
-              )
-            })}
-            <div className="space-y-4">
-              <PrimaryButton
-                text={submitButtonText ? submitButtonText : 'Submit'}
-                onClick={handleSubmit}
-              />
-              <SecondaryButton
-                text="Cancel"
-                onClick={(e) => {
-                  e.preventDefault()
-                  setShowPanel(false)
-                }}
-              />
-            </div>
-          </form>
+          {jsonForm ? (
+            <JsonForms
+              schema={jsonForm.dataSchema}
+              uischema={jsonForm.uiSchema}
+              data={jsonForm.data}
+              renderers={materialRenderers}
+              cells={materialCells}
+              onChange={({ data, errors }) => {
+                jsonForm.setData(data)
+              }}
+            />
+          ) : (
+            <form className="flex flex-col space-y-8">
+              {inputFields.map((field, index) => {
+                return (
+                  <FormField
+                    key={index}
+                    value={field.value}
+                    setter={field.setter}
+                    label={field.label}
+                    type={field.type}
+                    disabled={field.disabled}
+                    selectionOptions={field.selectionOptions}
+                  />
+                )
+              })}
+            </form>
+          )}
+          <div className="space-y-4 pt-4">
+            <PrimaryButton
+              text={submitButtonText ? submitButtonText : 'Submit'}
+              onClick={handleSubmit}
+            />
+            <SecondaryButton
+              text="Cancel"
+              onClick={(e) => {
+                e.preventDefault()
+                setShowPanel(false)
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
   )
 }
+
+// dynamic form examples for jsonForms
+
+// raw json
+// {"uiSchema":{"type":"VerticalLayout","elements":[{"type":"Label","text":"Protein Expression and Purification"},{"type":"Control","scope":"#/properties/geneName"},{"type":"Control","scope":"#/properties/sequence","label":"Sequence","options":{"multi":true}},{"type":"Control","scope":"#/properties/requiredServices"},{"type":"Control","scope":"#/properties/purity","label":"Purity (%)"},{"type":"Control","scope":"#/properties/amount","label":"Amount (g)"},{"type":"Control","scope":"#/properties/additionalComments","options":{"multi":true}}]},"dataSchema":{"type":"object","properties":{"geneName":{"type":"string"},"sequence":{"type":"string"},"requiredServices":{"type":"array","uniqueItems":true,"items":{"type":"string","enum":["Yeast Expression System","Baculovirus-Insect Cell Expression System","Mammalian Cell Expression System","Bacterial Expression System"]}},"purity":{"type":"integer","maximum":100},"amount":{"type":"integer"},"additionalComments":{"type":"string"}}}}
+
+// javascript objects
+// const dataSchema = {
+//   type: 'object',
+//   properties: {
+//     geneName: {
+//       type: 'string',
+//     },
+//     sequence: {
+//       type: 'string',
+//     },
+//     requiredServices: {
+//       type: 'array',
+//       uniqueItems: true,
+//       items: {
+//         type: 'string',
+//         enum: [
+//           'Yeast Expression System',
+//           'Baculovirus-Insect Cell Expression System',
+//           'Mammalian Cell Expression System',
+//           'Bacterial Expression System',
+//         ],
+//       },
+//     },
+//     purity: {
+//       type: 'integer',
+//       maximum: 100,
+//     },
+//     amount: {
+//       type: 'integer',
+//     },
+//     additionalComments: {
+//       type: 'string',
+//     },
+//   },
+// }
+
+// const uiSchema = {
+//   type: 'VerticalLayout',
+//   elements: [
+//     {
+//       type: 'Label',
+//       text: 'Protein Expression and Purification',
+//     },
+//     {
+//       type: 'Control',
+//       scope: '#/properties/geneName',
+//     },
+//     {
+//       type: 'Control',
+//       scope: '#/properties/sequence',
+//       label: 'Sequence',
+//       options: {
+//         multi: true,
+//       },
+//     },
+//     {
+//       type: 'Control',
+//       scope: '#/properties/requiredServices',
+//     },
+//     {
+//       type: 'Control',
+//       scope: '#/properties/purity',
+//       label: 'Purity (%)',
+//     },
+//     {
+//       type: 'Control',
+//       scope: '#/properties/amount',
+//       label: 'Amount (g)',
+//     },
+//     {
+//       type: 'Control',
+//       scope: '#/properties/additionalComments',
+//       options: {
+//         multi: true,
+//       },
+//     },
+//   ],
+// }

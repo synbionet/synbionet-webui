@@ -32,14 +32,14 @@ export function CreateAssetView() {
           <FormField
             value={serviceEndpointValue}
             setter={setServiceEndpointValue}
-            type="text"
-            label="Website"
+            type="textarea"
+            label="Custom Service Request Form"
           />
           <FormField
             value={licenseValue}
             setter={setLicenseValue}
-            type="text"
-            label="Terms and Conditions URI"
+            type="textarea"
+            label="Terms and Conditions"
           />
           <PrimaryButton defaultSize text="Register" onClick={handleSubmit} />
         </form>

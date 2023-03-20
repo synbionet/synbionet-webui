@@ -13,7 +13,16 @@ import { ThreeDotsLoader } from '../components/common/ThreeDotsLoader'
 export function AssetDetailsView({ asset, portfolioView }) {
   const { did } = useParams()
   const [assetDetails, setAssetDetails] = useState(undefined)
+  const [serviceRequestData, setServiceRequestData] = useState({})
   const activeAccount = useSelector((state) => state.account.activeAccount)
+
+  // TODO: change name of serviceEndpoint field to something more appropriate, like jsonFormSchema
+  let jsonFormSchemas
+  try {
+    jsonFormSchemas = JSON.parse(assetDetails.serviceEndpoint)
+  } catch (e) {}
+  const dataSchema = jsonFormSchemas?.dataSchema
+  const uiSchema = jsonFormSchemas?.uiSchema
 
   const [showOfferPanel, setShowOfferPanel] = useState(false)
   const [showRequestPanel, setShowRequestPanel] = useState(false)
@@ -295,6 +304,15 @@ export function AssetDetailsView({ asset, portfolioView }) {
           handleSubmit={handleCreateOffer}
         />
         <FlyoutForm
+          jsonForm={
+            dataSchema &&
+            uiSchema && {
+              dataSchema,
+              uiSchema,
+              data: serviceRequestData,
+              setData: setServiceRequestData,
+            }
+          }
           formTitle={`Request Service from ${assetDetails.name}`}
           inputFields={requestFormInputFields}
           showPanel={showRequestPanel}
