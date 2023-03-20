@@ -1,8 +1,12 @@
 # SynBioNet Web Client
 
-To Stand Up:
+## Requirements
 
-**_allow a few seconds for contracts to deploy before starting webui, otherwise contract addresses my be impacted_**
+- Foundry (download [here](https://book.getfoundry.sh/getting-started/installation))
+- npm (download [here](https://nodejs.org/en/download))
+
+## Running Locally
+
 **_docker build coming soon_**
 
 1. launch a local anvil node by executing `anvil`
@@ -14,8 +18,6 @@ To Stand Up:
 4. Launch the indexer from the synbionet-indexer repo [https://github.com/synbionet/synbionet-indexer](https://github.com/synbionet/synbionet-indexer) by navigating to the project folder and executing `make run`.
 
 5. Install dependencies with `npm install`
-
-   **_if experiencing any issues after spinning up, try deleting node_modules folder and package-lock.json and running npm install again_**
 
 6. Run with `npm start` . Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
