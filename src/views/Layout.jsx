@@ -3,7 +3,12 @@ import { Header } from '../components/Header'
 import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { PrimaryButton } from '../components/common/PrimaryButton'
-import { setActiveAccount, setEthBalance, setBioAssets } from '../store/accountStore'
+import {
+  setActiveAccount,
+  setEthBalance,
+  setBioAssets,
+  setIsTransactionPending,
+} from '../store/accountStore'
 import { setAllEvents } from '../store/eventStore'
 import {
   connectWalletToBionet,
@@ -33,6 +38,7 @@ export function Layout() {
       dispatch(setAllEvents(allExchangeEvents))
 
       dispatch(setEthBalance(bigNumToUSDString(await provider.getBalance(activeAccountAddress))))
+      dispatch(setIsTransactionPending(false))
     })
 
     window.ethereum.on('accountsChanged', async (accounts) => {
