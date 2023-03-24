@@ -204,7 +204,9 @@ export function OfferTable({
                   <div className="flex flex-col items-center w-1/4">
                     {buttonState && buttonState.text !== 'Void Offer' ? (
                       <div className={`text-center ${!isCommittedOffer && 'text-gray-500'}`}>
-                        <div className="font-semibold uppercase">created</div>
+                        <div className="font-semibold uppercase">
+                          {isOfferVoided ? 'Voided' : 'Created'}
+                        </div>
                         <div className="font-mono">{"20 April '23 - 9:16 AM"}</div>
                       </div>
                     ) : (
