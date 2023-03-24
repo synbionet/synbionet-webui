@@ -165,7 +165,7 @@ async function sortEvents(allEvents) {
 
 export async function getProvider() {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  return await synbionet.requestProvider()
+  return await synbionet.config.getProvider()
 }
 
 export async function getExchangeContractEvents() {
@@ -266,6 +266,7 @@ export async function revoke(exchangeId) {
 }
 
 export async function withdrawFunds() {
+  console.log('withdraw function')
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
   await synbionet.exchange.withdrawFunds()
 }
