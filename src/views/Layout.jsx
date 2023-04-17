@@ -3,12 +3,8 @@ import { Header } from '../components/Header'
 import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { PrimaryButton } from '../components/common/PrimaryButton'
-import {
-  setActiveAccount,
-  setEthBalance,
-  setBioAssets,
-  setIsTransactionPending,
-} from '../store/accountStore'
+import { ToastNotification } from '../components/common/ToastNotification'
+import { setActiveAccount, setEthBalance, setBioAssets } from '../store/accountStore'
 import { setAllEvents } from '../store/eventStore'
 import {
   connectWalletToBionet,
@@ -16,12 +12,16 @@ import {
   getProvider,
   bigNumToUSDString,
   fetchAssets,
+  setDispatchForUtils,
 } from '../utils'
 
 export function Layout() {
   const activeAccount = useSelector((state) => state.account.activeAccount)
+  const lastTransactionStatus = useSelector((state) => state.account.lastTransactionStatus)
+  const lastTransactionMessage = useSelector((state) => state.account.lastTransactionMessage)
   const location = useLocation()
   const dispatch = useDispatch()
+  setDispatchForUtils(dispatch)
   let provider = undefined
 
   async function connectWallet() {
@@ -38,7 +38,6 @@ export function Layout() {
       dispatch(setAllEvents(allExchangeEvents))
 
       dispatch(setEthBalance(bigNumToUSDString(await provider.getBalance(activeAccountAddress))))
-      dispatch(setIsTransactionPending(false))
     })
 
     window.ethereum.on('accountsChanged', async (accounts) => {
@@ -58,6 +57,10 @@ export function Layout() {
 
   return (
     <div className="App flex flex-col min-h-screen text-slate-700 tracking-wide">
+      <ToastNotification
+        lastTransactionStatus={lastTransactionStatus}
+        message={lastTransactionMessage}
+      />
       <div className="flex-0">
         <Header connectWallet={connectWallet} />
       </div>

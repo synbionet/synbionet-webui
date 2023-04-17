@@ -1,5 +1,12 @@
 import { SynBioNet } from '@synbionet/api'
 import { ethers } from 'ethers'
+import { setLastTransactionStatus } from './store/accountStore'
+
+// TODO: dynamically set accurate ethPrice instead of hard-coded value
+const ethPriceInUSD = 1574
+
+// dispatch to set values in store. must be set from a react component using useDispatch()
+let dispatch = undefined
 
 export function bigNumToEtherString(bigNum) {
   // TODO: refactor logic to return appropriate string and units (eth, gwei, wei)
@@ -16,8 +23,6 @@ export function bigNumToEtherString(bigNum) {
 
 export function bigNumToUSDString(bigNum) {
   const ethString = ethers.utils.formatEther(bigNum)
-  // TODO: dynamically set accurate ethPrice instead of hard-coded value
-  const ethPriceInUSD = 1574
   return {
     value: (parseFloat(ethString) * ethPriceInUSD).toFixed(2),
     units: 'usd',
@@ -26,12 +31,12 @@ export function bigNumToUSDString(bigNum) {
 }
 
 export function ethStringToUSD(ethString) {
-  return parseFloat(ethString) * 1574
+  return parseFloat(ethString) * ethPriceInUSD
 }
 
 export function weiToUSD(wei) {
   const ethString = ethers.utils.formatEther(ethers.utils.parseUnits(wei, 'wei'))
-  return (parseFloat(ethString) * 1574).toFixed(2)
+  return (parseFloat(ethString) * ethPriceInUSD).toFixed(2)
 }
 
 // temporary helper function for getting and storing events in app storage to recreate history without indexer
@@ -224,56 +229,115 @@ export async function registerAssetOnMarket(
 ) {
   if (licensePrice === '' || licenseQty === '' || (ipForSale && ipPrice === '')) return
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  await synbionet.market.registerAssetOnMarket(
-    assetAddress,
-    parseInt(licenseQty),
-    parseInt(licensePrice),
-    ipForSale,
-    ipPrice !== '' ? parseInt(ipPrice) : 0
-  )
+  setTransactionStatus('pending')
+  try {
+    await synbionet.market.registerAssetOnMarket(
+      assetAddress,
+      parseInt(licenseQty),
+      parseInt(licensePrice),
+      ipForSale,
+      ipPrice !== '' ? parseInt(ipPrice) : 0
+    )
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e })
+    setTransactionStatus('failed')
+  }
 }
 
 export async function createOfferOnExchange(assetAddress, name, description, price, metadataUri) {
   if (name === '' || description === '' || price === '' || metadataUri === '') return
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  await synbionet.exchange.createOffer(
-    assetAddress,
-    name,
-    description,
-    ethers.utils.parseEther('1').div(1574).mul(parseInt(price)),
-    metadataUri
-  )
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.createOffer(
+      assetAddress,
+      name,
+      description,
+      ethers.utils.parseEther('1').div(ethPriceInUSD).mul(parseInt(price)),
+      metadataUri
+    )
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e.message })
+    const errorObject = JSON.parse(e.message.match(/.*({.+}).*/)[1])
+    console.log({ errorObject })
+    setTransactionStatus('failed')
+  }
 }
 
 export async function voidOffer(offerId) {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  await synbionet.exchange.voidOffer(offerId)
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.voidOffer(offerId)
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e })
+    setTransactionStatus('failed')
+  }
 }
 
 export async function commitToOffer(offerId) {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  await synbionet.exchange.commitToOffer(offerId)
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.commitToOffer(offerId)
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e })
+    setTransactionStatus('failed')
+  }
 }
 
 export async function redeem(exchangeId) {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  await synbionet.exchange.redeem(exchangeId)
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.redeem(exchangeId)
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e })
+    setTransactionStatus('failed')
+  }
 }
 
 export async function revoke(exchangeId) {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  await synbionet.exchange.revoke(exchangeId)
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.revoke(exchangeId)
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e })
+    setTransactionStatus('failed')
+  }
 }
 
 export async function withdrawFunds() {
-  console.log('withdraw function')
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  await synbionet.exchange.withdrawFunds()
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.withdrawFunds()
+    setTransactionStatus('complete')
+  } catch (e) {
+    setTransactionStatus('failed')
+    console.log({ error: e.message })
+    const errorObject = JSON.parse(e.message.match(/.*({.+}).*/)[1])
+    console.log({ errorObject })
+  }
 }
 
 export async function finalize(exchangeId) {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  await synbionet.exchange.finalize(exchangeId)
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.finalize(exchangeId)
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e })
+    setTransactionStatus('failed')
+  }
 }
 
 export async function buyLicense(assetAddress, qty = 1) {
@@ -287,8 +351,15 @@ export async function buyAsset(assetAddress) {
 }
 
 export async function createAsset(title, description, licenseURI, serviceEndpoint) {
-  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  await synbionet.portfolio.createAsset(title, description, licenseURI, serviceEndpoint)
+  setTransactionStatus('pending')
+  try {
+    const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+    await synbionet.portfolio.createAsset(title, description, licenseURI, serviceEndpoint)
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log('error: ' + e)
+    setTransactionStatus('failed')
+  }
 }
 
 export async function buyBioTokens(tokenQty) {
@@ -319,8 +390,22 @@ export async function connectWalletToBionet() {
   return account
 }
 
+export function setDispatchForUtils(dispatchForUtils) {
+  dispatch = dispatchForUtils
+}
+
 export function generateDid(nftAddress, tokenId) {
   const chainId = 31337
   const didValue = ethers.utils.id(nftAddress + tokenId + chainId)
   return `did:synbio:${didValue}`
+}
+
+export function setTransactionStatus(status, message) {
+  const transactionMessage =
+    status === 'pending'
+      ? 'transaction pending'
+      : status === 'complete'
+      ? 'transaction complete'
+      : 'transaction failed'
+  dispatch(setLastTransactionStatus({ status, message: transactionMessage }))
 }

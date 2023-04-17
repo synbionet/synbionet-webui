@@ -8,7 +8,8 @@ export const accountStore = createSlice({
     bioTokenBalance: undefined,
     ethBalance: undefined,
     escrowBalance: undefined,
-    isTransactionPending: false,
+    lastTransactionStatus: undefined,
+    lastTransactionMessage: undefined,
   },
   reducers: {
     setActiveAccount: (state, activeAccount) => {
@@ -26,8 +27,9 @@ export const accountStore = createSlice({
     setBioAssets: (state, bioAssetAddresses) => {
       state.bioAssets = bioAssetAddresses.payload
     },
-    setIsTransactionPending: (state, isTransactionPending) => {
-      state.isTransactionPending = isTransactionPending.payload
+    setLastTransactionStatus: (state, lastTransactionStatus) => {
+      state.lastTransactionStatus = lastTransactionStatus.payload.status
+      state.lastTransactionMessage = lastTransactionStatus.payload.message
     },
     // decrement: (state) => {
     //   state.value -= 1
@@ -41,7 +43,7 @@ export const {
   setBioAssets,
   setEthBalance,
   setEscrowBalance,
-  setIsTransactionPending,
+  setLastTransactionStatus,
 } = accountStore.actions
 
 export default accountStore.reducer
