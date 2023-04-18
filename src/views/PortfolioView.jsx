@@ -5,13 +5,9 @@ import { PortfolioNavBar } from '../components/PortfolioNavBar'
 import { OfferTable } from '../components/OfferTable'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setBioAssets, setBioTokenBalance, setEscrowBalance } from '../store/accountStore'
+import { setBioAssets, setBioTokenBalance } from '../store/accountStore'
 import { fetchAssets } from '../utils'
-import {
-  getBioTokenBalanceForAccount,
-  getEscrowBalanceForAccount,
-  bigNumToUSDString,
-} from '../utils'
+import { getBioTokenBalanceForAccount } from '../utils'
 import { GridLoader } from '../components/common/GridLoader'
 
 export function PortfolioView() {
@@ -37,14 +33,9 @@ export function PortfolioView() {
     dispatch(setBioTokenBalance(await getBioTokenBalanceForAccount(activeAccount)))
   }
 
-  // TODO: call this on new block like ethBalance
-  async function getEscrowBalance() {
-    dispatch(setEscrowBalance(bigNumToUSDString(await getEscrowBalanceForAccount(activeAccount))))
-  }
-
   async function fetchData() {
     setIsLoading(true)
-    await Promise.all([await getEscrowBalance(), await getAssets()])
+    await getAssets()
     setIsLoading(false)
   }
 

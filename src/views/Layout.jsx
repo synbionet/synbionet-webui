@@ -4,7 +4,12 @@ import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { PrimaryButton } from '../components/common/PrimaryButton'
 import { ToastNotification } from '../components/common/ToastNotification'
-import { setActiveAccount, setEthBalance, setBioAssets } from '../store/accountStore'
+import {
+  setActiveAccount,
+  setEthBalance,
+  setBioAssets,
+  setEscrowBalance,
+} from '../store/accountStore'
 import { setAllEvents } from '../store/eventStore'
 import {
   connectWalletToBionet,
@@ -13,6 +18,7 @@ import {
   bigNumToUSDString,
   fetchAssets,
   setDispatchForUtils,
+  getEscrowBalanceForAccount,
 } from '../utils'
 
 export function Layout() {
@@ -36,8 +42,12 @@ export function Layout() {
       dispatch(setBioAssets(bioAssets))
       const allExchangeEvents = await getExchangeContractEvents()
       dispatch(setAllEvents(allExchangeEvents))
-
+      //set eth balance
       dispatch(setEthBalance(bigNumToUSDString(await provider.getBalance(activeAccountAddress))))
+      //set escrow balance
+      dispatch(
+        setEscrowBalance(bigNumToUSDString(await getEscrowBalanceForAccount(activeAccountAddress)))
+      )
     })
 
     window.ethereum.on('accountsChanged', async (accounts) => {
