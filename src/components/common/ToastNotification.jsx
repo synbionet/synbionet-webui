@@ -23,7 +23,11 @@ export function ToastNotification({ lastTransactionStatus, message }) {
     >
       <div
         className={`${
-          lastTransactionStatus === 'failed' ? 'bg-red-600' : 'bg-indigo-500'
+          lastTransactionStatus === 'failed'
+            ? 'bg-red-500'
+            : lastTransactionStatus === 'pending'
+            ? 'bg-indigo-500'
+            : 'bg-green-500'
         }  py-3 flex items-center justify-center space-x-4 w-96 rounded-sm shadow text-white`}
       >
         {lastTransactionStatus === 'pending' && (
