@@ -5,11 +5,11 @@ import { PrimaryButton } from '../components/common/PrimaryButton'
 import { SecondaryButton } from '../components/common/SecondaryButton'
 import { FlyoutForm } from '../components/common/FlyoutForm'
 import { OfferTable } from '../components/OfferTable'
+import { Modal } from '../components/common/Modal'
 import { getAssetByDid, createOfferOnExchange, buyAsset, buyLicense } from '../utils'
 import { ThreeDotsLoader } from '../components/common/ThreeDotsLoader'
 
 // TODO: Refactor this page. remove old code
-
 export function AssetDetailsView({ asset, portfolioView }) {
   const { did } = useParams()
   const [assetDetails, setAssetDetails] = useState(undefined)
@@ -26,6 +26,7 @@ export function AssetDetailsView({ asset, portfolioView }) {
 
   const [showOfferPanel, setShowOfferPanel] = useState(false)
   const [showRequestPanel, setShowRequestPanel] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   // request form fields
   const [geneName, setGeneName] = useState('')
@@ -130,6 +131,14 @@ export function AssetDetailsView({ asset, portfolioView }) {
     setShowOfferPanel(false)
   }
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false)
+  }
+
   function handleSendRequest(event) {
     event.preventDefault()
     setShowRequestPanel(false)
@@ -205,13 +214,14 @@ export function AssetDetailsView({ asset, portfolioView }) {
                   onClick={() => setShowRequestPanel(!showRequestPanel)}
                 />
               )}
-              <a
+              {/* <a
                 target="_blank"
                 href="https://synbio-tech.com/terms-and-conditions/"
                 rel="noreferrer"
               >
                 <SecondaryButton text="Terms/Conditions" defaultSize />
-              </a>
+              </a> */}
+              <SecondaryButton text="Terms/Conditions" defaultSize onClick={handleOpenModal} />
             </div>
 
             {isListedOnMarket && !isOwnedByActiveAccount && (
@@ -294,6 +304,12 @@ export function AssetDetailsView({ asset, portfolioView }) {
           providerAddress={assetDetails.nftAddress}
           isOwnedByActiveAccount={isOwnedByActiveAccount}
           toggleShowPanel={() => setShowOfferPanel(!showOfferPanel)}
+        />
+        <Modal
+          title={assetDetails.name + ' Terms and Conditions'}
+          text="whatever"
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
         />
         <FlyoutForm
           formTitle="Create Offer on Market"
