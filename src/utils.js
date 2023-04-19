@@ -384,6 +384,12 @@ export async function getEscrowBalanceForAccount(accountAddress) {
   return balance
 }
 
+export async function getAvailableToWithdrawEscrowBalanceForAccount(accountAddress) {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  const balance = await synbionet.exchange.getAvailableToWithdrawEscrowBalance(accountAddress)
+  return balance
+}
+
 export async function connectWalletToBionet() {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
   const account = await synbionet.requestAccounts()

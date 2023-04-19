@@ -8,6 +8,7 @@ export const accountStore = createSlice({
     bioTokenBalance: undefined,
     ethBalance: undefined,
     escrowBalance: undefined,
+    availableToWithdrawEscrowBalance: undefined,
     lastTransactionStatus: undefined,
     lastTransactionMessage: undefined,
   },
@@ -23,6 +24,9 @@ export const accountStore = createSlice({
     },
     setEscrowBalance: (state, escrowBalance) => {
       state.escrowBalance = escrowBalance.payload
+    },
+    setAvailableToWithdrawEscrowBalance: (state, balance) => {
+      state.availableToWithdrawEscrowBalance = balance.payload
     },
     setBioAssets: (state, bioAssetAddresses) => {
       state.bioAssets = bioAssetAddresses.payload
@@ -43,6 +47,7 @@ export const {
   setBioAssets,
   setEthBalance,
   setEscrowBalance,
+  setAvailableToWithdrawEscrowBalance,
   setLastTransactionStatus,
 } = accountStore.actions
 

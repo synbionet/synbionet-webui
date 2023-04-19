@@ -2,7 +2,11 @@ import { PrimaryButton } from './common/PrimaryButton'
 import { ThreeDotsLoader } from './common/ThreeDotsLoader'
 import { withdrawFunds } from '../utils'
 
-export function BioTokenWidget({ accountBalance, escrowBalance }) {
+export function BioTokenWidget({
+  accountBalance,
+  escrowBalance,
+  availableToWithdrawEscrowBalance,
+}) {
   return (
     <div className="p-6 px-8 space-y-6 bg-gray-100 rounded-sm border-2 border-slate-300 drop-shadow-sm">
       <div className="flex flex-col items-center">
@@ -45,11 +49,19 @@ export function BioTokenWidget({ accountBalance, escrowBalance }) {
         )}
       </div>
 
-      <div className="flex flex-col space-y-4">
+      <div className="flex flex-col space-y-2 items-center">
+        {parseFloat(escrowBalance?.value) > 0 && availableToWithdrawEscrowBalance && (
+          <div className="text-sm font-semibold text-slate-500 lowercase">
+            ${availableToWithdrawEscrowBalance.value} Available to Withdraw
+          </div>
+        )}
         <PrimaryButton
           text="withdraw"
           onClick={withdrawFunds}
-          disabled={parseFloat(escrowBalance) === 0}
+          disabled={
+            !availableToWithdrawEscrowBalance ||
+            parseFloat(availableToWithdrawEscrowBalance.value) === 0
+          }
         />
       </div>
     </div>

@@ -15,6 +15,9 @@ export function PortfolioView() {
   const bioAssets = useSelector((state) => state.account.bioAssets)
   const ethBalance = useSelector((state) => state.account.ethBalance)
   const escrowBalance = useSelector((state) => state.account.escrowBalance)
+  const availableToWithdrawEscrowBalance = useSelector(
+    (state) => state.account.availableToWithdrawEscrowBalance
+  )
   const activeAccount = useSelector((state) => state.account.activeAccount)
   const [isLoading, setIsLoading] = useState(false)
   const [selectedTab, setSelectedTab] = useState('portfolio')
@@ -72,6 +75,7 @@ export function PortfolioView() {
               accountBalance={ethBalance}
               getBioTokenBalance={getBioTokenBalance}
               escrowBalance={escrowBalance}
+              availableToWithdrawEscrowBalance={availableToWithdrawEscrowBalance}
             />
           </div>
         </div>
@@ -87,6 +91,7 @@ export function PortfolioView() {
               accountBalance={ethBalance}
               getBioTokenBalance={getBioTokenBalance}
               escrowBalance={escrowBalance}
+              availableToWithdrawEscrowBalance={availableToWithdrawEscrowBalance}
             />
           </div>
         </div>

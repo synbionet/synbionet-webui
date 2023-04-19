@@ -9,6 +9,7 @@ import {
   setEthBalance,
   setBioAssets,
   setEscrowBalance,
+  setAvailableToWithdrawEscrowBalance,
 } from '../store/accountStore'
 import { setAllEvents } from '../store/eventStore'
 import {
@@ -19,6 +20,7 @@ import {
   fetchAssets,
   setDispatchForUtils,
   getEscrowBalanceForAccount,
+  getAvailableToWithdrawEscrowBalanceForAccount,
 } from '../utils'
 
 export function Layout() {
@@ -47,6 +49,14 @@ export function Layout() {
       //set escrow balance
       dispatch(
         setEscrowBalance(bigNumToUSDString(await getEscrowBalanceForAccount(activeAccountAddress)))
+      )
+      //set available to withdraw escrow balance
+      dispatch(
+        setAvailableToWithdrawEscrowBalance(
+          bigNumToUSDString(
+            await getAvailableToWithdrawEscrowBalanceForAccount(activeAccountAddress)
+          )
+        )
       )
     })
 
