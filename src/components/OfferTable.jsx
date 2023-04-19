@@ -162,7 +162,7 @@ export function OfferTable({
                     </h3>
                     <p className="h-24 overflow-auto">{offerDetails.description}</p>
                     <h3 className="pt-8 font-semibold uppercase text-sm mb-1 text-gray-500">
-                      Contract Checksum
+                      MD5 Hash of Agreement
                     </h3>
                     <p>{offerDetails.license}</p>
                   </div>

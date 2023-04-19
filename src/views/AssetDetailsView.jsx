@@ -60,7 +60,7 @@ export function AssetDetailsView({ asset, portfolioView }) {
       type: 'text',
     },
     {
-      label: 'Contract Checksum',
+      label: 'MD5 Hash of Agreement',
       value: contractChecksum,
       setter: setContractChecksum,
       type: 'text',
