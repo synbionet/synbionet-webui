@@ -181,15 +181,15 @@ export function OfferTable({
                   <div className="flex justify-center w-1/4 items-center">
                     <div className="flex-1" />
                     <div className="h-5 w-5 rounded-full bg-indigo-400" />
-                    <div className="flex-1 h-1 bg-indigo-400" />
+                    <div className="flex-1 h-1 bg-slate-400" />
                   </div>
                   <div className="flex justify-center w-1/4 items-center">
-                    <div className="flex-1 h-1 bg-indigo-400" />
-                    <div className="h-5 w-5 rounded-full bg-indigo-400" />
-                    <div className="flex-1 h-1 bg-indigo-400" />
+                    <div className="flex-1 h-1 bg-slate-400" />
+                    <div className="h-5 w-5 rounded-full bg-slate-400" />
+                    <div className="flex-1 h-1 bg-slate-400" />
                   </div>
                   <div className="flex justify-center w-1/4 items-center">
-                    <div className="flex-1 h-1 bg-indigo-400" />
+                    <div className="flex-1 h-1 bg-slate-400" />
                     <div className="h-5 w-5 rounded-full bg-slate-400" />
                     <div className="flex-1 h-1 bg-slate-400" />
                   </div>
