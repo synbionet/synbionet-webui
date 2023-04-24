@@ -6,7 +6,7 @@ export function HomeView() {
   return (
     <div className="flex flex-1 pt-56">
       <div className="flex-1 flex flex-col items-center">
-        <div className="w-96 word-break flex-none font-semibold text-slate-500 text-5xl text-center">
+        <div className="w-96 word-break flex-none font-semibold text-slate-500 leading-tight text-5xl text-center">
           Incentivize innovation and collaboration in{' '}
           <span className="text-indigo-500">Synthetic Biology</span>
         </div>
