@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { setLastTransactionStatus } from './store/accountStore'
 
 // TODO: dynamically set accurate ethPrice instead of hard-coded value
-const ethPriceInUSD = 1574
+const ethPriceInUSD = 1998
 
 // dispatch to set values in store. must be set from a react component using useDispatch()
 let dispatch = undefined
