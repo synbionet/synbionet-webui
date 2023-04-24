@@ -60,223 +60,232 @@ export function OfferTable({
         </div>
       </div>
       {/* TODO: refactor all these buttons and conditions below */}
-      {createdOffers.map((o, index) => {
-        const isOfferedByThisProvider = o.offer.assetAddress === providerAddress
-        if (!isOfferedByThisProvider && !workflowView) return undefined
+      {createdOffers
+        .filter((o) => {
+          // filter offers to display in UI
+          const isOfferedByThisProvider = o.offer.assetAddress === providerAddress
+          if (!isOfferedByThisProvider && !workflowView) return false
+          const isCommittedOffer = createdExchanges.find((ce) => o.offerId === ce.offerId)
+          const isCommittedToBuy =
+            isCommittedOffer && isCommittedOffer.buyer.toLowerCase() === activeAccount.toLowerCase()
+          if (workflowView && !isCommittedToBuy) return false
+          return true
+        })
+        .map((o, index) => {
+          const isOfferVoided = voidedOffers.find((vo) => o.offerId === vo.offerId)
 
-        const isOfferVoided = voidedOffers.find((vo) => o.offerId === vo.offerId)
-        const isCommittedOffer = createdExchanges.find((ce) => o.offerId === ce.offerId)
-        // TODO: below is quick solution to demo buyer, but this should be whoever owns the voucher not made the initial commitment as emited by the event
-        const isCommittedToBuy =
-          isCommittedOffer && isCommittedOffer.buyer.toLowerCase() === activeAccount.toLowerCase()
+          const isCommittedOffer = createdExchanges.find((ce) => o.offerId === ce.offerId)
+          // TODO: below is quick solution to demo buyer, but this should be whoever owns the voucher not made the initial commitment as emited by the event
 
-        const isExchangeRevoked =
-          isCommittedOffer &&
-          revokedExchanges.find((re) => re.exchangeId === isCommittedOffer.exchangeId)
+          const isCommittedToBuy =
+            isCommittedOffer && isCommittedOffer.buyer.toLowerCase() === activeAccount.toLowerCase()
 
-        if (workflowView && !isCommittedToBuy) return undefined
+          const isExchangeRevoked =
+            isCommittedOffer &&
+            revokedExchanges.find((re) => re.exchangeId === isCommittedOffer.exchangeId)
 
-        const isRedeemed =
-          isCommittedOffer &&
-          redeemedExchanges.find((re) => re.exchangeId === isCommittedOffer.exchangeId)
-        const isComplete =
-          isRedeemed &&
-          completedExchanges.find((ce) => ce.exchangeId === isCommittedOffer.exchangeId)
+          const isRedeemed =
+            isCommittedOffer &&
+            redeemedExchanges.find((re) => re.exchangeId === isCommittedOffer.exchangeId)
 
-        function determineButtonState() {
-          if (isOfferVoided) {
-            return { text: 'Offer Voided', onClick: null }
-          } else if (isExchangeRevoked) {
-            return { text: 'Revoked', onClick: null }
-          } else if (isComplete) {
-            return { text: 'Completed', onClick: null }
-          } else if (isRedeemed) {
-            if (isCommittedToBuy)
-              return {
-                text: 'Finalize',
-                onClick: () => handleCompleteExchange(isCommittedOffer.exchangeId),
-              }
-            else return { text: 'Redeemed', onClick: null }
-          } else if (!!isCommittedOffer) {
-            if (isOwnedByActiveAccount)
-              return {
-                text: 'Revoke',
-                onClick: () => handleRevokeOffer(isCommittedOffer.exchangeId),
-              }
-            else if (isCommittedToBuy)
-              return {
-                text: 'Redeem',
-                onClick: () => handleRedeemOffer(isCommittedOffer.exchangeId),
-              }
-            else return { text: 'Committed', onClick: null }
-          } else {
-            if (isOwnedByActiveAccount)
-              return { text: 'Void Offer', onClick: () => handleVoidOffer(o.offerId) }
-            else return { text: 'Commit', onClick: () => handleCommitToOffer(o.offerId) }
+          const isComplete =
+            isRedeemed &&
+            completedExchanges.find((ce) => ce.exchangeId === isCommittedOffer.exchangeId)
+
+          function determineButtonState() {
+            if (isOfferVoided) {
+              return { text: 'Offer Voided', onClick: null }
+            } else if (isExchangeRevoked) {
+              return { text: 'Revoked', onClick: null }
+            } else if (isComplete) {
+              return { text: 'Completed', onClick: null }
+            } else if (isRedeemed) {
+              if (isCommittedToBuy)
+                return {
+                  text: 'Finalize',
+                  onClick: () => handleCompleteExchange(isCommittedOffer.exchangeId),
+                }
+              else return { text: 'Redeemed', onClick: null }
+            } else if (!!isCommittedOffer) {
+              if (isOwnedByActiveAccount)
+                return {
+                  text: 'Revoke',
+                  onClick: () => handleRevokeOffer(isCommittedOffer.exchangeId),
+                }
+              else if (isCommittedToBuy)
+                return {
+                  text: 'Redeem',
+                  onClick: () => handleRedeemOffer(isCommittedOffer.exchangeId),
+                }
+              else return { text: 'Committed', onClick: null }
+            } else {
+              if (isOwnedByActiveAccount)
+                return { text: 'Void Offer', onClick: () => handleVoidOffer(o.offerId) }
+              else return { text: 'Commit', onClick: () => handleCommitToOffer(o.offerId) }
+            }
           }
-        }
 
-        const buttonState = determineButtonState()
+          const buttonState = determineButtonState()
 
-        const did = generateDid(o.offer.assetAddress, o.offer.assetTokenId)
-        const offerDetails = allOfferDetails.find((offerDetails) => offerDetails.did === did)
+          const did = generateDid(o.offer.assetAddress, o.offer.assetTokenId)
+          const offerDetails = allOfferDetails.find((offerDetails) => offerDetails.did === did)
 
-        return (
-          <div
-            key={o.offerId}
-            className={`flex flex-col ${index % 2 && 'bg-slate-200'} ${
-              expandedOffer !== o.offerId && 'cursor-pointer'
-            }`}
-            onClick={() => setExpandedOffer(expandedOffer === o.offerId ? null : o.offerId)}
-          >
-            <div className="flex h-12 items-center">
-              <div className="w-16 px-3">{o.offerId}</div>
-              <div className="w-1/4 font-semibold">{offerDetails.name}</div>
-              <div className="flex-1 flex justify-end">
-                <div className="w-32 text-center mr-8 uppercase text-sm font-semibold">
-                  {isComplete
-                    ? 'Completed'
-                    : isRedeemed
-                    ? 'Redeemed'
-                    : isCommittedOffer
-                    ? isExchangeRevoked
-                      ? 'Revoked'
-                      : 'Committed'
-                    : isOfferVoided
-                    ? 'Voided'
-                    : 'Created'}
-                </div>
-                <div className="w-32 text-center font-semibold">{weiToUSD(o.offer.price)}</div>
-              </div>
-            </div>
+          return (
             <div
-              className={`transition-all duration-500 transition-500 overflow-hidden ${
-                expandedOffer === o.offerId ? 'h-96' : 'h-0'
+              key={o.offerId}
+              className={`flex flex-col ${index % 2 && 'bg-slate-200'} ${
+                expandedOffer !== o.offerId && 'cursor-pointer'
               }`}
+              onClick={() => setExpandedOffer(expandedOffer === o.offerId ? null : o.offerId)}
             >
-              <div className="flex flex-col">
-                <div className="flex">
-                  <div className="flex-1 pt-4 pl-16">
-                    <h3 className="font-semibold uppercase text-sm mb-1 text-gray-500">
-                      Description
-                    </h3>
-                    <p className="h-24 overflow-auto">{offerDetails.description}</p>
-                    <h3 className="pt-8 font-semibold uppercase text-sm mb-1 text-gray-500">
-                      Agreement Fingerprint
-                    </h3>
-                    <p>{offerDetails.license}</p>
+              <div className="flex h-12 items-center">
+                <div className="w-16 px-3">{o.offerId}</div>
+                <div className="w-1/4 font-semibold">{offerDetails.name}</div>
+                <div className="flex-1 flex justify-end">
+                  <div className="w-32 text-center mr-8 uppercase text-sm font-semibold">
+                    {isComplete
+                      ? 'Completed'
+                      : isRedeemed
+                      ? 'Redeemed'
+                      : isCommittedOffer
+                      ? isExchangeRevoked
+                        ? 'Revoked'
+                        : 'Committed'
+                      : isOfferVoided
+                      ? 'Voided'
+                      : 'Created'}
                   </div>
-                  <div className="flex pr-8 pt-6 pl-24">
-                    <div className="flex-1 flex flex-col items-center">
-                      <OfferTableButton buttonText="View Agreement" onClick={() => {}} />
-                      <div className="text-sm font-semibold pt-3">delivery 4-6 weeks</div>
-                      <div className="text-sm font-semibold pt-3">98% purity</div>
-                      <div className="text-sm font-semibold pt-3">accredited lab</div>
+                  <div className="w-32 text-center font-semibold">{weiToUSD(o.offer.price)}</div>
+                </div>
+              </div>
+              <div
+                className={`transition-all duration-500 transition-500 overflow-hidden ${
+                  expandedOffer === o.offerId ? 'h-96' : 'h-0'
+                }`}
+              >
+                <div className="flex flex-col">
+                  <div className="flex">
+                    <div className="flex-1 pt-4 pl-16">
+                      <h3 className="font-semibold uppercase text-sm mb-1 text-gray-500">
+                        Description
+                      </h3>
+                      <p className="h-24 overflow-auto">{offerDetails.description}</p>
+                      <h3 className="pt-8 font-semibold uppercase text-sm mb-1 text-gray-500">
+                        Agreement Fingerprint
+                      </h3>
+                      <p>{offerDetails.license}</p>
+                    </div>
+                    <div className="flex pr-8 pt-6 pl-24">
+                      <div className="flex-1 flex flex-col items-center">
+                        <OfferTableButton buttonText="View Agreement" onClick={() => {}} />
+                        <div className="text-sm font-semibold pt-3">delivery 4-6 weeks</div>
+                        <div className="text-sm font-semibold pt-3">98% purity</div>
+                        <div className="text-sm font-semibold pt-3">accredited lab</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* TODO: make this progress bar dynamic and refactor as separate component */}
+                  <div className="pt-16 flex">
+                    <div className="flex justify-center w-1/4 items-center">
+                      <div className="flex-1" />
+                      <div className="h-5 w-5 rounded-full bg-indigo-400" />
+                      <div className="flex-1 h-1 bg-slate-400" />
+                    </div>
+                    <div className="flex justify-center w-1/4 items-center">
+                      <div className="flex-1 h-1 bg-slate-400" />
+                      <div className="h-5 w-5 rounded-full bg-slate-400" />
+                      <div className="flex-1 h-1 bg-slate-400" />
+                    </div>
+                    <div className="flex justify-center w-1/4 items-center">
+                      <div className="flex-1 h-1 bg-slate-400" />
+                      <div className="h-5 w-5 rounded-full bg-slate-400" />
+                      <div className="flex-1 h-1 bg-slate-400" />
+                    </div>
+                    <div className="flex justify-center w-1/4 items-center">
+                      <div className="flex-1 h-1 bg-slate-400" />
+                      <div className="h-5 w-5 rounded-full bg-slate-400" />
+                      <div className="flex-1" />
+                    </div>
+                  </div>
+
+                  <div className="pt-6 flex justify-between text-sm align-middle">
+                    <div className="flex flex-col items-center w-1/4">
+                      {buttonState && buttonState.text !== 'Void Offer' ? (
+                        <div className={`text-center ${!isCommittedOffer && 'text-gray-500'}`}>
+                          <div className="font-semibold uppercase">
+                            {isOfferVoided ? 'Voided' : 'Created'}
+                          </div>
+                          <div className="font-mono">{"20 April '23 - 9:16 AM"}</div>
+                        </div>
+                      ) : (
+                        <OfferTableButton
+                          buttonText={buttonState.text}
+                          onClick={buttonState.onClick}
+                        />
+                      )}
+                    </div>
+                    <div className="flex flex-col items-center w-1/4">
+                      {buttonState && buttonState.text !== 'Commit' ? (
+                        <div className={`text-center ${!isCommittedOffer && 'text-gray-500'}`}>
+                          <div className="font-semibold uppercase">committed</div>
+                          <div className="font-mono">
+                            {!isCommittedOffer ? 'TBD' : "20 April '23 - 9:16 AM"}
+                          </div>
+                        </div>
+                      ) : (
+                        <OfferTableButton
+                          buttonText={buttonState.text}
+                          onClick={buttonState.onClick}
+                        />
+                      )}
+                    </div>
+                    <div className="flex flex-col items-center w-1/4">
+                      {buttonState &&
+                      buttonState.text !== 'Redeem' &&
+                      buttonState.text !== 'Revoke' ? (
+                        <div
+                          className={`text-center ${
+                            !isRedeemed && !isComplete && !isExchangeRevoked && 'text-gray-500'
+                          }`}
+                        >
+                          <div className="font-semibold uppercase">
+                            {isExchangeRevoked ? 'revoked' : 'redeemed'}
+                          </div>
+                          <div className="font-mono">
+                            {!isRedeemed && !isComplete && !isExchangeRevoked
+                              ? 'TBD'
+                              : "20 April '23 - 9:16 AM"}
+                          </div>
+                        </div>
+                      ) : (
+                        <OfferTableButton
+                          buttonText={buttonState.text}
+                          onClick={buttonState.onClick}
+                        />
+                      )}
+                    </div>
+                    <div className="flex flex-col items-center w-1/4">
+                      {buttonState && buttonState.text !== 'Finalize' ? (
+                        <div className={`text-center ${!isComplete && 'text-gray-500'}`}>
+                          <div className="font-semibold uppercase">finalized</div>
+                          <div className="font-mono">
+                            {!isComplete ? 'TBD' : "20 April '23 - 9:16 AM"}
+                          </div>
+                        </div>
+                      ) : (
+                        <OfferTableButton
+                          buttonText={buttonState.text}
+                          onClick={buttonState.onClick}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
-
-                {/* TODO: make this progress bar dynamic and refactor as separate component */}
-                <div className="pt-16 flex">
-                  <div className="flex justify-center w-1/4 items-center">
-                    <div className="flex-1" />
-                    <div className="h-5 w-5 rounded-full bg-indigo-400" />
-                    <div className="flex-1 h-1 bg-slate-400" />
-                  </div>
-                  <div className="flex justify-center w-1/4 items-center">
-                    <div className="flex-1 h-1 bg-slate-400" />
-                    <div className="h-5 w-5 rounded-full bg-slate-400" />
-                    <div className="flex-1 h-1 bg-slate-400" />
-                  </div>
-                  <div className="flex justify-center w-1/4 items-center">
-                    <div className="flex-1 h-1 bg-slate-400" />
-                    <div className="h-5 w-5 rounded-full bg-slate-400" />
-                    <div className="flex-1 h-1 bg-slate-400" />
-                  </div>
-                  <div className="flex justify-center w-1/4 items-center">
-                    <div className="flex-1 h-1 bg-slate-400" />
-                    <div className="h-5 w-5 rounded-full bg-slate-400" />
-                    <div className="flex-1" />
-                  </div>
-                </div>
-
-                <div className="pt-6 flex justify-between text-sm align-middle">
-                  <div className="flex flex-col items-center w-1/4">
-                    {buttonState && buttonState.text !== 'Void Offer' ? (
-                      <div className={`text-center ${!isCommittedOffer && 'text-gray-500'}`}>
-                        <div className="font-semibold uppercase">
-                          {isOfferVoided ? 'Voided' : 'Created'}
-                        </div>
-                        <div className="font-mono">{"20 April '23 - 9:16 AM"}</div>
-                      </div>
-                    ) : (
-                      <OfferTableButton
-                        buttonText={buttonState.text}
-                        onClick={buttonState.onClick}
-                      />
-                    )}
-                  </div>
-                  <div className="flex flex-col items-center w-1/4">
-                    {buttonState && buttonState.text !== 'Commit' ? (
-                      <div className={`text-center ${!isCommittedOffer && 'text-gray-500'}`}>
-                        <div className="font-semibold uppercase">committed</div>
-                        <div className="font-mono">
-                          {!isCommittedOffer ? 'TBD' : "20 April '23 - 9:16 AM"}
-                        </div>
-                      </div>
-                    ) : (
-                      <OfferTableButton
-                        buttonText={buttonState.text}
-                        onClick={buttonState.onClick}
-                      />
-                    )}
-                  </div>
-                  <div className="flex flex-col items-center w-1/4">
-                    {buttonState &&
-                    buttonState.text !== 'Redeem' &&
-                    buttonState.text !== 'Revoke' ? (
-                      <div
-                        className={`text-center ${
-                          !isRedeemed && !isComplete && !isExchangeRevoked && 'text-gray-500'
-                        }`}
-                      >
-                        <div className="font-semibold uppercase">
-                          {isExchangeRevoked ? 'revoked' : 'redeemed'}
-                        </div>
-                        <div className="font-mono">
-                          {!isRedeemed && !isComplete && !isExchangeRevoked
-                            ? 'TBD'
-                            : "20 April '23 - 9:16 AM"}
-                        </div>
-                      </div>
-                    ) : (
-                      <OfferTableButton
-                        buttonText={buttonState.text}
-                        onClick={buttonState.onClick}
-                      />
-                    )}
-                  </div>
-                  <div className="flex flex-col items-center w-1/4">
-                    {buttonState && buttonState.text !== 'Finalize' ? (
-                      <div className={`text-center ${!isComplete && 'text-gray-500'}`}>
-                        <div className="font-semibold uppercase">finalized</div>
-                        <div className="font-mono">
-                          {!isComplete ? 'TBD' : "20 April '23 - 9:16 AM"}
-                        </div>
-                      </div>
-                    ) : (
-                      <OfferTableButton
-                        buttonText={buttonState.text}
-                        onClick={buttonState.onClick}
-                      />
-                    )}
-                  </div>
-                </div>
               </div>
             </div>
-          </div>
-        )
-      })}
+          )
+        })}
     </div>
   )
 }
