@@ -15,7 +15,7 @@ import { setAllEvents } from '../store/eventStore'
 import {
   connectWalletToBionet,
   getExchangeContractEvents,
-  getProvider,
+  getPublicClient,
   bigNumToUSDString,
   fetchAssets,
   setDispatchForUtils,
@@ -23,47 +23,70 @@ import {
   getAvailableToWithdrawEscrowBalanceForAccount,
 } from '../utils'
 
+import { useAccount, useConnect, useEnsName } from 'wagmi'
+
 export function Layout() {
+  const { address, isConnected } = useAccount()
+  const { connect, connectors } = useConnect({
+    onSuccess(data) {
+      console.log('Connect', data)
+      connectWallet()
+    },
+  })
+
   const activeAccount = useSelector((state) => state.account.activeAccount)
   const lastTransactionStatus = useSelector((state) => state.account.lastTransactionStatus)
   const lastTransactionMessage = useSelector((state) => state.account.lastTransactionMessage)
   const location = useLocation()
   const dispatch = useDispatch()
   setDispatchForUtils(dispatch)
-  let provider = undefined
+  let publicClient = undefined
 
   async function connectWallet() {
-    const activeAccountAddress = dispatch(setActiveAccount(await connectWalletToBionet())).payload
+    const activeAccountAddress = dispatch(setActiveAccount(address)).payload
 
-    provider = await getProvider()
+    publicClient = await getPublicClient()
     // TODO: append new events for latest block rather than recreating entire history of events
     // TODO: update escrow balance on mined block
-    provider.on('block', async (blockNumber) => {
-      // temp solution to index the history of the contract
-      const bioAssets = await fetchAssets()
-      dispatch(setBioAssets(bioAssets))
-      const allExchangeEvents = await getExchangeContractEvents()
-      dispatch(setAllEvents(allExchangeEvents))
-      //set eth balance
-      dispatch(setEthBalance(bigNumToUSDString(await provider.getBalance(activeAccountAddress))))
-      //set escrow balance
-      dispatch(
-        setEscrowBalance(bigNumToUSDString(await getEscrowBalanceForAccount(activeAccountAddress)))
-      )
-      //set available to withdraw escrow balance
-      dispatch(
-        setAvailableToWithdrawEscrowBalance(
-          bigNumToUSDString(
-            await getAvailableToWithdrawEscrowBalanceForAccount(activeAccountAddress)
+    const unwatch = publicClient.watchBlocks({
+      onBlock: async (block) => {
+        console.log('on block')
+        // temp solution to index the history of the contract
+        const bioAssets = await fetchAssets()
+        dispatch(setBioAssets(bioAssets))
+        const allExchangeEvents = await getExchangeContractEvents()
+        dispatch(setAllEvents(allExchangeEvents))
+        //set eth balance
+        dispatch(
+          setEthBalance(
+            bigNumToUSDString(await publicClient.getBalance({ address: activeAccountAddress }))
           )
         )
-      )
+        //set escrow balance
+        dispatch(
+          setEscrowBalance(
+            bigNumToUSDString(await getEscrowBalanceForAccount(activeAccountAddress))
+          )
+        )
+        //set available to withdraw escrow balance
+        dispatch(
+          setAvailableToWithdrawEscrowBalance(
+            bigNumToUSDString(
+              await getAvailableToWithdrawEscrowBalanceForAccount(activeAccountAddress)
+            )
+          )
+        )
+      },
     })
 
     window.ethereum.on('accountsChanged', async (accounts) => {
       if (accounts.length > 0) {
         const activeAccountAddress = dispatch(setActiveAccount(accounts[0])).payload
-        dispatch(setEthBalance(bigNumToUSDString(await provider.getBalance(activeAccountAddress))))
+        dispatch(
+          setEthBalance(
+            bigNumToUSDString(await publicClient.getBalance({ address: activeAccountAddress }))
+          )
+        )
         return
       } else {
         return dispatch(setActiveAccount(undefined))
@@ -82,7 +105,7 @@ export function Layout() {
         message={lastTransactionMessage}
       />
       <div className="flex-0">
-        <Header connectWallet={connectWallet} />
+        <Header connectWallet={() => connect({ connector: connectors[0] })} />
       </div>
       <div className="bg-gray-200 flex-1 flex flex-col">
         {!activeAccount && location.pathname !== '/' ? (
@@ -91,7 +114,10 @@ export function Layout() {
               Connect your wallet to use SynBioNet App
             </p>
             <div className="w-40 mt-8">
-              <PrimaryButton text="connect Wallet" onClick={connectWallet} />
+              <PrimaryButton
+                text="connect Wallet"
+                onClick={() => connect({ connector: connectors[0] })}
+              />
             </div>
           </div>
         ) : (

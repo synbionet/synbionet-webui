@@ -7,19 +7,51 @@ import { CreateAssetView } from './views/CreateAssetView'
 import { HomeView } from './views/HomeView'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
+import { WagmiConfig, createConfig, configureChains } from 'wagmi'
+import { foundry } from 'wagmi/chains'
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
+import { InjectedConnector } from 'wagmi/connectors/injected'
+
+const { chains, publicClient } = configureChains(
+  [foundry],
+  [
+    jsonRpcProvider({
+      rpc: (chain) => ({
+        http: 'http://127.0.0.1:8545',
+      }),
+    }),
+  ]
+)
+
+const config = createConfig({
+  autoConnect: true,
+  publicClient,
+  connectors: [
+    new InjectedConnector({
+      chains,
+      options: {
+        name: 'Injected',
+        shimDisconnect: true,
+      },
+    }),
+  ],
+})
+
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomeView />} />
-          <Route path="market" element={<ExploreView />} />
-          <Route path="portfolio" element={<PortfolioView />} />
-          <Route path="create" element={<CreateAssetView />} />
-          <Route path="asset/:did" element={<AssetDetailsView />} />
-          {/* <Route path="*" element={<NoPage />} /> */}
-        </Route>
-      </Routes>
+      <WagmiConfig config={config}>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomeView />} />
+            <Route path="market" element={<ExploreView />} />
+            <Route path="portfolio" element={<PortfolioView />} />
+            <Route path="create" element={<CreateAssetView />} />
+            <Route path="asset/:did" element={<AssetDetailsView />} />
+            {/* <Route path="*" element={<NoPage />} /> */}
+          </Route>
+        </Routes>
+      </WagmiConfig>
     </Router>
   )
 }

@@ -168,9 +168,9 @@ async function sortEvents(allEvents) {
   }
 }
 
-export async function getProvider() {
+export async function getPublicClient() {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  return await synbionet.config.getProvider()
+  return synbionet.config.getPublicClient()
 }
 
 export async function getExchangeContractEvents() {
