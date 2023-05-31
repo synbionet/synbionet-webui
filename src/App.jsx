@@ -29,7 +29,7 @@ function App() {
   const { address, isConnected } = useAccount()
 
   async function watchBlocks() {
-    if (!address) return
+    if (!isConnected) return
     const publicClient = await getPublicClient()
     const unwatch = publicClient.watchBlocks({
       onBlock: async (block) => {
