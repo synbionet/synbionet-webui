@@ -1,52 +1,32 @@
 import { BioTokenWidget } from '../components/BioTokenWidget'
-import { AssetDetailsView } from './AssetDetailsView'
-import { AssetTable } from '../components/AssetTable'
 import { PortfolioNavBar } from '../components/PortfolioNavBar'
 import { OfferTable } from '../components/OfferTable'
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setBioAssets, setBioTokenBalance } from '../store/accountStore'
-import { fetchAssets } from '../utils'
-import { getBioTokenBalanceForAccount } from '../utils'
 import { GridLoader } from '../components/common/GridLoader'
+import { useBalance, useAccount } from 'wagmi'
+import { USDC_CONTRACT_ADDRESS } from '../utils'
 
 export function PortfolioView() {
-  const dispatch = useDispatch()
-  const bioAssets = useSelector((state) => state.account.bioAssets)
-  const ethBalance = useSelector((state) => state.account.ethBalance)
-  const escrowBalance = useSelector((state) => state.account.escrowBalance)
-  const availableToWithdrawEscrowBalance = useSelector(
-    (state) => state.account.availableToWithdrawEscrowBalance
-  )
-  const activeAccount = useSelector((state) => state.account.activeAccount)
+  const { address } = useAccount()
+  const { data: balance, isError } = useBalance({
+    address,
+    token: USDC_CONTRACT_ADDRESS,
+  })
+
   const [isLoading, setIsLoading] = useState(false)
   const [selectedTab, setSelectedTab] = useState('portfolio')
 
-  const ownedAssets = bioAssets.filter((asset) => isOwner(asset))
-
-  function isOwner(asset) {
-    return asset.owner.toLowerCase() === activeAccount.toLowerCase()
-  }
-
-  async function getAssets() {
-    dispatch(setBioAssets(await fetchAssets(activeAccount)))
-  }
-
-  async function getBioTokenBalance() {
-    dispatch(setBioTokenBalance(await getBioTokenBalanceForAccount(activeAccount)))
-  }
-
   async function fetchData() {
     setIsLoading(true)
-    await getAssets()
     setIsLoading(false)
   }
 
   useEffect(() => {
     fetchData()
-  }, [activeAccount])
+  })
 
-  if (bioAssets.length === 0 && isLoading)
+  if (isLoading)
     return (
       <div className="flex-1 flex">
         <PortfolioNavBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
@@ -60,22 +40,15 @@ export function PortfolioView() {
       <PortfolioNavBar selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
       {selectedTab === 'portfolio' ? (
         <div className="flex flex-1 space-x-4 pt-4 mx-4">
-          <div className="flex-1">
-            {ownedAssets.length === 0 ? (
-              <AssetTable assets={ownedAssets} portfolioView />
-            ) : (
-              <AssetDetailsView portfolioView asset={ownedAssets[0]} />
-            )}
-          </div>
-          {/* <div className="flex-1">
-            <AssetTable assets={licensedAssets} licenseView />
-          </div> */}
+          <div className="flex-1" />
           <div className="flex-none">
             <BioTokenWidget
-              accountBalance={ethBalance}
-              getBioTokenBalance={getBioTokenBalance}
-              escrowBalance={escrowBalance}
-              availableToWithdrawEscrowBalance={availableToWithdrawEscrowBalance}
+              accountBalance={{ value: balance?.formatted, units: balance?.symbol }}
+              escrowBalance={{ value: balance?.formatted, units: balance?.symbol }}
+              availableToWithdrawEscrowBalance={{
+                value: balance?.formatted,
+                units: balance?.symbol,
+              }}
             />
           </div>
         </div>
@@ -88,10 +61,12 @@ export function PortfolioView() {
           </div>
           <div className="flex flex-col">
             <BioTokenWidget
-              accountBalance={ethBalance}
-              getBioTokenBalance={getBioTokenBalance}
-              escrowBalance={escrowBalance}
-              availableToWithdrawEscrowBalance={availableToWithdrawEscrowBalance}
+              accountBalance={{ value: balance?.formatted, units: balance?.symbol }}
+              escrowBalance={{ value: balance?.formatted, units: balance?.symbol }}
+              availableToWithdrawEscrowBalance={{
+                value: balance?.formatted,
+                units: balance?.symbol,
+              }}
             />
           </div>
         </div>

@@ -4,6 +4,7 @@ import { setLastTransactionStatus } from './store/accountStore'
 
 // TODO: dynamically set accurate ethPrice instead of hard-coded value
 const ethPriceInUSD = 1998
+export const USDC_CONTRACT_ADDRESS = '0xbdEd0D2bf404bdcBa897a74E6657f1f12e5C6fb6'
 
 // dispatch to set values in store. must be set from a react component using useDispatch()
 let dispatch = undefined

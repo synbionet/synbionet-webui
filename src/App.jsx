@@ -6,8 +6,11 @@ import { AssetDetailsView } from './views/AssetDetailsView'
 import { CreateAssetView } from './views/CreateAssetView'
 import { HomeView } from './views/HomeView'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { useEffect } from 'react'
+import { getPublicClient } from './utils'
 
-import { WagmiConfig, createConfig } from 'wagmi'
+import { WagmiConfig, createConfig, useAccount } from 'wagmi'
+
 import { ConnectKitProvider, getDefaultConfig } from 'connectkit'
 import { foundry } from 'wagmi/chains'
 
@@ -23,6 +26,23 @@ const config = createConfig(
 )
 
 function App() {
+  const { address, isConnected } = useAccount()
+
+  async function watchBlocks() {
+    if (!address) return
+    const publicClient = await getPublicClient()
+    const unwatch = publicClient.watchBlocks({
+      onBlock: async (block) => {
+        console.log('onBlock')
+      },
+    })
+  }
+
+  useEffect(() => {
+    console.log('account changed')
+    watchBlocks()
+  }, [address])
+
   return (
     <Router>
       <WagmiConfig config={config}>
