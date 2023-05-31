@@ -23,7 +23,8 @@ import {
   getAvailableToWithdrawEscrowBalanceForAccount,
 } from '../utils'
 
-import { useAccount, useConnect, useEnsName } from 'wagmi'
+import { useAccount, useConnect } from 'wagmi'
+import { ConnectKitButton } from 'connectkit'
 
 export function Layout() {
   const { address, isConnected } = useAccount()
@@ -113,12 +114,15 @@ export function Layout() {
             <p className="pt-8 font-semibold text-slate-600 text-center tracking-wide">
               Connect your wallet to use SynBioNet App
             </p>
-            <div className="w-40 mt-8">
+            <div className="mt-8">
+              <ConnectKitButton />
+            </div>
+            {/* <div className="w-40 mt-8">
               <PrimaryButton
                 text="connect Wallet"
                 onClick={() => connect({ connector: connectors[0] })}
               />
-            </div>
+            </div> */}
           </div>
         ) : (
           <Outlet />

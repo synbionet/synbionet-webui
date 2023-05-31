@@ -2,6 +2,7 @@ import { HeaderButton } from './HeaderButton'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
+import { ConnectKitButton } from 'connectkit'
 
 function NavBar({ connectWallet }) {
   const activeAccount = useSelector((state) => state.account.activeAccount)
@@ -15,10 +16,11 @@ function NavBar({ connectWallet }) {
       <Link to="/portfolio">
         <HeaderButton buttonTitle="Portfolio" isActive={location.pathname === '/portfolio'} />
       </Link>
-      <HeaderButton
+      <ConnectKitButton />
+      {/* <HeaderButton
         buttonTitle={activeAccount ? activeAccount : 'Connect'}
         onClick={connectWallet}
-      />
+      /> */}
     </div>
   )
 }
