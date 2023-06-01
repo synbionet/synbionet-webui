@@ -11,9 +11,9 @@ WORKDIR /root/
 RUN curl -L https://foundry.paradigm.xyz | bash
 RUN ~/.foundry/bin/foundryup
 
-RUN git clone -b v0.1.0 https://github.com/synbionet/synbionet-core.git
+RUN git clone -b mvp2-diamond https://github.com/synbionet/fair-exchange.git
 
-WORKDIR /root/synbionet-core
+WORKDIR /root/fair-exchange
 ADD docker_artifacts/solc-0.8.16-linux .
 
 RUN printf "\nsolc = \"/root/synbionet-core/solc-0.8.16-linux\"" >> foundry.toml
@@ -21,7 +21,7 @@ RUN printf "\nsolc = \"/root/synbionet-core/solc-0.8.16-linux\"" >> foundry.toml
 RUN forge install
 
 # Runs `forge script` against the anvil chain to set up contracts
-ENV INIT_SCRIPTS='forge script script/Bionet.s.sol:BionetScript --fork-url http://0.0.0.0:8545 --broadcast'
+ENV INIT_SCRIPTS='forge script script/Deploy.s.sol:AnvilDeployScript --rpc-url http://0.0.0.0:8545 --broadcast --ffi -vvvv'
  
 # Command to start the anvil service
 ENV ANVIL_START='anvil --host 0.0.0.0'
