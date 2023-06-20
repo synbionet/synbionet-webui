@@ -2,7 +2,7 @@ import { PrimaryButton } from './common/PrimaryButton'
 
 export function BioAssetCard({ asset, marketView, portfolioView, licenseView }) {
   return (
-    <div className="flex rounded-sm bg-gray-100 border-2 border-slate-300 drop-shadow-sm">
+    <div className="flex rounded-sm bg-slate-100 shadow">
       <div className="w-2 bg-indigo-200 flex-none" />
       <div
         className={`flex flex-col justify-between flex-grow px-3 pt-3 pb-3 ${

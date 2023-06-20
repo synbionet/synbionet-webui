@@ -9,7 +9,7 @@ export function Modal({ title, text, isOpen, onClose }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between">
-              <div className="text-lg font-medium">{title}</div>
+              <div className="text-lg capitalize font-medium">{title}</div>
               <button className="text-xl font-bold text-gray-600" onClick={onClose}>
                 X
               </button>

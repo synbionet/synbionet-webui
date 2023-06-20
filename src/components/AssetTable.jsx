@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 export function AssetTable({ assets = [], portfolioView, licenseView }) {
   return (
-    <div className="flex flex-col space-y-4 bg-gray-100 rounded-sm border-2 border-slate-300 drop-shadow-sm px-8 py-6">
+    <div className="flex flex-col space-y-4 bg-slate-100 rounded-sm border border-slate-300 drop-shadow-sm px-8 py-6">
       <div className="flex justify-between items-center">
         <h5 className="font-semibold uppercase tracking-wider text-slate-500 py-2">
           {/* TODO: update logic here */}

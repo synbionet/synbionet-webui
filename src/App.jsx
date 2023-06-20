@@ -2,12 +2,14 @@
 import { Layout } from './views/Layout'
 import { ExploreView } from './views/ExploreView'
 import { PortfolioView } from './views/PortfolioView'
-import { AssetDetailsView } from './views/AssetDetailsView'
+import { ServiceView } from './views/ServiceView'
 import { CreateAssetView } from './views/CreateAssetView'
 import { HomeView } from './views/HomeView'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useEffect } from 'react'
 import { getPublicClient } from './utils'
+import { useDispatch } from 'react-redux'
+import { setDispatchForUtils } from './utils'
 
 import { WagmiConfig, createConfig, useAccount } from 'wagmi'
 
@@ -26,6 +28,7 @@ const config = createConfig(
 )
 
 function App() {
+  const dispatch = useDispatch()
   const { address, isConnected } = useAccount()
 
   async function watchBlocks() {
@@ -39,9 +42,8 @@ function App() {
   }
 
   useEffect(() => {
-    console.log('account changed')
-    console.log({ address })
     watchBlocks()
+    setDispatchForUtils(dispatch)
   }, [address])
 
   return (
@@ -54,7 +56,14 @@ function App() {
               <Route path="market" element={<ExploreView />} />
               <Route path="portfolio" element={<PortfolioView />} />
               <Route path="create" element={<CreateAssetView />} />
-              <Route path="asset/:did" element={<AssetDetailsView />} />
+              <Route
+                path="asset/:did"
+                element={
+                  <div className="m-4">
+                    <ServiceView />
+                  </div>
+                }
+              />
               {/* <Route path="*" element={<NoPage />} /> */}
             </Route>
           </Routes>

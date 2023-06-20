@@ -292,7 +292,7 @@ export function OfferTable({
 
 function OfferTableButton({ buttonText, onClick }) {
   const dynamicStyle = `w-32 h-8 justify-center flex rounded-sm text-sm font-semibold items-center 
-    ${buttonText === 'View Agreement' && 'text-indigo-500 border-2 border-indigo-500'}
+    ${buttonText === 'View Agreement' && 'text-indigo-500 border border-indigo-500'}
     ${
       (buttonText === 'Offer Voided' || buttonText === 'Revoked') &&
       'text-white bg-slate-600 opacity-60'
@@ -304,7 +304,7 @@ function OfferTableButton({ buttonText, onClick }) {
         buttonText === 'Redeem' ||
         buttonText === 'Redeemed' ||
         buttonText === 'Finalize') &&
-      'border-2 border-green-500 bg-green-200 text-green-600'
+      'border border-green-500 bg-green-200 text-green-600'
     }
     ${buttonText === 'Completed' && 'text-white bg-green-600 opacity-80'}
     ${

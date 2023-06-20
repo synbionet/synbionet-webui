@@ -8,7 +8,7 @@ export function SearchBar() {
     setSearchText(e.target.value)
   }
   return (
-    <div className="w-full bg-gray-100 border-slate-300 border-2 rounded-sm flex items-center drop-shadow-sm">
+    <div className="w-full bg-slate-100 border-slate-300 border rounded-sm flex items-center drop-shadow-sm">
       <SearchIcon className="w-8 h-8 px-2 fill-slate-500" />
       <input
         className="grow placeholder:italic placeholder:text-slate-500 text-slate-800 bg-transparent py-2 pr-3 focus:outline-none sm:text-sm tracking-wide"

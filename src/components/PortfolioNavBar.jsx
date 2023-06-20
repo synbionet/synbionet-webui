@@ -15,7 +15,7 @@ function NavBarButton({ Icon, isActive, onClick }) {
 
 export function PortfolioNavBar({ selectedTab, setSelectedTab }) {
   return (
-    <div className="flex-none w-14 border-r-2 bg-slate-100 border-slate-300">
+    <div className="flex-none w-14 border-r bg-slate-100 border-slate-300">
       <div className="flex flex-col items-center space-y-2 mt-6 fill-slate-400">
         <NavBarButton
           Icon={Briefcase}

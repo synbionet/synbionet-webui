@@ -8,7 +8,7 @@ export function BioTokenWidget({
   availableToWithdrawEscrowBalance,
 }) {
   return (
-    <div className="p-6 px-8 space-y-6 bg-gray-100 rounded-sm border-2 border-slate-300 drop-shadow-sm">
+    <div className="p-6 px-8 space-y-6 bg-slate-100 rounded-sm border border-slate-300 drop-shadow-sm">
       <div className="flex flex-col items-center">
         <h5 className="font-semibold uppercase tracking-wider text-slate-500 pt-1">
           account balance

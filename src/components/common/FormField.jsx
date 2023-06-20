@@ -16,7 +16,7 @@ export function FormField({
 }) {
   const css = alternateStyle
     ? 'grow placeholder:italic placeholder:text-slate-500 text-slate-800 bg-slate-200 shadow-inner py-2 font-semibold rounded-sm focus:outline-none tracking-wide text-center'
-    : 'px-2 grow placeholder:italic placeholder:text-slate-200 bg-slate-100 border-2 rounded-sm border-slate-300 drop-shadow-sm py-2 pr-3 focus:outline-none sm:text-sm'
+    : 'px-2 grow placeholder:italic placeholder:text-slate-200 bg-slate-100 border rounded-sm border-slate-300 drop-shadow-sm py-2 pr-3 focus:outline-none sm:text-sm'
 
   const [selections, setSelections] = useState(new Set([]))
 
