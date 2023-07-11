@@ -22,7 +22,7 @@ export function Layout() {
       <div className="flex-0">
         <Header />
       </div>
-      <div className="bg-gray-200 flex-1 flex flex-col">
+      <div className="bg-slate-200 flex-1 flex flex-col">
         {!isConnected && location.pathname !== '/' ? (
           <div className="flex flex-col items-center">
             <p className="pt-8 font-semibold text-slate-600 text-center tracking-wide">

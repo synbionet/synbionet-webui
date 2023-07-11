@@ -7,9 +7,8 @@ import { CreateAssetView } from './views/CreateAssetView'
 import { HomeView } from './views/HomeView'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useEffect } from 'react'
-import { getPublicClient } from './utils'
 import { useDispatch } from 'react-redux'
-import { setDispatchForUtils } from './utils'
+import { setDispatchForUtils, getPublicClient, getServices, getExchanges } from './utils'
 
 import { WagmiConfig, createConfig, useAccount } from 'wagmi'
 
@@ -37,14 +36,26 @@ function App() {
     const unwatch = publicClient.watchBlocks({
       onBlock: async (block) => {
         console.log('onBlock')
+        console.log({ services: await getServices() })
+        console.log({ exchanges: await getExchanges() })
+        getServices()
+        getExchanges()
       },
     })
   }
 
   useEffect(() => {
+    async function fetchAppData() {
+      getServices()
+      getExchanges()
+    }
+    fetchAppData()
     watchBlocks()
-    setDispatchForUtils(dispatch)
   }, [address])
+
+  useEffect(() => {
+    setDispatchForUtils(dispatch)
+  }, [])
 
   return (
     <Router>
@@ -59,8 +70,12 @@ function App() {
               <Route
                 path="asset/:did"
                 element={
-                  <div className="m-4">
-                    <ServiceView />
+                  <div className="flex flex-1 space-x-4 pt-4 mx-4">
+                    <div className="flex flex-1 flex-col">
+                      <div className="flex-1 w-full mx-auto bg-slate-100 border border-slate-300 py-8 px-10 shadow-sm overflow-hidden">
+                        <ServiceView />
+                      </div>
+                    </div>
                   </div>
                 }
               />

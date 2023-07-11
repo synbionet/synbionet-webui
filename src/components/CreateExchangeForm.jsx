@@ -2,7 +2,7 @@ import TextField from '@mui/material/TextField'
 import { PrimaryButton } from './common/PrimaryButton'
 import { useState } from 'react'
 
-export function CreateExchangeForm({ onSubmit }) {
+export function CreateExchangeForm({ onSubmit, serviceId }) {
   const [buyer, setBuyer] = useState('0x70997970c51812dc3a010c7d01b50e0d17dc79c8')
   const [moderator, setModerator] = useState('0x90f79bf6eb2c4f870365e785982e1f101e93b906')
   const [price, setPrice] = useState('')
@@ -19,36 +19,40 @@ export function CreateExchangeForm({ onSubmit }) {
       <TextField
         onChange={(e) => setBuyer(e.target.value)}
         autoComplete="off"
-        id="filled-basic"
+        id="standard-basic"
         label="Buyer"
-        variant="filled"
+        variant="standard"
         defaultValue={buyer}
       />
       <TextField
         onChange={(e) => setModerator(e.target.value)}
         autoComplete="off"
-        id="filled-basic"
+        id="standard-basic"
         label="Moderator"
-        variant="filled"
+        variant="standard"
         defaultValue={moderator}
       />
       <TextField
         onChange={(e) => setPrice(e.target.value)}
         autoComplete="off"
-        id="filled-basic"
+        id="standard-basic"
         label="Price (USDC)"
-        variant="filled"
+        variant="standard"
       />
       <TextField
         onChange={(e) => setAgreementUri(e.target.value)}
         autoComplete="off"
-        id="filled-basic"
+        id="standard-basic"
         label="AgreementUri"
-        variant="filled"
+        variant="standard"
         defaultValue={agreementUri}
       />
       <div className="w-64">
-        <PrimaryButton disabled={!isInputValid()} onClick={{}} text="create service" />
+        <PrimaryButton
+          disabled={!isInputValid()}
+          onClick={() => onSubmit(serviceId, buyer, moderator, price, agreementUri)}
+          text="create service"
+        />
       </div>
     </div>
   )

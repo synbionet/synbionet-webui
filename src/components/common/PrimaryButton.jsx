@@ -6,6 +6,7 @@ export function PrimaryButton({
   disabled,
   alternate,
   disableElevation,
+  size = '',
 }) {
   function getCustomStyles() {
     if (!alternate) {
@@ -42,6 +43,7 @@ export function PrimaryButton({
 
     <div className={defaultSize ? 'w-40' : 'w-full'}>
       <Button
+        size={size}
         style={{ width: '100%' }}
         disableElevation={disableElevation}
         disabled={disabled}

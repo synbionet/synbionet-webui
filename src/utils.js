@@ -1,13 +1,11 @@
 import { SynBioNet } from '@synbionet/api'
 import { keccak256, toHex } from 'viem'
 import { setLastTransactionStatus } from './store/accountStore'
-
-// TODO: dynamically set accurate ethPrice instead of hard-coded value
-const ethPriceInUSD = 1998
-// export const USDC_CONTRACT_ADDRESS = '0xbdEd0D2bf404bdcBa897a74E6657f1f12e5C6fb6'
+import { setServices, setExchanges } from './store/eventStore'
 
 // dispatch to set values in store. must be set from a react component using useDispatch()
 let dispatch = undefined
+const oneDollar = 1e6
 
 export function weiToUSD(wei) {
   return '0'
@@ -15,9 +13,53 @@ export function weiToUSD(wei) {
 
 export async function getServices() {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  return (await synbionet.service.getServices()).map((service) =>
-    Object.assign(service, { uri: JSON.parse(service.uri) })
-  )
+  const services = (await synbionet.service.getServices()).map((service) => {
+    try {
+      return Object.assign(service, { uri: JSON.parse(service.uri) })
+    } catch (e) {
+      return service
+    }
+  })
+  dispatch(setServices(services))
+  return services
+}
+
+export async function getExchanges() {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  const exchanges = (await synbionet.exchange.getExchanges()).map((exchange) => {
+    try {
+      return Object.assign(exchange, { uri: JSON.parse(exchange.uri) })
+    } catch (e) {
+      return exchange
+    }
+  })
+  dispatch(setExchanges(exchanges))
+  return exchanges
+}
+
+export async function createExchange(serviceId, buyer, moderator, priceInDollars, agreementUri) {
+  setTransactionStatus('pending')
+  try {
+    const defaultDisputeTime = 2592000 // 30 days in seconds
+    const price = parseFloat(priceInDollars) * oneDollar
+    const defaultModeratorFee = 200 // 2%
+    const exchangeArgs = {
+      serviceId: serviceId,
+      buyer: buyer,
+      moderator: moderator,
+      moderatorPercentage: defaultModeratorFee,
+      price: price,
+      disputeTimerValue: defaultDisputeTime,
+      uri: agreementUri,
+    }
+    const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+    const exchangeId = await synbionet.exchange.createOffer(exchangeArgs)
+    setTransactionStatus('complete')
+    return exchangeId
+  } catch (e) {
+    setTransactionStatus('failed')
+    throw new Error('Error creating exchange: ' + e)
+  }
 }
 
 export async function createService(serviceName, serviceUri) {
@@ -135,6 +177,18 @@ export async function voidOffer(offerId) {
   setTransactionStatus('pending')
   try {
     await synbionet.exchange.voidOffer(offerId)
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e })
+    setTransactionStatus('failed')
+  }
+}
+
+export async function fundOffer(offerId) {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.fundOffer(offerId)
     setTransactionStatus('complete')
   } catch (e) {
     console.log({ error: e })

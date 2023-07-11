@@ -10,7 +10,7 @@ export function BioTokenWidget({
   return (
     <div className="p-6 px-8 space-y-6 bg-slate-100 rounded-sm border border-slate-300 drop-shadow-sm">
       <div className="flex flex-col items-center">
-        <h5 className="font-semibold uppercase tracking-wider text-slate-500 pt-1">
+        <h5 className="font-medium uppercase tracking-wider text-slate-500 pt-1">
           account balance
         </h5>
         <div className="flex items-baseline mt-4">
@@ -30,9 +30,7 @@ export function BioTokenWidget({
       </div>
 
       <div className="flex flex-col items-center">
-        <h5 className="font-semibold uppercase tracking-wider text-slate-500 pt-1">
-          escrow balance
-        </h5>
+        <h5 className="font-medium uppercase tracking-wider text-slate-500 pt-1">escrow balance</h5>
         <div className="flex items-baseline mt-4">
           {!escrowBalance ? (
             <ThreeDotsLoader height="40" width="60" />

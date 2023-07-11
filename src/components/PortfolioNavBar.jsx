@@ -1,5 +1,6 @@
 import { ReactComponent as Briefcase } from '../assets/briefcase.svg'
 import { ReactComponent as CheckMark } from '../assets/checkMark.svg'
+import { Badge } from '@mui/material'
 
 function NavBarButton({ Icon, isActive, onClick }) {
   return (
@@ -13,7 +14,7 @@ function NavBarButton({ Icon, isActive, onClick }) {
   )
 }
 
-export function PortfolioNavBar({ selectedTab, setSelectedTab }) {
+export function PortfolioNavBar({ selectedTab, setSelectedTab, numOfferNotifications }) {
   return (
     <div className="flex-none w-14 border-r bg-slate-100 border-slate-300">
       <div className="flex flex-col items-center space-y-2 mt-6 fill-slate-400">
@@ -22,11 +23,13 @@ export function PortfolioNavBar({ selectedTab, setSelectedTab }) {
           isActive={selectedTab === 'portfolio'}
           onClick={() => setSelectedTab('portfolio')}
         />
-        <NavBarButton
-          Icon={CheckMark}
-          isActive={selectedTab === 'workflows'}
-          onClick={() => setSelectedTab('workflows')}
-        />
+        <Badge badgeContent={numOfferNotifications} color="primary">
+          <NavBarButton
+            Icon={CheckMark}
+            isActive={selectedTab === 'workflows'}
+            onClick={() => setSelectedTab('workflows')}
+          />
+        </Badge>
       </div>
     </div>
   )
