@@ -11,18 +11,18 @@ export function PrimaryButton({
   function getCustomStyles() {
     if (!alternate) {
       return {
-        backgroundColor: 'rgb(99 102 241)',
+        backgroundColor: '#005b94',
         '&:hover': {
-          backgroundColor: 'rgb(99 102 241)',
+          backgroundColor: '#005b94',
         },
       }
     } else {
       return {
-        color: 'rgb(99 102 241)',
-        borderColor: 'rgb(99 102 241)',
+        color: '#005b94',
+        borderColor: '#005b94',
         '&:hover': {
-          backgroundColor: 'rgb(224 231 255)',
-          borderColor: 'rgb(99 102 241)',
+          backgroundColor: 'rgba(0, 91, 148, 0.1)',
+          borderColor: '#005b94',
         },
       }
     }
