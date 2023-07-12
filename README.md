@@ -15,7 +15,7 @@
 
 3. Install dependencies with `npm install`
 
-4. Run with `npm run dev` . Open [http://localhost:5173](http://localhost:5173) to view it in your browser.
+4. Run with `npm run dev` . Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 5. Import pre-funded accounts to your wallet so you can pay for transactions. You can import the following private keys into your wallet client. Switch between accounts to simulate different users of the bionet.
 
