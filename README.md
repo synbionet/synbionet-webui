@@ -7,17 +7,19 @@
 
 ## Running Locally
 
-1. Build the local anvil ethereum node for testing by executing `make anvil_build`
+<!-- 1. Build the local anvil ethereum node for testing by executing `make anvil_build`
 
 2. Run the local anvil ethereum node by executing `make anvil_start`
 
-> **NOTE:** allow approximately 30s for deploy script to run before interacting with the contracts.
+> **NOTE:** allow approximately 30s for deploy script to run before interacting with the contracts. -->
 
-3. Install dependencies with `npm install`
+1. Spin up backend from synbionet-demo-backend repo.
 
-4. Run with `npm run dev` . Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+2. Install dependencies with `npm install`
 
-5. Import pre-funded accounts to your wallet so you can pay for transactions. You can import the following private keys into your wallet client. Switch between accounts to simulate different users of the bionet.
+3. Run with `npm run dev` . Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+
+4. Import pre-funded accounts to your wallet so you can pay for transactions. You can import the following private keys into your wallet client. Switch between accounts to simulate different users of the bionet.
 
    - `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d`
    - `0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a`

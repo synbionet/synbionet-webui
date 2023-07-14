@@ -9,7 +9,7 @@ export default defineConfig({
   },
   plugins: [react(), svgr()],
   // need to include when installing dep from 'file:../synbionet-api-js'
-  optimizeDeps: {
-    include: ['@synbionet/api'],
-  },
+  // optimizeDeps: {
+  //   include: ['@synbionet/api'],
+  // },
 })
