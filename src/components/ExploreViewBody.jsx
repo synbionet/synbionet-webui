@@ -24,13 +24,7 @@ export function ExploreViewBody() {
         return (
           <div key={service.id} className="w-1/4 p-3">
             <Link to={`/asset/${service.id}`}>
-              <BioAssetCard
-                marketView
-                asset={{
-                  name: service.name,
-                  description: service.uri.description,
-                }}
-              />
+              <BioAssetCard marketView asset={service} />
             </Link>
           </div>
         )

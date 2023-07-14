@@ -18,6 +18,7 @@ import { CreateExchangeForm } from '../components/CreateExchangeForm'
 import { createExchange } from '../utils'
 import { useSelector } from 'react-redux'
 import { TabWrapper } from '../components/common/TabWrapper'
+import { ExchangeTableRow } from '../components/ExchangeTableRow'
 
 export function ServiceView() {
   const { did } = useParams()
@@ -30,6 +31,8 @@ export function ServiceView() {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const services = useSelector((state) => state.event.services)
   const exchanges = useSelector((state) => state.event.exchanges)
+
+  const myActiveOperations = exchanges?.filter((exchange) => exchange.seller === address)
 
   const dummyText =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque ante nec tellus vulputate, ac fringilla magna aliquam. Sed convallis cursus ligula vel consequat. Proin fermentum, neque id aliquet vestibulum, augue nisi pulvinar sem, vel faucibus velit massa in dolor. Vivamus venenatis, turpis ac tincidunt consectetur, nisl ex laoreet metus, nec iaculis tortor justo nec nulla. Cras finibus tempor purus, id feugiat neque feugiat id. Suspendisse potenti. Maecenas quis lacinia ex, vel cursus dui. Suspendisse tempor, metus in consectetur pellentesque, massa orci elementum dolor, non eleifend ipsum nisi nec elit. Curabitur iaculis, neque id elementum ultricies, velit quam volutpat urna, id condimentum nisi quam et velit. Sed eu iaculis ligula. Sed mattis, lorem id fermentum blandit, ipsum dui tempor turpis, id bibendum tortor turpis in tortor. Fusce vulputate scelerisque felis id ultrices. Sed in aliquet odio.\n\nPellentesque ut tortor ac justo lobortis pellentesque. Sed consectetur justo eget turpis varius pulvinar. Ut eget metus mauris. In vel elit id felis vestibulum tincidunt a ut odio. Etiam faucibus, justo vel vulputate aliquam, elit ligula facilisis nulla, a posuere purus ipsum vel purus. Curabitur in lacus enim. Vestibulum hendrerit est in eros viverra tincidunt. Mauris auctor, ex vel tristique fringilla, nibh nibh tristique urna, ut gravida mauris dui vel purus. Nunc auctor mauris ac massa ultrices, vel gravida leo dapibus. Vivamus pellentesque mauris non ligula rutrum commodo. Mauris sagittis, odio ut lacinia lacinia, sapien lectus aliquam nisl, eu aliquam sem lacus non urna. Integer iaculis felis ligula, sit amet malesuada enim fermentum et.'
@@ -65,28 +68,32 @@ export function ServiceView() {
         show={service && currentSlide === 'serviceOverview'}
         isTransitionDisabled={selectedCapability === undefined}
         Component={() => (
-          <div className="flex flex-col space-y-14 w-full">
-            <div className="flex flex-col space-y-2">
-              <h2 className="font-semibold text-2xl capitalize">MITRE LABS - {service.name}</h2>
-              <div className="font-mono text-slate-600 text-sm pb-2">{service.owner}</div>
-              <div className="flex space-x-3 font-mono text-slate-600 text-sm pb-4 items-center">
-                {service?.owner === address && (
-                  <div>
-                    <PrimaryButton
-                      text="Create Exchange"
-                      onClick={() => setDestinationSlide('createExchange')}
-                    />
-                  </div>
-                )}
-                <Rating name="read-only" size="small" value={5} readOnly />
-                <div>2k+ Exchanges</div>
+          <div className="flex flex-col space-y-8 w-full">
+            <div className="flex items-center space-x-3">
+              <div className="h-12 rounded-full overflow-hidden">
+                <img src="/example_logo.png" className="object-fit w-full h-full" />
               </div>
-              <div className="flex space-x-6">
-                <Chip label="Gene synthesis" variant="outlined" />
-                <Chip label="Pathway engineering" variant="outlined" />
-                <Chip label="Plasmid construction" variant="outlined" />
-                <Chip label="DNA cloning" variant="outlined" />
+              <div className="flex flex-col space-y-1">
+                <h2 className="font-semibold text-2xl capitalize">{service.name}</h2>
+                <div className="font-mono text-slate-600 text-sm">{service.owner}</div>
               </div>
+            </div>
+            {/* <div className="flex space-x-3 font-mono text-slate-600 text-sm items-center">
+              <Rating name="read-only" size="small" value={5} readOnly />
+              <div>29 Exchanges</div>
+            </div> */}
+            {service?.owner === address && (
+              <div className="w-48">
+                <PrimaryButton
+                  text="Create Exchange"
+                  onClick={() => setDestinationSlide('createExchange')}
+                />
+              </div>
+            )}
+            <div className="flex space-x-6">
+              {service?.uri?.tags.map((tag) => (
+                <Chip key={tag} label={tag} variant="outlined" />
+              ))}
             </div>
             <TabWrapper
               tabs={[
@@ -140,18 +147,16 @@ export function ServiceView() {
                     <>
                       <TableWrapper
                         rows={
-                          exchanges
-                            ? exchanges
-                                .filter((exchange) => exchange.seller === address)
-                                .map((exchange) => {
-                                  return {
-                                    label: exchange.buyer,
-                                    secondary: exchange.state,
-                                  }
-                                })
-                            : []
+                          myActiveOperations?.map((exchange) => {
+                            return {
+                              customComponent: () => (
+                                <ExchangeTableRow exchange={exchange} variant="serviceOperations" />
+                              ),
+                            }
+                          }) || []
                         }
                       />
+                      {!myActiveOperations.length && <div>No active exchanges</div>}
                     </>
                   ),
                 },

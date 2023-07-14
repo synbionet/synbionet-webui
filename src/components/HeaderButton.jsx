@@ -1,3 +1,5 @@
+import { Typography } from '@mui/material'
+
 export function HeaderButton({ buttonTitle, onClick, isActive }) {
   return (
     <button
@@ -7,7 +9,9 @@ export function HeaderButton({ buttonTitle, onClick, isActive }) {
       }`}
       onClick={onClick}
     >
-      {buttonTitle}
+      <Typography variant="h7" component="h3">
+        {buttonTitle}
+      </Typography>
     </button>
   )
 }

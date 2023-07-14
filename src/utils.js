@@ -196,6 +196,18 @@ export async function fundOffer(offerId) {
   }
 }
 
+export async function completeExchange(exchangeId) {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.complete(exchangeId)
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e })
+    setTransactionStatus('failed')
+  }
+}
+
 export async function commitToOffer(offerId) {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
   setTransactionStatus('pending')

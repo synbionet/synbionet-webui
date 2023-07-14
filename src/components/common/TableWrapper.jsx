@@ -17,12 +17,18 @@ export function TableWrapper({ rows = [], onClick }) {
                 role="checkbox"
                 tabIndex={-1}
                 key={index}
-                sx={{ cursor: 'pointer' }}
+                sx={{ cursor: onClick ? 'pointer' : 'normal' }}
               >
-                <TableCell component="th" scope="row">
-                  <div className="font-semibold pb-2">{row.label}</div>
-                  <div>{row.secondary}</div>
-                </TableCell>
+                {row?.customComponent ? (
+                  <TableCell component="th" scope="row">
+                    <row.customComponent />
+                  </TableCell>
+                ) : (
+                  <TableCell component="th" scope="row">
+                    <div className="font-semibold pb-2">{row.label}</div>
+                    <div>{row.secondary}</div>
+                  </TableCell>
+                )}
               </TableRow>
             )
           })}

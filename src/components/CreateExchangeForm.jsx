@@ -51,7 +51,7 @@ export function CreateExchangeForm({ onSubmit, serviceId }) {
         <PrimaryButton
           disabled={!isInputValid()}
           onClick={() => onSubmit(serviceId, buyer, moderator, price, agreementUri)}
-          text="create service"
+          text="make offer"
         />
       </div>
     </div>

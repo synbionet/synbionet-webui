@@ -64,7 +64,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<HomeView />} />
-              <Route path="market" element={<ExploreView />} />
+              <Route path="network" element={<ExploreView />} />
               <Route path="portfolio" element={<PortfolioView />} />
               <Route path="create" element={<CreateAssetView />} />
               <Route

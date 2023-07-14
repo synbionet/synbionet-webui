@@ -26,7 +26,7 @@ export function ToastNotification({ lastTransactionStatus, message }) {
           lastTransactionStatus === 'failed'
             ? 'bg-red-500'
             : lastTransactionStatus === 'pending'
-            ? 'bg-indigo-500'
+            ? 'bg-indigo-600'
             : 'bg-green-500'
         }  py-3 flex items-center justify-center space-x-4 w-96 rounded-sm shadow text-white`}
       >

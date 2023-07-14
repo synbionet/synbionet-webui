@@ -7,8 +7,11 @@ export function PrimaryButton({
   alternate,
   disableElevation,
   size = '',
+  endIcon,
+  isTextButton,
 }) {
   function getCustomStyles() {
+    if (isTextButton) return {}
     if (!alternate) {
       return {
         backgroundColor: '#005b94',
@@ -48,8 +51,9 @@ export function PrimaryButton({
         disableElevation={disableElevation}
         disabled={disabled}
         onClick={onClick}
-        variant={alternate ? 'outlined' : 'contained'}
+        variant={isTextButton ? 'text' : alternate ? 'outlined' : 'contained'}
         sx={getCustomStyles()}
+        endIcon={endIcon}
       >
         {text}
       </Button>

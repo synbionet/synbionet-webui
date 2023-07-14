@@ -9,8 +9,8 @@ function NavBar({ connectWallet }) {
   return (
     <div className="flex items-center space-x-10">
       <div className="flex space-x-14">
-        <Link to="/market">
-          <HeaderButton buttonTitle="Market" isActive={location.pathname === '/market'} />
+        <Link to="/network">
+          <HeaderButton buttonTitle="Network" isActive={location.pathname === '/network'} />
         </Link>
         <Link to="/portfolio">
           <HeaderButton buttonTitle="Portfolio" isActive={location.pathname === '/portfolio'} />

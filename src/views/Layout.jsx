@@ -26,7 +26,7 @@ export function Layout() {
         {!isConnected && location.pathname !== '/' ? (
           <div className="flex flex-col items-center">
             <p className="pt-8 font-semibold text-slate-600 text-center tracking-wide">
-              Connect your wallet to use SynBioNet App
+              Connect your wallet to use BioNet App
             </p>
             <div className="mt-8">
               <ConnectKitButton />
