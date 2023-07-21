@@ -1,17 +1,7 @@
-import { PrimaryButton } from './common/PrimaryButton'
 import { ThreeDotsLoader } from './common/ThreeDotsLoader'
-import { withdrawFunds } from '../utils'
+import { formatCurrency } from '../utils'
 
-export function BioTokenWidget({
-  accountBalance,
-  escrowBalance,
-  availableToWithdrawEscrowBalance,
-}) {
-  const usDollar = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  })
-
+export function BioTokenWidget({ accountBalance, escrowBalance }) {
   return (
     <div className="p-6 px-8 space-y-6 bg-slate-100 rounded-sm border border-slate-300 drop-shadow-sm">
       <div className="flex flex-col items-center">
@@ -23,7 +13,7 @@ export function BioTokenWidget({
             <ThreeDotsLoader height="40" width="60" />
           ) : (
             <div className="text-3xl mr-1" style={{ minHeight: '40px' }}>
-              {usDollar.format(accountBalance.value)}
+              {formatCurrency(accountBalance.value)}
             </div>
           )}
         </div>
@@ -44,7 +34,7 @@ export function BioTokenWidget({
               <ThreeDotsLoader height="40" width="60" />
             ) : (
               <div className="text-3xl mr-1" style={{ minHeight: '40px' }}>
-                {usDollar.format(escrowBalance.value)}
+                {formatCurrency(escrowBalance.value)}
               </div>
             )}
           </div>

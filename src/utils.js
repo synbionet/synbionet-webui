@@ -1,7 +1,8 @@
 import { SynBioNet } from '@synbionet/api'
 import { keccak256, toHex } from 'viem'
 import { setLastTransactionStatus } from './store/accountStore'
-import { setServices, setExchanges } from './store/eventStore'
+import { setServices, setExchanges, setTreasuryBalance } from './store/eventStore'
+import { formatUnits } from 'viem'
 
 // dispatch to set values in store. must be set from a react component using useDispatch()
 let dispatch = undefined
@@ -9,6 +10,18 @@ const oneDollar = 1e6
 
 export function weiToUSD(wei) {
   return '0'
+}
+
+export function formatCurrency(amt) {
+  const usDollar = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  })
+  return usDollar.format(amt)
+}
+
+export function formatUSDCBalance(amt) {
+  return formatUnits(amt, 6)
 }
 
 export async function getServices() {
@@ -35,6 +48,13 @@ export async function getExchanges() {
   })
   dispatch(setExchanges(exchanges))
   return exchanges
+}
+
+export async function getTreasuryBalance() {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  const balance = await synbionet.core.getTreasuryBalance()
+  dispatch(setTreasuryBalance(formatUSDCBalance(balance)))
+  return formatUSDCBalance(balance)
 }
 
 export async function createExchange(serviceId, buyer, moderator, priceInDollars, agreementUri) {
@@ -151,26 +171,7 @@ export async function registerAssetOnMarket(
   }
 }
 
-export async function createOfferOnExchange(assetAddress, name, description, price, metadataUri) {
-  //   if (name === '' || description === '' || price === '' || metadataUri === '') return
-  //   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
-  //   setTransactionStatus('pending')
-  //   try {
-  //     await synbionet.exchange.createOffer(
-  //       assetAddress,
-  //       name,
-  //       description,
-  //       ethers.utils.parseEther('1').div(ethPriceInUSD).mul(parseInt(price)),
-  //       metadataUri
-  //     )
-  //     setTransactionStatus('complete')
-  //   } catch (e) {
-  //     console.log({ error: e.message })
-  //     const errorObject = JSON.parse(e.message.match(/.*({.+}).*/)[1])
-  //     console.log({ errorObject })
-  //     setTransactionStatus('failed')
-  //   }
-}
+export async function createOfferOnExchange(assetAddress, name, description, price, metadataUri) {}
 
 export async function voidOffer(offerId) {
   const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
@@ -189,6 +190,47 @@ export async function fundOffer(offerId) {
   setTransactionStatus('pending')
   try {
     await synbionet.exchange.fundOffer(offerId)
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e })
+    setTransactionStatus('failed')
+  }
+}
+
+export async function disputeExchange(exchangeId) {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.dispute(exchangeId)
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e })
+    setTransactionStatus('failed')
+  }
+}
+
+export async function agreeToDisputeResolution(exchangeId) {
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.agreeToRefund(exchangeId)
+    setTransactionStatus('complete')
+  } catch (e) {
+    console.log({ error: e })
+    setTransactionStatus('failed')
+  }
+}
+
+export async function resolveExchange(exchangeId, resolutionType) {
+  const resolutionOptions = {
+    none: 0,
+    partial: 1,
+    full: 2,
+  }
+  const synbionet = new SynBioNet({ ethereumClient: window.ethereum })
+  setTransactionStatus('pending')
+  try {
+    await synbionet.exchange.resolve(exchangeId, resolutionOptions[resolutionType])
     setTransactionStatus('complete')
   } catch (e) {
     console.log({ error: e })

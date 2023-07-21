@@ -1,7 +1,6 @@
 import { Chip } from '@mui/material'
 
 export function BioAssetCard({ asset, marketView, portfolioView, licenseView }) {
-  console.log({ asset })
   return (
     <div className="flex rounded-sm bg-slate-100 shadow">
       <div className="w-2 bg-indigo-400 flex-none" />
@@ -36,8 +35,8 @@ export function BioAssetCard({ asset, marketView, portfolioView, licenseView }) 
         </div>
         <div className="flex flex-wrap">
           {asset?.uri?.tags?.map((tag) => (
-            <div className="mr-1 mt-1">
-              <Chip key={tag} size="small" label={tag} variant="outlined" />
+            <div key={tag} className="mr-1 mt-1">
+              <Chip size="small" label={tag} variant="outlined" />
             </div>
           ))}
         </div>

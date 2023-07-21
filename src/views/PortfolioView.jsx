@@ -9,25 +9,31 @@ import { ServiceView } from './ServiceView'
 import { useSelector } from 'react-redux'
 import { TabWrapper } from '../components/common/TabWrapper'
 import { ExchangeTableRow } from '../components/ExchangeTableRow'
-import { formatUnits } from 'viem'
+import { formatUSDCBalance } from '../utils'
 
 export function PortfolioView() {
   const { address } = useAccount()
-  const { data: balance, isError } = useBalance({
+  const { data: balance } = useBalance({
     address,
     token: USDC_CONTRACT_ADDRESS,
+    watch: true,
   })
 
   const exchanges = useSelector((state) => state.event.exchanges)
-  const myExchanges = exchanges?.filter((exchange) => exchange.buyer === address) || []
-  const myOffers = myExchanges?.filter((exchange) => exchange.state === 0) || []
-  const myActiveOperations = myExchanges?.filter((exchange) => exchange.state !== 0) || []
+  const exchangesAsBuyer = exchanges?.filter((exchange) => exchange.buyer === address) || []
+  const exchangesAsSeller = exchanges?.filter((exchange) => exchange.seller === address) || []
+  const exchangesAsModerator = exchanges?.filter((exchange) => exchange.moderator === address) || []
+  const exchangesOfferedToMe = exchangesAsBuyer?.filter((exchange) => exchange.state === 0) || []
+  const disputedExchanges = [
+    ...exchangesAsBuyer,
+    ...exchangesAsSeller,
+    ...exchangesAsModerator,
+  ].filter((exchange) => exchange.state === 2 || exchange.state === 3)
 
-  const escrowedFunds = formatUnits(
-    myExchanges
-      .filter((exchange) => exchange.state === 1)
-      .reduce((sum, exchange) => sum + exchange.price, 0),
-    6
+  const escrowedFunds = formatUSDCBalance(
+    exchangesAsBuyer
+      .filter((exchange) => exchange.state !== 0 && exchange.state !== 4)
+      .reduce((sum, exchange) => sum + exchange.price, 0)
   )
 
   const [isLoading, setIsLoading] = useState(false)
@@ -48,7 +54,8 @@ export function PortfolioView() {
         <PortfolioNavBar
           selectedTab={selectedTab}
           setSelectedTab={setSelectedTab}
-          numOfferNotifications={myOffers.length}
+          numOfferNotifications={exchangesOfferedToMe.length}
+          numDisputeNotifications={disputedExchanges.length}
         />
         <GridLoader />
       </div>
@@ -60,7 +67,8 @@ export function PortfolioView() {
       <PortfolioNavBar
         selectedTab={selectedTab}
         setSelectedTab={setSelectedTab}
-        numOfferNotifications={myOffers.length}
+        numOfferNotifications={exchangesOfferedToMe.length}
+        numDisputeNotifications={disputedExchanges.length}
       />
       {selectedTab === 'portfolio' ? (
         <div className="flex flex-1 space-x-4 pt-4 mx-4">
@@ -80,6 +88,43 @@ export function PortfolioView() {
             />
           </div>
         </div>
+      ) : selectedTab === 'workflows' ? (
+        <div className="flex-1 flex space-x-4 pt-4 mx-4">
+          <div className="flex-1">
+            <div className="flex flex-col space-y-4 bg-slate-100 rounded-sm border border-slate-300 drop-shadow-sm h-full px-8 py-6">
+              <TabWrapper
+                tabs={[
+                  {
+                    label: 'exchanges',
+                    Component: () => (
+                      <div>
+                        <TableWrapper
+                          rows={exchangesAsBuyer.map((offer) =>
+                            Object.assign(
+                              {},
+                              { customComponent: () => <ExchangeTableRow exchange={offer} /> }
+                            )
+                          )}
+                        />
+                        {!exchangesAsBuyer.length && <div>No Exchanges</div>}
+                      </div>
+                    ),
+                  },
+                ]}
+              />
+            </div>
+          </div>
+          <div className="flex flex-col">
+            <BioTokenWidget
+              accountBalance={{ value: balance?.formatted, units: balance?.symbol }}
+              escrowBalance={{ value: escrowedFunds.toString(), units: balance?.symbol }}
+              availableToWithdrawEscrowBalance={{
+                value: '0.00',
+                units: '$',
+              }}
+            />
+          </div>
+        </div>
       ) : (
         <div className="flex-1 flex space-x-4 pt-4 mx-4">
           <div className="flex-1">
@@ -87,34 +132,18 @@ export function PortfolioView() {
               <TabWrapper
                 tabs={[
                   {
-                    label: 'offers',
+                    label: 'disputes',
                     Component: () => (
                       <div>
                         <TableWrapper
-                          rows={myOffers.map((offer) =>
+                          rows={disputedExchanges.map((offer) =>
                             Object.assign(
                               {},
                               { customComponent: () => <ExchangeTableRow exchange={offer} /> }
                             )
                           )}
                         />
-                        {!myOffers.length && <div>No pending offers</div>}
-                      </div>
-                    ),
-                  },
-                  {
-                    label: 'exchanges',
-                    Component: () => (
-                      <div>
-                        <TableWrapper
-                          rows={myActiveOperations.map((offer) =>
-                            Object.assign(
-                              {},
-                              { customComponent: () => <ExchangeTableRow exchange={offer} /> }
-                            )
-                          )}
-                        />
-                        {!myActiveOperations.length && <div>No active exchanges</div>}
+                        {!disputedExchanges.length && <div>No Disputes</div>}
                       </div>
                     ),
                   },

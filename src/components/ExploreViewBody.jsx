@@ -19,10 +19,10 @@ export function ExploreViewBody() {
   }, [])
 
   return (
-    <div className="flex flex-wrap mx-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 pt-2">
       {services.map((service) => {
         return (
-          <div key={service.id} className="w-1/4 p-3">
+          <div key={service.id}>
             <Link to={`/asset/${service.id}`}>
               <BioAssetCard marketView asset={service} />
             </Link>

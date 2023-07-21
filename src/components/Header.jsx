@@ -1,15 +1,50 @@
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import { ConnectKitButton } from 'connectkit'
+import { useSelector } from 'react-redux'
 import Box from '@mui/material/Box'
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import { useAccount } from 'wagmi'
+
+export function AddressDetails({ address, flip }) {
+  const services = useSelector((state) => state.event.services)
+  const service = address ? services?.find((service) => service.owner === address) : undefined
+
+  return (
+    <div className={`flex items-center ${flip && 'flex-row-reverse'} justify-end`}>
+      <div className="h-8 w-8 rounded-full overflow-hidden">
+        <img src="/example_logo.png" className="object-fit w-full h-full" />
+      </div>
+      <div className={`flex flex-col items-${flip ? 'end' : 'start'} px-3`}>
+        <h2 className="font-medium capitalize whitespace-nowrap">{service.name}</h2>
+        <div className="font-mono text-slate-600 text-xs w-24 truncate">{service.owner}</div>
+      </div>
+    </div>
+  )
+}
 
 function NavBar() {
+  const services = useSelector((state) => state.event.services)
+  const { address } = useAccount()
+
+  const service = address ? services?.find((service) => service.owner === address) : undefined
   return (
     <div className="flex items-center">
       <NavTabs />
-      <ConnectKitButton />
+      {!service ? (
+        <ConnectKitButton />
+      ) : (
+        <ConnectKitButton.Custom>
+          {({ isConnected, isConnecting, show, hide, address, ensName, chain }) => {
+            return (
+              <button onClick={show} className="pl-3">
+                <AddressDetails address={address} />
+              </button>
+            )
+          }}
+        </ConnectKitButton.Custom>
+      )}
     </div>
   )
 }
@@ -46,7 +81,9 @@ function NavTabs() {
     network: 0,
     portfolio: 1,
   }
-  const path = `${location.pathname.substring(1)}`
+
+  let path = `${location.pathname.substring(1)}`
+  if (path.includes('asset')) path = 'network'
 
   return (
     <Box sx={{ width: '100%' }}>

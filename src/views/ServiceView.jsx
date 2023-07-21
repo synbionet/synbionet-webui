@@ -32,14 +32,14 @@ export function ServiceView() {
   const services = useSelector((state) => state.event.services)
   const exchanges = useSelector((state) => state.event.exchanges)
 
-  const myActiveOperations = exchanges?.filter((exchange) => exchange.seller === address)
-
   const dummyText =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque ante nec tellus vulputate, ac fringilla magna aliquam. Sed convallis cursus ligula vel consequat. Proin fermentum, neque id aliquet vestibulum, augue nisi pulvinar sem, vel faucibus velit massa in dolor. Vivamus venenatis, turpis ac tincidunt consectetur, nisl ex laoreet metus, nec iaculis tortor justo nec nulla. Cras finibus tempor purus, id feugiat neque feugiat id. Suspendisse potenti. Maecenas quis lacinia ex, vel cursus dui. Suspendisse tempor, metus in consectetur pellentesque, massa orci elementum dolor, non eleifend ipsum nisi nec elit. Curabitur iaculis, neque id elementum ultricies, velit quam volutpat urna, id condimentum nisi quam et velit. Sed eu iaculis ligula. Sed mattis, lorem id fermentum blandit, ipsum dui tempor turpis, id bibendum tortor turpis in tortor. Fusce vulputate scelerisque felis id ultrices. Sed in aliquet odio.\n\nPellentesque ut tortor ac justo lobortis pellentesque. Sed consectetur justo eget turpis varius pulvinar. Ut eget metus mauris. In vel elit id felis vestibulum tincidunt a ut odio. Etiam faucibus, justo vel vulputate aliquam, elit ligula facilisis nulla, a posuere purus ipsum vel purus. Curabitur in lacus enim. Vestibulum hendrerit est in eros viverra tincidunt. Mauris auctor, ex vel tristique fringilla, nibh nibh tristique urna, ut gravida mauris dui vel purus. Nunc auctor mauris ac massa ultrices, vel gravida leo dapibus. Vivamus pellentesque mauris non ligula rutrum commodo. Mauris sagittis, odio ut lacinia lacinia, sapien lectus aliquam nisl, eu aliquam sem lacus non urna. Integer iaculis felis ligula, sit amet malesuada enim fermentum et.'
 
   const service = did
     ? services?.find((service) => service.id === parseInt(did))
     : services?.find((service) => service.owner === address)
+
+  const serviceExchanges = exchanges?.filter((exchange) => exchange.seller === service?.owner)
 
   useEffect(() => {
     if (destinationSlide) {
@@ -78,10 +78,10 @@ export function ServiceView() {
                 <div className="font-mono text-slate-600 text-sm">{service.owner}</div>
               </div>
             </div>
-            {/* <div className="flex space-x-3 font-mono text-slate-600 text-sm items-center">
-              <Rating name="read-only" size="small" value={5} readOnly />
-              <div>29 Exchanges</div>
-            </div> */}
+            <div className="flex space-x-3 font-mono text-slate-600 text-sm items-center">
+              <Rating name="read-only" size="small" value={0} readOnly />
+              <div>{serviceExchanges.length} Exchanges</div>
+            </div>
             {service?.owner === address && (
               <div className="w-48">
                 <PrimaryButton
@@ -142,12 +142,12 @@ export function ServiceView() {
                   ),
                 },
                 {
-                  label: 'Active Operations',
+                  label: 'Exchanges',
                   Component: () => (
                     <>
                       <TableWrapper
                         rows={
-                          myActiveOperations?.map((exchange) => {
+                          serviceExchanges?.map((exchange) => {
                             return {
                               customComponent: () => (
                                 <ExchangeTableRow exchange={exchange} variant="serviceOperations" />
@@ -156,7 +156,7 @@ export function ServiceView() {
                           }) || []
                         }
                       />
-                      {!myActiveOperations.length && <div>No active exchanges</div>}
+                      {!serviceExchanges.length && <div>Service has no exchanges</div>}
                     </>
                   ),
                 },

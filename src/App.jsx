@@ -8,7 +8,13 @@ import { HomeView } from './views/HomeView'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { setDispatchForUtils, getPublicClient, getServices, getExchanges } from './utils'
+import {
+  setDispatchForUtils,
+  getPublicClient,
+  getServices,
+  getExchanges,
+  getTreasuryBalance,
+} from './utils'
 
 import { WagmiConfig, createConfig, useAccount } from 'wagmi'
 
@@ -38,8 +44,10 @@ function App() {
         console.log('onBlock')
         console.log({ services: await getServices() })
         console.log({ exchanges: await getExchanges() })
+        console.log({ treasuryBalance: await getTreasuryBalance() })
         getServices()
         getExchanges()
+        getTreasuryBalance()
       },
     })
   }
@@ -48,6 +56,7 @@ function App() {
     async function fetchAppData() {
       getServices()
       getExchanges()
+      getTreasuryBalance()
     }
     fetchAppData()
     watchBlocks()

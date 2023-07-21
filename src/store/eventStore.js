@@ -5,6 +5,7 @@ export const eventStore = createSlice({
   initialState: {
     services: [],
     exchanges: [],
+    treasuryBalance: undefined,
   },
   reducers: {
     setServices: (state, services) => {
@@ -13,9 +14,12 @@ export const eventStore = createSlice({
     setExchanges: (state, exchanges) => {
       state.exchanges = exchanges.payload
     },
+    setTreasuryBalance: (state, treasuryBalance) => {
+      state.treasuryBalance = treasuryBalance.payload
+    },
   },
 })
 
-export const { setServices, setExchanges } = eventStore.actions
+export const { setServices, setExchanges, setTreasuryBalance } = eventStore.actions
 
 export default eventStore.reducer
