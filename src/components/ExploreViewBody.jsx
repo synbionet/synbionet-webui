@@ -29,7 +29,7 @@ export function ExploreViewBody() {
           </div>
         )
       })}
-      {isLoading && <GridLoader />}
+      {/* {isLoading && <GridLoader />} */}
     </div>
   )
 }

@@ -16,21 +16,51 @@ import {
   getTreasuryBalance,
 } from './utils'
 
-import { WagmiConfig, createConfig, useAccount } from 'wagmi'
-
 import { ConnectKitProvider, getDefaultConfig } from 'connectkit'
 import { foundry } from 'wagmi/chains'
 
-const config = createConfig(
-  getDefaultConfig({
-    appName: 'bionet',
-    appDescription: 'bionet - synbio services on demand',
-    appUrl: 'https://www.mitre.org',
-    appLogo:
-      'https://yt3.ggpht.com/f9CD1mREMez6x5anm3E-WRBU6TTKuoRQjZtDF4TYKTonQQSJR04MeypIpKbpdPbA80s9eTsprA=s108-c-k-c0x00ffffff-no-rj',
-    chains: [foundry],
-  })
+import { WagmiConfig, createConfig, configureChains, useAccount } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
+import { InjectedConnector } from 'wagmi/connectors/injected'
+import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+ 
+const { chains, publicClient } = configureChains(
+  [foundry],
+  [publicProvider()],
 )
+ 
+// Set up wagmi config
+const config = createConfig({
+  appName: 'bionet',
+  appDescription: 'synbio capability network',
+  appUrl: 'https://www.mitre.org',
+  appLogo:
+    'https://yt3.ggpht.com/f9CD1mREMez6x5anm3E-WRBU6TTKuoRQjZtDF4TYKTonQQSJR04MeypIpKbpdPbA80s9eTsprA=s108-c-k-c0x00ffffff-no-rj',
+  autoConnect: true,
+  connectors: [
+    new MetaMaskConnector({ chains }),
+    new InjectedConnector({
+      chains,
+      options: {
+        name: 'Injected',
+        shimDisconnect: true,
+      },
+    }),
+  ],
+  publicClient,
+})
+
+// or use connectkit config
+// const config = createConfig(
+//   getDefaultConfig({
+//     appName: 'bionet',
+//     appDescription: 'synbio capability network',
+//     appUrl: 'https://www.mitre.org',
+//     appLogo:
+//       'https://yt3.ggpht.com/f9CD1mREMez6x5anm3E-WRBU6TTKuoRQjZtDF4TYKTonQQSJR04MeypIpKbpdPbA80s9eTsprA=s108-c-k-c0x00ffffff-no-rj',
+//     chains: [foundry],
+//   })
+// )
 
 function App() {
   const dispatch = useDispatch()
@@ -67,8 +97,6 @@ function App() {
   }, [])
 
   return (
-    <Router>
-      <WagmiConfig config={config}>
         <ConnectKitProvider>
           <Routes>
             <Route path="/" element={<Layout />}>
@@ -92,9 +120,18 @@ function App() {
             </Route>
           </Routes>
         </ConnectKitProvider>
+  )
+}
+
+function WagmiWrapper() {
+  return (
+
+    <Router>
+      <WagmiConfig config={config}>
+        <App />
       </WagmiConfig>
     </Router>
   )
 }
 
-export default App
+export default WagmiWrapper

@@ -1,8 +1,7 @@
 import { BioTokenWidget } from '../components/BioTokenWidget'
 import { PortfolioNavBar } from '../components/PortfolioNavBar'
 import { TableWrapper } from '../components/common/TableWrapper'
-import { useState, useEffect } from 'react'
-import { GridLoader } from '../components/common/GridLoader'
+import { useState } from 'react'
 import { useBalance, useAccount } from 'wagmi'
 import { USDC_CONTRACT_ADDRESS } from '@synbionet/api'
 import { ServiceView } from './ServiceView'
@@ -36,30 +35,7 @@ export function PortfolioView() {
       .reduce((sum, exchange) => sum + exchange.price, 0)
   )
 
-  const [isLoading, setIsLoading] = useState(false)
   const [selectedTab, setSelectedTab] = useState('portfolio')
-
-  async function fetchData() {
-    setIsLoading(true)
-    setIsLoading(false)
-  }
-
-  useEffect(() => {
-    fetchData()
-  })
-
-  if (isLoading)
-    return (
-      <div className="flex-1 flex">
-        <PortfolioNavBar
-          selectedTab={selectedTab}
-          setSelectedTab={setSelectedTab}
-          numOfferNotifications={exchangesOfferedToMe.length}
-          numDisputeNotifications={disputedExchanges.length}
-        />
-        <GridLoader />
-      </div>
-    )
 
   // TODO: Refactor code below
   return (
