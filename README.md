@@ -15,9 +15,9 @@
 
 1. Spin up backend from synbionet-demo-backend repo.
 
-2. Load fair-exchange contracts and pre-fund accounts with `node loadState.js`
+2. Install dependencies with `npm install`
 
-3. Install dependencies with `npm install`
+3. Load fair-exchange contracts and pre-fund accounts with `node loadState.js`
 
 4. Run with `npm run dev` . Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
