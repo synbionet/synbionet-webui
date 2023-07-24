@@ -13,7 +13,7 @@
 
 > **NOTE:** allow approximately 30s for deploy script to run before interacting with the contracts. -->
 
-1. Spin up backend from synbionet-demo-backend repo.
+1. Spin up backend from [synbionet-demo-backend repo](https://github.com/synbionet/synbionet-demo-backend).
 
 2. Install dependencies with `npm install`
 
