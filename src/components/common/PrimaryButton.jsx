@@ -8,6 +8,7 @@ export function PrimaryButton({
   disableElevation,
   size = '',
   endIcon,
+  startIcon,
   isTextButton,
 }) {
   function getCustomStyles() {
@@ -54,6 +55,7 @@ export function PrimaryButton({
         variant={isTextButton ? 'text' : alternate ? 'outlined' : 'contained'}
         sx={getCustomStyles()}
         endIcon={endIcon}
+        startIcon={startIcon}
       >
         {text}
       </Button>

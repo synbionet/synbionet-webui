@@ -71,7 +71,8 @@ async function mineBlocks(numBlocks) {
   await testClient.mine(numBlocks)
 }
 
+// must mine at least one block after spinning up backend to start chain after loading state
 mineBlocks(5)
-loadState()
+// loadState()
 // dumpState()
 // getNodeInfo()

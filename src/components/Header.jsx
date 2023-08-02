@@ -17,7 +17,7 @@ export function AddressDetails({ address, flip }) {
         <img src="/example_logo.png" className="object-fit w-full h-full" />
       </div>
       <div className={`flex flex-col items-${flip ? 'end' : 'start'} px-3`}>
-        <h2 className="font-medium capitalize whitespace-nowrap">{service.name}</h2>
+        <h2 className="text-left font-medium capitalize whitespace-nowrap">{service.name}</h2>
         <div className="font-mono text-slate-600 text-xs w-24 truncate">{service.owner}</div>
       </div>
     </div>
