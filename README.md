@@ -17,11 +17,9 @@
 
 2. Install dependencies with `npm install`
 
-3. Load fair-exchange contracts and pre-fund accounts with `node loadState.js`
+3. Run with `npm run dev` . Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-4. Run with `npm run dev` . Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-5. Import pre-funded accounts to your wallet so you can pay for transactions. You can import the following private keys into your wallet client. Switch between accounts to simulate different users of the bionet.
+4. Import pre-funded accounts to your wallet so you can pay for transactions. You can import the following private keys into your wallet client. Switch between accounts to simulate different users of the bionet.
 
    - `0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d`
    - `0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a`
